@@ -1,8 +1,8 @@
 package absclasses;
 
 public abstract class Spielfeld{
-    private int horizontal;
-    private int vertical;
+    protected int horizontal;
+    protected int vertical;
 
     public abstract void printSpielfeld();
     public void setHorizontal(int horizontal){
