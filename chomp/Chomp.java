@@ -4,7 +4,7 @@ import absclasses.*;
 import java.util.*;
 
 public class Chomp extends Spiel implements Protokollierbar{
-    ChompFeld feld = new ChompFeld(); 
+    protected ChompFeld feld = new ChompFeld(); 
 
     public void addSpielzug(Spielzug spielzug) {
         szstack.push(spielzug);
@@ -14,7 +14,7 @@ public class Chomp extends Spiel implements Protokollierbar{
         szstack.pop();
     }
 
-    public void executeSpielzug(Spielzug spielzug) {
+    public void executeSpielzug(ChompSpielzug spielzug) {
         //Koordinate in ArrayIndizes, vertical und horizontal sind absolute Längen
         for ( int i = spielzug.getYkoordinate(); i < feld.getVertical(); i++) {
             for ( int j = spielzug.getXkoordinate(); j < feld.getHorizontal(); j++) {
@@ -33,12 +33,18 @@ public class Chomp extends Spiel implements Protokollierbar{
     }
 
     public static void main(String args[]) {
+        Chomp chomp = new Chomp();
         ChompFeld feld = new ChompFeld();
         feld.setHorizontal(3);
         feld.setVertical(2);
         feld.initializeSpielfeld();
         feld.printSpielfeld();
-        //Hier ist eine kleine Änderung
+
+        System.out.println("Jetzt wird ein Spielzug gemacht!");
+
+        ChompSpielzug spielzug = new ChompSpielzug(1, 0);
+        chomp.executeSpielzug(spielzug);
+        feld.printSpielfeld(); 
     }
 
 }
