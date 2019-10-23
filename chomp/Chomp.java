@@ -1,6 +1,7 @@
 package chomp;
 
 import absclasses.*;
+import java.util.*;
 
 public class Chomp extends Spiel implements Protokollierbar{
 
@@ -16,6 +17,17 @@ public class Chomp extends Spiel implements Protokollierbar{
     }
     public void durchgang() {
 
+    }
+    public Stack getSzstack(){
+        return this.szstack;
+    }
+
+    public static void main(String args[]) {
+        ChompFeld feld = new ChompFeld();
+        feld.setHorizontal(3);
+        feld.setVertical(2);
+        feld.initializeSpielfeld();
+        feld.printSpielfeld();
     }
 
 }
