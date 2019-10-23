@@ -7,9 +7,10 @@ public class ChompFeld extends Spielfeld{
     private int [][] feld; 
 
     public void initializeSpielfeld() {
+        this.feld = new feld[this.vertical][this.horizontal]
         for ( int i = 0; i < this.vertical; i++) {
             for ( int j = 0; j < this.horizontal; j++) {
-            feld[i][j] = 0;
+                this.feld[i][j] = 0;
             }
         }
     }
