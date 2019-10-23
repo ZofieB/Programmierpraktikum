@@ -9,14 +9,16 @@ public class Chomp extends Spiel implements Protokollierbar{
     public void addSpielzug(Spielzug spielzug) {
         szstack.push(spielzug);
     }
+
     public void removeSpielzug() {
         szstack.pop();
     }
+
     public void executeSpielzug(Spielzug spielzug) {
-        
-        for ( int i = 0; i < this.vertical; i++) {
-            for ( int j = 0; j < this.horizontal; j++) {
-                this.feld[i][j] = 1;
+        //Koordinate in ArrayIndizes, vertical und horizontal sind absolute Längen
+        for ( int i = spielzug.getYkoordinate(); i < feld.getVertical(); i++) {
+            for ( int j = spielzug.getXkoordinate(); j < feld.getHorizontal(); j++) {
+                feld.changeCoordinates(i, j, 1);
             }
         }
     }

@@ -25,4 +25,7 @@ public class ChompFeld extends Spielfeld{
             System.out.println();
         }
     }
+    public void changeCoordinates(int x, int y, int value) {
+        this.feld[x][y] = value;
+    }
 }
