@@ -4,13 +4,21 @@ import absclasses.*;
 import java.util.*;
 
 public class Chomp extends Spiel implements Protokollierbar{
-
+    ChompFeld feld = new ChompFeld(); 
 
     public void addSpielzug(Spielzug spielzug) {
-        //hier entsteht ein spielzug
+        szstack.push(spielzug);
     }
-    public void removeSpielzug(Spielzug spielzug) {
-
+    public void removeSpielzug() {
+        szstack.pop();
+    }
+    public void executeSpielzug(Spielzug spielzug) {
+        
+        for ( int i = 0; i < this.vertical; i++) {
+            for ( int j = 0; j < this.horizontal; j++) {
+                this.feld[i][j] = 1;
+            }
+        }
     }
     public void spielzug() {
 
@@ -28,6 +36,7 @@ public class Chomp extends Spiel implements Protokollierbar{
         feld.setVertical(2);
         feld.initializeSpielfeld();
         feld.printSpielfeld();
+        //Hier ist eine kleine Änderung
     }
 
 }
