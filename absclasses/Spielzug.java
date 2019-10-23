@@ -1,9 +1,9 @@
 package absclasses;
 
 public class Spielzug{
-    private Spieler spieler;
-    private int xkoordinate;
-    private int ykoordinate;
+    protected Spieler spieler;
+    protected int xkoordinate;
+    protected int ykoordinate;
 
     public Spieler getSpieler() {
         return this.spieler;
