@@ -6,4 +6,6 @@ public interface Protokollierbar {
 
     public void addSpielzug(Spielzug spielzug);
     public void removeSpielzug(Spielzug spielzug);
+    public Stack getSzstack();
+    public void setSzstack(Stack stack);
 }
