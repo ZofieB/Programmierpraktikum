@@ -36,4 +36,7 @@ public class Chomp extends Spiel implements Protokollierbar{
         return this.szstack;
     }
 
+    public void chomp() {
+        
+    }
 }
