@@ -4,7 +4,7 @@ import absclasses.*;
 //import java.util.Arrays;
 
 public class ChompFeld extends Spielfeld{
-    public int [][] feld; 
+    private int [][] feld; 
 
     public void initializeSpielfeld() {
         this.feld = new int[this.vertical][this.horizontal];
