@@ -1,11 +1,9 @@
 package absclasses;
 
-public abstract class Spieler {
+public class Spieler {
     private String spielername;
     private boolean spielerart; //0-Computer 1-richtiger Spieler
 
-    public abstract void durchgang(); //Rückgabewert?
-    public abstract Spielzug spielzug();
     public String getSpielername() {
         return this.spielername;
     }
