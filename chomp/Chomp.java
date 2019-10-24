@@ -16,9 +16,10 @@ public class Chomp extends Spiel implements Protokollierbar{
 
     public void executeSpielzug(ChompSpielzug spielzug) {
         //Koordinate in ArrayIndizes, vertical und horizontal sind absolute Längen
-        for ( int i = spielzug.getYkoordinate(); i < feld.getVertical(); i++) {
-            for ( int j = spielzug.getXkoordinate(); j < feld.getHorizontal(); j++) {
+        for ( int i = 0/*spielzug.getYkoordinate()*/; i < feld.getVertical(); i++) {
+            for ( int j = 0/*spielzug.getXkoordinate()*/; j < feld.getHorizontal(); j++) {
                 feld.changeCoordinates(i, j, 1);
+                System.out.println("Schleifendurchlauf");
             }
         }
     }
@@ -42,9 +43,9 @@ public class Chomp extends Spiel implements Protokollierbar{
 
         System.out.println("Jetzt wird ein Spielzug gemacht!");
 
-        ChompSpielzug spielzug = new ChompSpielzug(1, 0);
+        ChompSpielzug spielzug = new ChompSpielzug(1, 1);
+        //System.out.println(spielzug.getXkoordinate());
         chomp.executeSpielzug(spielzug);
-        feld.printSpielfeld(); 
     }
 
 }
