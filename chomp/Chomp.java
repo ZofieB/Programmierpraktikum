@@ -20,14 +20,21 @@ public class Chomp extends Spiel implements Protokollierbar{
 
     public void executeSpielzug(ChompSpielzug spielzug) {
         //Koordinate in ArrayIndizes, vertical und horizontal sind absolute Längen
-        for ( int i = spielzug.getYkoordinate(); i < feld.getVertical(); i++) {
-            for ( int j = spielzug.getXkoordinate(); j < feld.getHorizontal(); j++) {
-                feld.changeCoordinates(i, j, 1);
+        
+        if(feld.getValue(spielzug.getXkoordinate(), spielzug.getYkoordinate()) == 0) {
+            for ( int i = spielzug.getYkoordinate(); i < feld.getVertical(); i++) {
+                for ( int j = spielzug.getXkoordinate(); j < feld.getHorizontal(); j++) {
+                    feld.changeCoordinates(i, j, 1);
+                }
             }
         }
     }
     public void spielzug() {
 
+        //Ein Spieler hat verloren
+        if(feld.getValue(0, 0) == 1) {
+            
+        }
     }
     public void durchgang() {
 
@@ -37,6 +44,6 @@ public class Chomp extends Spiel implements Protokollierbar{
     }
 
     public void chomp() {
-        
+
     }
 }
