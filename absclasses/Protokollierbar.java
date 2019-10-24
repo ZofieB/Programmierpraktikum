@@ -6,5 +6,5 @@ public interface Protokollierbar {
 
     public void addSpielzug(Spielzug spielzug);
     public void removeSpielzug();
-    public Stack getSzstack();
+    public Stack<Spielzug> getSzstack();
 }

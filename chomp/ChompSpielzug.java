@@ -5,9 +5,10 @@ import absclasses.*;
 public class ChompSpielzug extends Spielzug{
     protected int ykoordinate;
 
-    public ChompSpielzug(int x, int y) {
+    public ChompSpielzug(int x, int y, Spieler spieler) {
         this.xkoordinate = x;
         this.ykoordinate = y;
+        this.spieler = spieler;
     }
 
     public int getYkoordinate() {

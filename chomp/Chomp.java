@@ -30,8 +30,18 @@ public class Chomp extends Spiel implements Protokollierbar{
         }
     }
     public void spielzug() {
-
-        //Ein Spieler hat verloren
+        Spieler spieler = new Spieler(); //Platzhalter für Spielr der am Zug ist
+        Scanner scan = new Scanner(System.in);
+        // Koordinaten einlesen
+        System.out.println("Gib bitte nacheinander x und y Koordinate deines Zuges ein:");
+        int x = scan.nextInt();
+        int y = scan.nextInt();
+        //Spielzug daraus erstellen
+        ChompSpielzug spielzug = new ChompSpielzug(x, y, spieler);
+        //Spielzug ausführen
+        executeSpielzug(spielzug);
+        szstack.push(spielzug);
+        //Ein Spieler hat verloren ?
         if(feld.getValue(0, 0) == 1) {
             
         }
@@ -39,11 +49,13 @@ public class Chomp extends Spiel implements Protokollierbar{
     public void durchgang() {
 
     }
-    public Stack getSzstack(){
+    public Stack<Spielzug> getSzstack(){
         return this.szstack;
     }
 
     public void chomp() {
-
+        //Spieler bestimmen
+        //Startspieler
+        //Spiel
     }
 }
