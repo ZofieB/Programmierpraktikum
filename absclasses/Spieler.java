@@ -5,7 +5,7 @@ public class Spieler {
     private int spielerart; //0-Computer 1-richtiger Spieler
 
     public Spieler() {}
-    public Spieler(String spielername, boolean spielerart) {
+    public Spieler(String spielername, int spielerart) {
         this.spielerart = spielerart;
         this.spielername = spielername;
     }
