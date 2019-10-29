@@ -6,9 +6,11 @@ import java.util.*;
 public class Chomp extends Spiel implements Protokollierbar{
     protected ChompFeld feld = new ChompFeld();
 
-    public Chomp(ChompFeld feld) {
+    public Chomp(ChompFeld feld, Spieler[] spieler) {
         this.feld = feld;
+        this.spieler = spieler;
     }
+
     @Override
     public void addSpielzug(Spielzug spielzug) {
         szstack.push(spielzug);
