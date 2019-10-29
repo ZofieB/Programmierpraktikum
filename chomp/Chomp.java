@@ -9,11 +9,11 @@ public class Chomp extends Spiel implements Protokollierbar{
     public Chomp(ChompFeld feld) {
         this.feld = feld;
     }
-
+    @Override
     public void addSpielzug(Spielzug spielzug) {
         szstack.push(spielzug);
     }
-
+    @Override
     public void removeSpielzug() {
         szstack.pop();
     }
@@ -29,8 +29,9 @@ public class Chomp extends Spiel implements Protokollierbar{
             }
         }
     }
+    @Override
     public void spielzug() {
-        Spieler spieler = new Spieler(); //Platzhalter für Spielr der am Zug ist
+        Spieler spieler = new Spieler(); //Platzhalter für Spieler der am Zug ist
         Scanner scan = new Scanner(System.in);
         // Koordinaten einlesen
         System.out.println("Gib bitte nacheinander x und y Koordinate deines Zuges ein:");
@@ -46,6 +47,7 @@ public class Chomp extends Spiel implements Protokollierbar{
             
         }
     }
+    @Override
     public void durchgang() {
 
     }
@@ -54,8 +56,6 @@ public class Chomp extends Spiel implements Protokollierbar{
     }
 
     public void chomp() {
-        //Spieler bestimmen
         //Startspieler
-        //Spiel
     }
 }
