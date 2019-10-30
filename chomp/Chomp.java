@@ -56,8 +56,4 @@ public class Chomp extends Spiel implements Protokollierbar{
     public Stack<Spielzug> getSzstack(){
         return this.szstack;
     }
-
-    public void chomp() {
-        //Startspieler
-    }
 }
