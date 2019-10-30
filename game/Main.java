@@ -67,8 +67,13 @@ public class Main{
 
             spielfeld.setHorizontal(feldhorizontal);
             spielfeld.setVertical(feldvertical);
+            spielfeld.initializeSpielfeld();
+            spielfeld.printSpielfeld();
 
             Chomp chomp = new Chomp(spielfeld, spielerarr);
+            while(!chomp.getPlayerlost()) {
+                chomp.durchgang();
+            }
         }
         else if(game == 1) { //hier wird Vier Gewinnt gespielt
 
@@ -76,18 +81,5 @@ public class Main{
         else {
             System.out.println("Das war keine gültige Eingabe!");
         }
-        
-        /* ChompFeld feld = new ChompFeld();
-        Chomp chomp = new Chomp(feld);
-        feld.setHorizontal(3);
-        feld.setVertical(2);
-        feld.initializeSpielfeld();
-        feld.printSpielfeld();
-
-        System.out.println("Jetzt wird ein Spielzug gemacht!");
-
-        ChompSpielzug spielzug = new ChompSpielzug(1, 0);
-        chomp.executeSpielzug(spielzug);
-        feld.printSpielfeld();*/
     }
 }

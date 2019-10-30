@@ -5,10 +5,18 @@ import java.util.*;
 
 public class Chomp extends Spiel implements Protokollierbar{
     protected ChompFeld feld = new ChompFeld();
+    private boolean playerlost = false;
 
     public Chomp(ChompFeld feld, Spieler[] spieler) {
         this.feld = feld;
         this.spieler = spieler;
+    }
+
+    public void setPlayerlost() {
+        this.playerlost = true;
+    }
+    public boolean getPlayerlost() {
+        return this.playerlost;
     }
 
     @Override
@@ -32,12 +40,12 @@ public class Chomp extends Spiel implements Protokollierbar{
         }
     }
     @Override
-    public void spielzug() {
-        Spieler spieler = new Spieler(); //Platzhalter für Spieler der am Zug ist
+    public void spielzug(Spieler spieler) {
         Scanner scan = new Scanner(System.in);
         // Koordinaten einlesen
         System.out.println("Gib bitte nacheinander x und y Koordinate deines Zuges ein:");
         int x = scan.nextInt();
+        scan.nextLine();
         int y = scan.nextInt();
         //Spielzug daraus erstellen
         ChompSpielzug spielzug = new ChompSpielzug(x, y, spieler);
@@ -46,12 +54,16 @@ public class Chomp extends Spiel implements Protokollierbar{
         szstack.push(spielzug);
         //Ein Spieler hat verloren ?
         if(feld.getValue(0, 0) == 1) {
-            
+            setPlayerlost();
         }
-    }
+        System.out.println();
+        feld.printSpielfeld();
+
+    }    
     @Override
     public void durchgang() {
-
+        spielzug(spieler[0]);
+        spielzug(spieler[1]);
     }
     public Stack<Spielzug> getSzstack(){
         return this.szstack;
