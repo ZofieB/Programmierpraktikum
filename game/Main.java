@@ -74,6 +74,10 @@ public class Main{
             while(!chomp.getPlayerlost()) {
                 chomp.durchgang();
             }
+            //Verlierenden Spieler ausgeben
+            Spielzug letzterZug = chomp.removeSpielzug();
+            Spieler verlierer = letzterZug.getSpieler();
+            System.out.println(verlierer.getSpielername() + " hat verloren!");
         }
         else if(game == 1) { //hier wird Vier Gewinnt gespielt
 

@@ -24,8 +24,8 @@ public class Chomp extends Spiel implements Protokollierbar{
         szstack.push(spielzug);
     }
     @Override
-    public void removeSpielzug() {
-        szstack.pop();
+    public Spielzug removeSpielzug() {
+        return szstack.pop();
     }
 
     public void executeSpielzug(ChompSpielzug spielzug) {
@@ -40,17 +40,26 @@ public class Chomp extends Spiel implements Protokollierbar{
     }
     @Override
     public void spielzug(Spieler spieler) {
+        System.out.println(spieler.getSpielername() + " ist dran!");
         Scanner scan = new Scanner(System.in);
         // Koordinaten einlesen
+        int x = feld.getHorizontal() - 1;
+        int y = feld.getVertical() -1 ;
         System.out.println("Gib bitte nacheinander x und y Koordinate deines Zuges ein:");
-        int x = scan.nextInt();
-        scan.nextLine();
-        int y = scan.nextInt();
+        do{
+            x = scan.nextInt();
+            scan.nextLine();
+            y = scan.nextInt();
+            if(feld.getValue(x, y) == 1) {
+                System.out.println("Du musst ein freies Feld nehmen! Wiederhole die Eingabe:");
+            }
+        } while(feld.getValue(x, y) != 0);
+
         //Spielzug daraus erstellen
         ChompSpielzug spielzug = new ChompSpielzug(x, y, spieler);
         //Spielzug ausführen
         executeSpielzug(spielzug);
-        szstack.push(spielzug);
+        addSpielzug(spielzug);
         //Ein Spieler hat verloren ?
         if(feld.getValue(0, 0) == 1) {
             setPlayerlost();
@@ -61,8 +70,12 @@ public class Chomp extends Spiel implements Protokollierbar{
     }    
     @Override
     public void durchgang() {
-        spielzug(spieler[0]);
-        spielzug(spieler[1]);
+        if(!playerlost) {
+            spielzug(spieler[0]);
+        }
+        if(!playerlost) {
+            spielzug(spieler[1]);
+        }
     }
     public Stack<Spielzug> getSzstack(){
         return this.szstack;
