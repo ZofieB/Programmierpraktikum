@@ -14,14 +14,14 @@ public class Main{
         int spielerart = scan.nextInt();
         scan.nextLine();
         Spieler spieler1 = new Spieler();
-        spieler1.setSpielerart(spielerart);
         if(spielerart == 1){
+            spieler1.setSpielerart(spielerart);
             System.out.println("Wie soll der Spieler heißen?");
             String spieler = scan.nextLine();
             spieler1.setSpielername(spieler);
         }
         else if (spielerart == 0){
-            spieler1.setSpielername("Spieler 1 AI");
+            spieler1 = new ChompBot("Spieler 1 AI");
         }
         else{
             System.out.println("Diese Eingabe war nicht gültig!");
@@ -32,14 +32,14 @@ public class Main{
         spielerart = scan.nextInt();
         scan.nextLine();
         Spieler spieler2 = new Spieler();
-        spieler2.setSpielerart(spielerart);
         if(spielerart == 1){
+            spieler2.setSpielerart(spielerart);
             System.out.println("Wie soll der Spieler heißen?");
             String spieler = scan.nextLine();
             spieler2.setSpielername(spieler);
         }
         else if (spielerart == 0){
-            spieler2.setSpielername("Spieler 2 AI");
+            spieler2 = new ChompBot("Spieler 2 AI");
         }
         else {
             System.out.println("Diese Eingabe war nicht gültig!");

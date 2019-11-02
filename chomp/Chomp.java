@@ -41,28 +41,33 @@ public class Chomp extends Spiel implements Protokollierbar{
     @Override
     public void spielzug(Spieler spieler) {
         System.out.println(spieler.getSpielername() + " ist dran!");
-        Scanner scan = new Scanner(System.in);
-        // Koordinaten einlesen
-        int x = feld.getHorizontal() - 1;
-        int y = feld.getVertical() -1 ;
-        System.out.println("Gib bitte nacheinander x und y Koordinate deines Zuges ein:");
-        do{
-            x = scan.nextInt();
-            scan.nextLine();
-            y = scan.nextInt();
-            if(feld.getValue(x, y) == 1) {
-                System.out.println("Du musst ein freies Feld nehmen! Wiederhole die Eingabe:");
-            }
-        } while(feld.getValue(x, y) != 0);
+        if(spieler.getSpielerart() == 1){ //Ein richtiger Spieler spielt
+            Scanner scan = new Scanner(System.in);
+            // Koordinaten einlesen
+            int x = feld.getHorizontal() - 1;
+            int y = feld.getVertical() -1 ;
+            System.out.println("Gib bitte nacheinander x und y Koordinate deines Zuges ein:");
+            do{
+                x = scan.nextInt();
+                scan.nextLine();
+                y = scan.nextInt();
+                if(feld.getValue(x, y) == 1) {
+                    System.out.println("Du musst ein freies Feld nehmen! Wiederhole die Eingabe:");
+                }
+            } while(feld.getValue(x, y) != 0);
 
-        //Spielzug daraus erstellen
-        ChompSpielzug spielzug = new ChompSpielzug(x, y, spieler);
-        //Spielzug ausführen
-        executeSpielzug(spielzug);
-        addSpielzug(spielzug);
-        //Ein Spieler hat verloren ?
-        if(feld.getValue(0, 0) == 1) {
-            setPlayerlost();
+            //Spielzug daraus erstellen
+            ChompSpielzug spielzug = new ChompSpielzug(x, y, spieler);
+            //Spielzug ausführen
+            executeSpielzug(spielzug);
+            addSpielzug(spielzug);
+            //Ein Spieler hat verloren ?
+            if(feld.getValue(0, 0) == 1) {
+                setPlayerlost();
+            }
+        }
+        else{ //der Computer spielt
+            
         }
         System.out.println();
         feld.printSpielfeld();

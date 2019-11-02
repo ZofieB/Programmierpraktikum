@@ -1,8 +1,8 @@
 package absclasses;
 
 public class Spieler {
-    private String spielername;
-    private int spielerart; //0-Computer 1-richtiger Spieler
+    protected String spielername;
+    protected int spielerart; //0-Computer 1-richtiger Spieler
 
     public Spieler() {}
     public Spieler(String spielername, int spielerart) {
