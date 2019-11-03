@@ -14,7 +14,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
     }
 
     public void executeSpielzug(Spielzug spielzug) {
-        for(i == 1; i <= veritcal-1; i++){ //von der untersten y-Koordinate Spielfeld beim eingegebenen x nach oben durchschauen, ob value drauf ist oder nicht
+        for(i = 1; i <= veritcal-1; i++){ //von der untersten y-Koordinate Spielfeld beim eingegebenen x nach oben durchschauen, ob value drauf ist oder nicht
             //if (feld [i][xkoordinate])
         }
     }
