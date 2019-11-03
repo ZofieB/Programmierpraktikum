@@ -1,10 +1,10 @@
 package absclasses;
 
 public abstract class Spiel { //Datenkapselung evtl. ändern!
-    private Spieler[] spieler;
-    private Spielfeld spielfeld;
+    protected Spieler[] spieler;
+    protected Spielfeld spielfeld;
 
-    abstract public void spielzug();
+    abstract public void spielzug(Spieler spieler);
     abstract public void durchgang();
     public Spieler[] getSpieler() {
         return this.spieler;

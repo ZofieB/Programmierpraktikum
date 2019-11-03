@@ -18,11 +18,23 @@ public class ChompFeld extends Spielfeld{
 
     @Override
     public void printSpielfeld() {
+        System.out.print(" \t");
+        for(int x = 0; x < this.horizontal; x++){
+            System.out.print(x + "\t");
+        }
+        System.out.println("\n");
         for ( int i = 0; i < this.vertical; i++) {
+            System.out.print(i + "\t");
             for ( int j = 0; j < this.horizontal; j++) {
                 System.out.print(feld[i][j] + "\t");
             }
             System.out.println();
         }
+    }
+    public void changeCoordinates(int x, int y, int value) {
+        this.feld[y][x] = value;
+    }
+    public int getValue(int x, int y) {
+        return this.feld[y][x];
     }
 }
