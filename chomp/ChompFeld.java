@@ -37,4 +37,12 @@ public class ChompFeld extends Spielfeld{
     public int getValue(int x, int y) {
         return this.feld[y][x];
     }
+    public boolean isInRange(int x, int y) {
+        if(x < this.horizontal && y < this.vertical && x >= 0 && y >= 0) {
+            return true;
+        }
+        else {
+            return false;
+        }
+    } 
 }
