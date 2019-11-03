@@ -30,11 +30,10 @@ public class Chomp extends Spiel implements Protokollierbar{
 
     public void executeSpielzug(ChompSpielzug spielzug) {
         //Koordinate in ArrayIndizes, vertical und horizontal sind absolute Längen
-        if(feld.getValue(spielzug.getXkoordinate(), spielzug.getYkoordinate()) == 0 && spielzug.getYkoordinate() < feld.getVertical() && spielzug.getXkoordinate() < feld.getHorizontal()) {
-            for ( int i = spielzug.getYkoordinate(); i < feld.getVertical(); i++) {
-                for ( int j = spielzug.getXkoordinate(); j < feld.getHorizontal(); j++) {
-                    feld.changeCoordinates(j, i, 1);
-                }
+        for ( int i = spielzug.getYkoordinate(); i < feld.getVertical(); i++) {
+            for ( int j = spielzug.getXkoordinate(); j < feld.getHorizontal(); j++) {
+                feld.changeCoordinates(j, i, 1);
+                
             }
         }
     }
@@ -51,8 +50,8 @@ public class Chomp extends Spiel implements Protokollierbar{
                 x = scan.nextInt();
                 scan.nextLine();
                 y = scan.nextInt();
-                if(feld.getValue(x, y) == 1) {
-                    System.out.println("Du musst ein freies Feld nehmen! Wiederhole die Eingabe:");
+                if(feld.getValue(x, y) == 1 || feld.isInRange(x, y) == false) {
+                    System.out.println("Du musst ein korrektes Feld nehmen! Wiederhole die Eingabe:");
                 }
             } while(feld.getValue(x, y) != 0);
 
@@ -67,7 +66,16 @@ public class Chomp extends Spiel implements Protokollierbar{
             }
         }
         else{ //der Computer spielt
-            
+            if(szstack.empty()){
+                ChompSpielzug spielzug = new ChompSpielzug((feld.getHorizontal() - 1), (feld.getVertical() - 1), spieler);
+            }
+            else{
+                //Zug des letzten Spielers auslesen
+                Spielzug letzterZug = removeSpielzug();
+                //Zug wieder auf Stack bringen
+                addSpielzug(letzterZug);
+
+            }
         }
         System.out.println();
         feld.printSpielfeld();
