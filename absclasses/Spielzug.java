@@ -3,6 +3,7 @@ package absclasses;
 public class Spielzug{
     protected Spieler spieler;
     protected int xkoordinate;
+    protected int ykoordinate;
 
     public Spieler getSpieler() {
         return this.spieler;
@@ -15,5 +16,11 @@ public class Spielzug{
     }
     public void setXkoordinate(int x) {
         this.xkoordinate = x;
+    }
+    public int getYkoordinate() {
+        return this.ykoordinate;
+    }
+    public void setYkoordinate(int y) {
+        this.ykoordinate = y;
     }
 }
