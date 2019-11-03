@@ -5,6 +5,12 @@ public class Spielzug{
     protected int xkoordinate;
     protected int ykoordinate;
 
+    public Spielzug(int x, int y, Spieler spieler) {
+        this.xkoordinate = x;
+        this.ykoordinate = y;
+        this.spieler = spieler;
+    }
+
     public Spieler getSpieler() {
         return this.spieler;
     }
