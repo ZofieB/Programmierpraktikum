@@ -4,6 +4,7 @@ import chomp.*;
 import absclasses.*;
 import java.util.*;
 
+//hier ändert sich was
 public class Main{
     public static void main(String[] args){
         Scanner scan = new Scanner(System.in);
