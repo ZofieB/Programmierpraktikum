@@ -25,5 +25,12 @@ public class VierGewinntFeld extends Spielfeld {
             System.out.println();
         }
     }
+
+    public boolean checkBesetzt (int i, int j){
+        if (feld[i][j] == 0){
+            return false;
+        }
+        else return true;
+    }
 }
 
