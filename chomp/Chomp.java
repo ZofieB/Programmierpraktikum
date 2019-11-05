@@ -69,6 +69,11 @@ public class Chomp extends Spiel implements Protokollierbar{
         else{ //der Computer spielt
             if(szstack.empty()){
                 Spielzug spielzug = new Spielzug((feld.getHorizontal() - 1), (feld.getVertical() - 1), spieler);
+                executeSpielzug(spielzug);
+                addSpielzug(spielzug);
+                if(feld.getValue(0, 0) == 1) {
+                    setPlayerlost();
+                }
             }
             else{
                 //Zug des letzten Spielers auslesen
