@@ -28,6 +28,7 @@ public class Main{
         else{
             System.out.println("Diese Eingabe war nicht gültig!");
         }
+        scan.close();
 
         //Spieler 2
         System.out.println("Spieler 2: \nSpielerart: 0 für Computer\n1 für echter Spieler");
@@ -92,7 +93,10 @@ public class Main{
                 if (feldhorizontal < 4){
                     System.out.println("Die horizontale Länge darf nicht kleiner als 4 sein. Gebe eine mögliche Länge ein.");
                 }
-                else richtigeLänge = 1;
+                else {
+                    richtigeLänge = 1;
+                    spielfeld.setHorizontal(feldhorizontal);
+                }
             } while (richtigeLänge == 0);
             //Vertikal
             do{
@@ -101,23 +105,23 @@ public class Main{
                 if (feldvertical < 4){
                     System.out.println("Die vertikale Länge darf nicht kleiner als 4 sein. Gebe eine mögliche Länge ein.");
                 }
-                else richtigeLänge = 0;
+                else {
+                    richtigeLänge = 0;
+                    spielfeld.setVertical(feldvertical);
+                }
             } while (richtigeLänge == 1);
-
-
-            spielfeld.setHorizontal(feldhorizontal);
-            spielfeld.setVertical(feldvertical);
+            
             spielfeld.initializeSpielfeld();
             spielfeld.printSpielfeld();
 
             VierGewinnt viergewinnt = new VierGewinnt(spielfeld, spielerarr);
-            while(!viergewinnt.getPlayerLost()) {
+            while(!viergewinnt.getPlayerwin()) {
                 viergewinnt.durchgang();
             }
-            //Verlierenden Spieler ausgeben
+            //Gewinnenden Spieler ausgeben
             Spielzug letzterZug = viergewinnt.removeSpielzug();
             Spieler verlierer = letzterZug.getSpieler();
-            System.out.println(verlierer.getSpielername() + " hat verloren!");
+            System.out.println(verlierer.getSpielername() + " hat gewonnen!");
         }
         else {
             System.out.println("Das war keine gültige Eingabe!");

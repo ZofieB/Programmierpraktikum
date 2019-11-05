@@ -5,10 +5,20 @@ import java.util.*;
 
 public class VierGewinnt extends Spiel implements Protokollierbar {
     protected VierGewinntFeld feld = new VierGewinntFeld();
-    private boolean playerlost = false;
+    private boolean playerwin = false;
 
-    public VierGewinnt(VierGewinntFeld feld){
+    public VierGewinnt(VierGewinntFeld feld, Spieler[] spieler) {
         this.feld = feld;
+        this.spieler = spieler;
+        
+    }
+
+    public void setPlayerwin() {
+        this.playerwin = true;
+    }
+
+    public boolean getPlayerwin() {
+        return this.playerwin;
     }
     
     @Override
@@ -21,17 +31,18 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
         return szstack.pop();
     }
 
-    public void setPlayerLost() {
-        this.playerlost = true;
+    public void executeSpielzug(Spieler spieler, Spielzug spielzug) {
+        int number;
+        if (spieler.getSpielerart() == 1){
+            number = 1;
+        }
+        else number = 2;
+        feld.changeCoordinates(spielzug.getXkoordinate(), spielzug.getYkoordinate(), number); //muss unbedingt schauen, wie ich das machen kann mit Spielernummer, vllt durch Anzahl der Spielzüge
     }
 
-    public void executeSpielzug(Spielzug spielzug) {
-        feld.changeCoordinates(j, i, spielernummer); //muss unbedingt schauen, wie ich das machen kann mit Spielernummer, vllt durch Anzahl der Spielzüge
-    }
+    
 
-    public void spielzug(Spieler spieler) {}
-
-    public void spielzug(Spieler spieler, int spielernummer) { 
+    public void spielzug(Spieler spieler) { 
         int i = 0;  
         System.out.println(spieler.getSpielername() + " ist dran!");
         if(spieler.getSpielerart() == 1){ //Ein richtiger Spieler spielt
@@ -43,7 +54,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
             do{
                 x = scan.nextInt();
                 scan.nextLine();                
-                for(; feld.checkBesetzt(i, x) && i < feld.getVertical(); i++){ //von der untersten y-Koordinate Spielfeld beim eingegebenen x nach oben durchschauen, ob value drauf ist oder nicht
+                for(; feld.checkBesetzt(x - 1, i) && i < feld.getVertical(); i++){ //von der untersten y-Koordinate Spielfeld beim eingegebenen x nach oben durchschauen, ob value drauf ist oder nicht
                 }       
                 if (i == feld.getVertical()){
                     System.out.println("Du musst eine freie Spalte nehmen! Wiederhole die Eingabe:");
@@ -52,25 +63,93 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                 }
                 else neuerZug = 0;
             } while(neuerZug == 1);
+            scan.close();
             //Spielzug daraus erstellen
-            Spielzug spielzug = new Spielzug(x, i, spieler);
+            Spielzug spielzug = new Spielzug(x - 1, i, spieler);
             //Spielzug ausführen
-            executeSpielzug(spielzug);
+            executeSpielzug(spieler, spielzug);
             addSpielzug(spielzug);
-            //ein Spieler hat verloren, muss noch gemacht werden
-            if (feld.checkGewonnen(x, i) == true){
-                setPlayerLost();
+            //ein Spieler hat verloren
+            if (feld.checkGewonnen(x - 1, i) == true){
+                setPlayerwin();
             }
         }
         else { //der Computer spielt
             if(szstack.empty()){
-                Spielzug spielzug = new Spielzug((feld.getHorizontal() - 1), (feld.getVertical() - 1), spieler);
+                Spielzug spielzug = new Spielzug((feld.getHorizontal() / 2) - 1, 0, spieler);
+                executeSpielzug(spieler, spielzug);
+                addSpielzug(spielzug);
             }
             else{
+                int oben = 0;
+                int rechts = 0;
+                int links = 0;
+                int linksrueber1 = 0;
+                int rechtsrueber1 = 0;
+                int linksrueber2 = 0;
+                int rechtsrueber2 = 0;
+                int safe = 0;
+                int newX = 0;
+                int newY = 0;
                 //Zug des letzten Spielers auslesen
                 Spielzug letzterZug = removeSpielzug();
                 //Zug wieder auf Stack bringen
                 addSpielzug(letzterZug);
+                feld.checkGefahren(letzterZug.getXkoordinate(), letzterZug.getYkoordinate());
+                if (oben != 0){
+                    newX = letzterZug.getXkoordinate();
+                    newY = letzterZug.getYkoordinate() + 1;
+                }
+                if (rechts != 0){
+                    newX = rechts;
+                    newY = letzterZug.getYkoordinate();
+                }
+                if (links != 0){
+                    newX = links;
+                    newY = letzterZug.getYkoordinate();
+                }
+                if (linksrueber1 != 0){
+                    newX = linksrueber1;
+                    newY = letzterZug.getYkoordinate() - (letzterZug.getXkoordinate() - linksrueber1);
+                }
+                if (rechtsrueber1 != 0){
+                    newX = rechtsrueber1;
+                    newY = rechtsrueber1 - letzterZug.getXkoordinate() + letzterZug.getYkoordinate();
+                }
+                if (linksrueber2 != 0){
+                    newX = linksrueber2;
+                    newY = letzterZug.getXkoordinate() - linksrueber2 + letzterZug.getYkoordinate();
+                }
+                if (rechtsrueber2 != 0){
+                    newX = rechtsrueber2;
+                    newY = letzterZug.getYkoordinate() - (rechtsrueber2 - letzterZug.getXkoordinate());
+                }
+                if (safe == 1){
+                    int neuerZug = 1;
+                    newX = letzterZug.getXkoordinate() + 1;
+                    do{               
+                        for(; feld.checkBesetzt(newX, i) && i < feld.getVertical(); i++){ //von der untersten y-Koordinate Spielfeld beim eingegebenen x nach oben durchschauen, ob value drauf ist oder nicht
+                        }       
+                        if (i == feld.getVertical()){
+                            neuerZug = 1;
+                            newX = newX + 1;
+                            if (newX == feld.getHorizontal()){
+                                newX = 0;
+                            }
+                            //an dieser Stelle nochmal Funktion aufrufen, mit neuem x Wert, falls Spalte voll ist
+                        }
+                        else {
+                            neuerZug = 0;
+                            newY = i;
+                        }
+                    } while(neuerZug == 1);
+                }
+                Spielzug spielzug = new Spielzug(newX, newY, spieler);
+                executeSpielzug(spieler, spielzug);
+                addSpielzug(spielzug);
+                if (feld.checkGewonnen(newX, newY) == true){
+                    setPlayerwin();
+                }
             }
         System.out.println();
         feld.printSpielfeld();
@@ -79,11 +158,11 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
 
     @Override
     public void durchgang() {
-        if(!playerlost) {
-            spielzug(spieler[0], 1);
+        if(!playerwin) {
+            spielzug(spieler[0]);
         }
-        if(!playerlost) {
-            spielzug(spieler[1], 2);
+        if(!playerwin) {
+            spielzug(spieler[1]);
         }
     }
 
