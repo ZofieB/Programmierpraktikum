@@ -27,7 +27,7 @@ public class Main{
         else{
             System.out.println("Diese Eingabe war nicht gültig!");
         }
-        scan.close();
+
 
         //Spieler 2
         System.out.println("Spieler 2: \nSpielerart: 0 für Computer\n1 für echter Spieler");
@@ -125,6 +125,6 @@ public class Main{
         else {
             System.out.println("Das war keine gültige Eingabe!");
         }
-        
+        scan.close();
     }
 }
