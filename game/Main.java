@@ -3,6 +3,7 @@ package game;
 import chomp.*;
 import absclasses.*;
 import java.util.*;
+import viergewinnt.*;
 
 public class Main{
     public static void main(String[] args){
@@ -26,6 +27,7 @@ public class Main{
         else{
             System.out.println("Diese Eingabe war nicht gültig!");
         }
+        scan.close();
 
         //Spieler 2
         System.out.println("Spieler 2: \nSpielerart: 0 für Computer\n1 für echter Spieler");
@@ -80,10 +82,49 @@ public class Main{
             System.out.println(verlierer.getSpielername() + " hat verloren!");
         }
         else if(game == 1) { //hier wird Vier Gewinnt gespielt
+            VierGewinntFeld spielfeld = new VierGewinntFeld();
+            System.out.println("Wie groß soll das Spielfeld sein?");
+            //Horizontal
+            int richtigeLänge = 0;
+            do{
+                System.out.println("Horizontale Länge:");
+                int feldhorizontal = scan.nextInt();
+                if (feldhorizontal < 4){
+                    System.out.println("Die horizontale Länge darf nicht kleiner als 4 sein. Gebe eine mögliche Länge ein.");
+                }
+                else {
+                    richtigeLänge = 1;
+                    spielfeld.setHorizontal(feldhorizontal);
+                }
+            } while (richtigeLänge == 0);
+            //Vertikal
+            do{
+                System.out.println("Vertikale Länge:");
+                int feldvertical = scan.nextInt();
+                if (feldvertical < 4){
+                    System.out.println("Die vertikale Länge darf nicht kleiner als 4 sein. Gebe eine mögliche Länge ein.");
+                }
+                else {
+                    richtigeLänge = 0;
+                    spielfeld.setVertical(feldvertical);
+                }
+            } while (richtigeLänge == 1);
+            
+            spielfeld.initializeSpielfeld();
+            spielfeld.printSpielfeld();
 
+            VierGewinnt viergewinnt = new VierGewinnt(spielfeld, spielerarr);
+            while(!viergewinnt.getPlayerwin()) {
+                viergewinnt.durchgang();
+            }
+            //Gewinnenden Spieler ausgeben
+            Spielzug letzterZug = viergewinnt.removeSpielzug();
+            Spieler verlierer = letzterZug.getSpieler();
+            System.out.println(verlierer.getSpielername() + " hat gewonnen!");
         }
         else {
             System.out.println("Das war keine gültige Eingabe!");
         }
+        
     }
 }
