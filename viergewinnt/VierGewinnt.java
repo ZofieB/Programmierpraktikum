@@ -33,10 +33,17 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
 
     public void executeSpielzug(Spieler spieler, Spielzug spielzug) {
         int number;
-        if (spieler.getSpielerart() == 1){
+        if(szstack.empty()){
             number = 1;
         }
-        else number = 2;
+        //Zug des letzten Spielers auslesen
+        Spielzug letzterZug = removeSpielzug();
+        //Zug wieder auf Stack bringen
+        addSpielzug(letzterZug);
+        if (feld.checkNumber(letzterZug.getXkoordinate(), letzterZug.getYkoordinate()) == true){
+            number = 2;
+        }
+        else number = 1;
         feld.changeCoordinates(spielzug.getXkoordinate(), spielzug.getYkoordinate(), number); //muss unbedingt schauen, wie ich das machen kann mit Spielernummer, vllt durch Anzahl der Spielzüge
     }
 

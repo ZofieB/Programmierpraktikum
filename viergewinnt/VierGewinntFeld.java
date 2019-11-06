@@ -26,6 +26,13 @@ public class VierGewinntFeld extends Spielfeld {
         }
     }
 
+    public boolean checkNumber(int i, int j){
+        if (feld[i][j] == 1){
+            return true;
+        }
+        else return false;
+    }
+
     public boolean checkBesetzt (int i, int j){
         if (feld[i][j] == 0){
             return false;
@@ -222,7 +229,7 @@ public class VierGewinntFeld extends Spielfeld {
         return safe;
     }
 
-    public void changeCoordinates(int x, int y, int number) { //wobei value Nummer der Spieler ist: Spieler Nummer 1 und 2
+    public void changeCoordinates(int x, int y, int number) { //wobei number = 1 am Anfang festgelegt wird und sich die restlichen number vom Vorgänger unterscheiden - switch zwischen Spieler 1 und 2
         this.feld[y][x] = number;
     }
 }
