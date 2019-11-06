@@ -101,28 +101,28 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                     newY = letzterZug.getYkoordinate() + 1;
                 }
                 if (rechts != 0){
-                    newX = rechts;
+                    newX = rechts - 1;
                     newY = letzterZug.getYkoordinate();
                 }
                 if (links != 0){
-                    newX = links;
+                    newX = links - 1;
                     newY = letzterZug.getYkoordinate();
                 }
                 if (linksrueber1 != 0){
-                    newX = linksrueber1;
-                    newY = letzterZug.getYkoordinate() - (letzterZug.getXkoordinate() - linksrueber1);
+                    newX = linksrueber1 - 1;
+                    newY = letzterZug.getYkoordinate() - (letzterZug.getXkoordinate() - linksrueber1 - 1);
                 }
                 if (rechtsrueber1 != 0){
-                    newX = rechtsrueber1;
-                    newY = rechtsrueber1 - letzterZug.getXkoordinate() + letzterZug.getYkoordinate();
+                    newX = rechtsrueber1 - 1;
+                    newY = rechtsrueber1 - 1 - letzterZug.getXkoordinate() + letzterZug.getYkoordinate();
                 }
                 if (linksrueber2 != 0){
-                    newX = linksrueber2;
-                    newY = letzterZug.getXkoordinate() - linksrueber2 + letzterZug.getYkoordinate();
+                    newX = linksrueber2 - 1;
+                    newY = letzterZug.getXkoordinate() - linksrueber2 - 1 + letzterZug.getYkoordinate();
                 }
                 if (rechtsrueber2 != 0){
-                    newX = rechtsrueber2;
-                    newY = letzterZug.getYkoordinate() - (rechtsrueber2 - letzterZug.getXkoordinate());
+                    newX = rechtsrueber2 - 1;
+                    newY = letzterZug.getYkoordinate() - (rechtsrueber2 - 1 - letzterZug.getXkoordinate());
                 }
                 if (safe == 1){
                     int neuerZug = 1;
