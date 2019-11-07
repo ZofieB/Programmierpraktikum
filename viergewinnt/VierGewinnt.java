@@ -71,8 +71,14 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
             int neuerZug = 1;
             do{
                 i = 0;
-                x = scan.nextInt();
-                scan.nextLine();                
+                x = -1;
+                while (x < 0 || x > feld.getHorizontal()){
+                    x = scan.nextInt();
+                    scan.nextLine();      
+                    if (x < 0 || x > feld.getVertical()){
+                        System.out.println("Die x-Koorinate befindet sich außerhalb des Spielfeldes. Versuch es mit einer anderen x-Koordinate:");
+                    }
+                }          
                 for(; i < feld.getVertical() && feld.checkBesetzt(x - 1, i); i++){ //von der untersten y-Koordinate Spielfeld beim eingegebenen x nach oben durchschauen, ob value drauf ist oder nicht
                 }       
                 if (i == feld.getVertical()){
@@ -143,7 +149,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                     }
                 }
                 //Checken ob Gegner in der Diagonale links unten bis rechts oben 4 Steine hinlegen kann
-                if (feld.checkGefahrenLinksUntenRechtsOben(letzterZug.getXkoordinate(), letzterZug.getYkoordinate()) == true){
+                /*if (feld.checkGefahrenLinksUntenRechtsOben(letzterZug.getXkoordinate(), letzterZug.getYkoordinate()) == true){
                     checker = feld.checkGegenzugGefahrLinksUnten(letzterZug.getXkoordinate(), letzterZug.getYkoordinate());
                     if (checker >= 0){
                         if (feld.checkBesetzt(checker, letzterZug.getYkoordinate() - (letzterZug.getXkoordinate() - checker)) == false){
@@ -181,6 +187,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                         }
                     }
                 }
+                */
 
                 if(gefahrda == 0){
                     int neuerZug = 1;
@@ -198,7 +205,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                             if (newX == feld.getHorizontal()){
                                 newX = 0;
                             }
-                                //an dieser Stelle nochmal Funktion aufrufen, mit neuem x Wert, falls Spalte voll ist
+                            //an dieser Stelle nochmal Funktion aufrufen, mit neuem x Wert, falls Spalte voll ist
                         }
                         else {
                             neuerZug = 0;

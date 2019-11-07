@@ -128,9 +128,8 @@ public class VierGewinntFeld extends Spielfeld {
             return false;
         }
     }
-     //blah
+
     // Methode für Computer um potentielle Gefahren zu erkennen und zu beseitigen
-   
     public boolean checkGefahrenOben(int x, int y){ 
         int counter = 0;  //von unten testen ob schon 3 Steine vom Gegner übereinander liegen
         if (y >= 2){
@@ -211,6 +210,7 @@ public class VierGewinntFeld extends Spielfeld {
         return nichtmöglich;
     }
 
+    /*
     public boolean checkGefahrenLinksUntenRechtsOben(int x, int y){
         int counter = 0;
         //von links unten nach rechts oben
@@ -329,6 +329,7 @@ public class VierGewinntFeld extends Spielfeld {
         }
         return nichtmöglich;
     }
+    */
 
 
     public void changeCoordinates(int x, int y, int number) { //wobei number = 1 am Anfang festgelegt wird und sich die restlichen number vom Vorgänger unterscheiden - switch zwischen Spieler 1 und 2
