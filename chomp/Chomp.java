@@ -6,6 +6,7 @@ import java.util.*;
 public class Chomp extends Spiel implements Protokollierbar{
     protected ChompFeld feld = new ChompFeld();
     private boolean playerlost = false;
+    
 
     public Chomp(ChompFeld feld, Spieler[] spieler) {
         this.feld = feld;
@@ -28,7 +29,7 @@ public class Chomp extends Spiel implements Protokollierbar{
         return szstack.pop();
     }
 
-    public void executeSpielzug(ChompSpielzug spielzug) {
+    public void executeSpielzug(Spielzug spielzug) {
         //Koordinate in ArrayIndizes, vertical und horizontal sind absolute Längen
         for ( int i = spielzug.getYkoordinate(); i < feld.getVertical(); i++) {
             for ( int j = spielzug.getXkoordinate(); j < feld.getHorizontal(); j++) {
@@ -56,7 +57,7 @@ public class Chomp extends Spiel implements Protokollierbar{
             } while(feld.getValue(x, y) != 0);
 
             //Spielzug daraus erstellen
-            ChompSpielzug spielzug = new ChompSpielzug(x, y, spieler);
+            Spielzug spielzug = new Spielzug(x, y, spieler);
             //Spielzug ausführen
             executeSpielzug(spielzug);
             addSpielzug(spielzug);
@@ -67,14 +68,42 @@ public class Chomp extends Spiel implements Protokollierbar{
         }
         else{ //der Computer spielt
             if(szstack.empty()){
-                ChompSpielzug spielzug = new ChompSpielzug((feld.getHorizontal() - 1), (feld.getVertical() - 1), spieler);
+                Spielzug spielzug = new Spielzug((feld.getHorizontal() - 1), (feld.getVertical() - 1), spieler);
+                executeSpielzug(spielzug);
+                addSpielzug(spielzug);
+                if(feld.getValue(0, 0) == 1) {
+                    setPlayerlost();
+                }
             }
             else{
                 //Zug des letzten Spielers auslesen
                 Spielzug letzterZug = removeSpielzug();
                 //Zug wieder auf Stack bringen
                 addSpielzug(letzterZug);
-
+                //Zuerst unten Links probieren
+                int newX = letzterZug.getXkoordinate() - 1;
+                int newY = letzterZug.getYkoordinate() + 1;
+                //Wenn unten links nicht geht dann oben rechts
+                if(!feld.isInRange(newX, newY) || feld.getValue(newX, newY) == 1) {
+                    newX = letzterZug.getXkoordinate() + 1;
+                    newY = letzterZug.getYkoordinate() -1;
+                }
+                //wenn oben rechts nicht geht dann links
+                if(!feld.isInRange(newX, newY) || feld.getValue(newX, newY) == 1) {
+                    newX = letzterZug.getXkoordinate() - 1;
+                    newY = letzterZug.getYkoordinate();
+                }
+                //wenn links auch nicht geht dann oben
+                if(!feld.isInRange(newX, newY) || feld.getValue(newX, newY) == 1) {
+                    newX = letzterZug.getXkoordinate();
+                    newY = letzterZug.getYkoordinate() - 1;
+                }
+                Spielzug spielzug = new Spielzug(newX, newY, spieler);
+                executeSpielzug(spielzug);
+                addSpielzug(spielzug);
+                if(feld.getValue(0, 0) == 1) {
+                    setPlayerlost();
+                }
             }
         }
         System.out.println();

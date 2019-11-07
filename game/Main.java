@@ -5,7 +5,6 @@ import absclasses.*;
 import java.util.*;
 import viergewinnt.*;
 
-//hier ändert sich was
 public class Main{
     public static void main(String[] args){
         Scanner scan = new Scanner(System.in);
@@ -28,7 +27,7 @@ public class Main{
         else{
             System.out.println("Diese Eingabe war nicht gültig!");
         }
-        scan.close();
+
 
         //Spieler 2
         System.out.println("Spieler 2: \nSpielerart: 0 für Computer\n1 für echter Spieler");
@@ -126,6 +125,6 @@ public class Main{
         else {
             System.out.println("Das war keine gültige Eingabe!");
         }
-        
+        scan.close();
     }
 }

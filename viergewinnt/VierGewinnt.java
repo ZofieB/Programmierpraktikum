@@ -36,14 +36,16 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
         if(szstack.empty()){
             number = 1;
         }
-        //Zug des letzten Spielers auslesen
-        Spielzug letzterZug = removeSpielzug();
-        //Zug wieder auf Stack bringen
-        addSpielzug(letzterZug);
-        if (feld.checkNumber(letzterZug.getXkoordinate(), letzterZug.getYkoordinate()) == true){
-            number = 2;
+        else{
+            //Zug des letzten Spielers auslesen
+            Spielzug letzterZug = removeSpielzug();
+            //Zug wieder auf Stack bringen
+            addSpielzug(letzterZug);
+            if (feld.checkNumber(letzterZug.getXkoordinate(), letzterZug.getYkoordinate()) == true){
+                number = 2;
+            }
+            else number = 1;
         }
-        else number = 1;
         feld.changeCoordinates(spielzug.getXkoordinate(), spielzug.getYkoordinate(), number); //muss unbedingt schauen, wie ich das machen kann mit Spielernummer, vllt durch Anzahl der Spielzüge
     }
 
@@ -59,9 +61,10 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
             System.out.println("Gib bitte die x-Koordinate deines Zuges ein:");
             int neuerZug = 1;
             do{
+                i = 0;
                 x = scan.nextInt();
                 scan.nextLine();                
-                for(; feld.checkBesetzt(x - 1, i) && i < feld.getVertical(); i++){ //von der untersten y-Koordinate Spielfeld beim eingegebenen x nach oben durchschauen, ob value drauf ist oder nicht
+                for(; i < feld.getVertical() && feld.checkBesetzt(x - 1, i); i++){ //von der untersten y-Koordinate Spielfeld beim eingegebenen x nach oben durchschauen, ob value drauf ist oder nicht
                 }       
                 if (i == feld.getVertical()){
                     System.out.println("Du musst eine freie Spalte nehmen! Wiederhole die Eingabe:");
@@ -70,12 +73,13 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                 }
                 else neuerZug = 0;
             } while(neuerZug == 1);
-            scan.close();
+            //scan.close();
             //Spielzug daraus erstellen
             Spielzug spielzug = new Spielzug(x - 1, i, spieler);
             //Spielzug ausführen
             executeSpielzug(spieler, spielzug);
             addSpielzug(spielzug);
+            feld.printSpielfeld();
             //ein Spieler hat verloren
             if (feld.checkGewonnen(x - 1, i) == true){
                 setPlayerwin();
