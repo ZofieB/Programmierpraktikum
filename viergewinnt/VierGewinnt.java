@@ -72,10 +72,10 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
             do{
                 i = 0;
                 x = -1;
-                while (x < 0 || x > feld.getHorizontal()){
+                while (x < 1 || x > feld.getHorizontal()){
                     x = scan.nextInt();
                     scan.nextLine();      
-                    if (x < 0 || x > feld.getVertical()){
+                    if (x < 1 || x > feld.getVertical()){
                         System.out.println("Die x-Koorinate befindet sich außerhalb des Spielfeldes. Versuch es mit einer anderen x-Koordinate:");
                     }
                 }          

@@ -79,7 +79,6 @@ public class VierGewinntFeld extends Spielfeld {
         for (int prueflinks = x - 1; prueflinks >= 0 && prueflinks >= x - 3 && feld[y][prueflinks] == feld[y][x]; prueflinks--){
             if (feld[y][prueflinks] == feld [y][x]){
                 counter = counter + 1;
-                System.out.println(counter);
             }
         }
 
