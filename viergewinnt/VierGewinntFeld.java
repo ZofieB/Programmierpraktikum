@@ -233,5 +233,3 @@ public class VierGewinntFeld extends Spielfeld {
         this.feld[y][x] = number;
     }
 }
-    
-

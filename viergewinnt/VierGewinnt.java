@@ -178,4 +178,3 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
         return this.szstack;
     }
 }
-
