@@ -11,7 +11,7 @@ public class Main{
         //Auswahl der Spieler
         //Spieler 1
         System.out.println("Auswahl der Spieler:");
-        System.out.println("Spieler 1: \nSpielerart: 0 für Computer\n1 für echter Spieler");
+        System.out.println("Spieler 1: \nSpielerart: \n0 für Computer\n1 für echter Spieler");
         int spielerart = scan.nextInt();
         scan.nextLine();
         Spieler spieler1 = new Spieler();
@@ -30,7 +30,7 @@ public class Main{
 
 
         //Spieler 2
-        System.out.println("Spieler 2: \nSpielerart: 0 für Computer\n1 für echter Spieler");
+        System.out.println("Spieler 2: \nSpielerart:\n0 für Computer\n1 für echter Spieler");
         spielerart = scan.nextInt();
         scan.nextLine();
         Spieler spieler2 = new Spieler();
@@ -114,13 +114,19 @@ public class Main{
             spielfeld.printSpielfeld();
 
             VierGewinnt viergewinnt = new VierGewinnt(spielfeld, spielerarr);
-            while(!viergewinnt.getPlayerwin()) {
+            while(!viergewinnt.getPlayerwin() && !viergewinnt.getPlayunentschieden()) {
                 viergewinnt.durchgang();
             }
             //Gewinnenden Spieler ausgeben
-            Spielzug letzterZug = viergewinnt.removeSpielzug();
-            Spieler verlierer = letzterZug.getSpieler();
-            System.out.println(verlierer.getSpielername() + " hat gewonnen!");
+            if (viergewinnt.getPlayerwin()){
+                Spielzug letzterZug = viergewinnt.removeSpielzug();
+                Spieler gewinner = letzterZug.getSpieler();
+                System.out.println(gewinner.getSpielername() + " hat gewonnen!");
+            }
+            //Unentschieden ausgeben
+            if (viergewinnt.getPlayunentschieden()){
+                System.out.println("Es ist unentschieden!");
+            }
         }
         else {
             System.out.println("Das war keine gültige Eingabe!");

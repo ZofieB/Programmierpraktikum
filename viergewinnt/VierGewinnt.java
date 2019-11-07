@@ -6,6 +6,7 @@ import java.util.*;
 public class VierGewinnt extends Spiel implements Protokollierbar {
     protected VierGewinntFeld feld = new VierGewinntFeld();
     private boolean playerwin = false;
+    private boolean playunentschieden = false;
 
     public VierGewinnt(VierGewinntFeld feld, Spieler[] spieler) {
         this.feld = feld;
@@ -17,10 +18,18 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
         this.playerwin = true;
     }
 
+    public void setPlayunentschieden(){
+        this.playunentschieden = true;
+    }
+    
     public boolean getPlayerwin() {
         return this.playerwin;
     }
     
+    public boolean getPlayunentschieden() {
+        return this.playunentschieden;
+    }
+
     @Override
     public void addSpielzug(Spielzug spielzug) {
         szstack.push(spielzug);
@@ -84,62 +93,104 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
             if (feld.checkGewonnen(x - 1, i) == true){
                 setPlayerwin();
             }
+            else if (feld.checkUnentschieden() == true){
+                setPlayunentschieden();
+            }
         }
         else { //der Computer spielt
             if(szstack.empty()){
-                Spielzug spielzug = new Spielzug((feld.getHorizontal() / 2) - 1, 0, spieler);
+                Spielzug spielzug = new Spielzug((feld.getHorizontal() / 2), 0, spieler);
                 executeSpielzug(spieler, spielzug);
                 addSpielzug(spielzug);
             }
-            else{
-                int oben = 0;
-                int rechts = 0;
-                int links = 0;
-                int linksrueber1 = 0;
-                int rechtsrueber1 = 0;
-                int linksrueber2 = 0;
-                int rechtsrueber2 = 0;
-                int safe = 0;
-                int newX = 0;
-                int newY = 0;
+            else{ 
                 //Zug des letzten Spielers auslesen
                 Spielzug letzterZug = removeSpielzug();
                 //Zug wieder auf Stack bringen
                 addSpielzug(letzterZug);
-                feld.checkGefahren(letzterZug.getXkoordinate(), letzterZug.getYkoordinate());
-                if (oben != 0){
+                int newX = 0;
+                int newY = 0;
+                int checker = 0;
+                int gefahrda = 0;
+                
+                //Checken, ob Gefahr da ist, dass der Gegner 4 Steine übereinanderstapelt
+                feld.checkGefahrenOben(letzterZug.getXkoordinate(), letzterZug.getYkoordinate());
+                if (feld.checkGefahrenOben(letzterZug.getXkoordinate(), letzterZug.getYkoordinate()) == true){
                     newX = letzterZug.getXkoordinate();
                     newY = letzterZug.getYkoordinate() + 1;
+                    gefahrda = gefahrda + 1;
                 }
-                if (rechts != 0){
-                    newX = rechts - 1;
-                    newY = letzterZug.getYkoordinate();
+                
+                //Checken, ob Gefahr da ist, dass der Gegner 4 Steine nebeneinander legt
+                if (feld.checkGefahrenRechtsLinks(letzterZug.getXkoordinate(), letzterZug.getYkoordinate()) == true){
+                    //Checken, ob Gefahr beseitigt werden kann, wenn man Stein ganz links legt
+                    checker = feld.checkGegenzugGefahrLinks(letzterZug.getXkoordinate(), letzterZug.getYkoordinate());
+                    if (checker != -1){
+                        if(feld.checkBesetzt(checker, letzterZug.getYkoordinate()) == false){
+                            newX = checker;
+                            newY = letzterZug.getYkoordinate();
+                            gefahrda = gefahrda + 1;
+                        }
+                    }
+                    //Checken, ob Gefahr beseitigt werden kann, wenn man Stein ganz rechts legt
+                    checker = feld.checkGegenzugGefahrRechts(letzterZug.getXkoordinate(), letzterZug.getYkoordinate());
+                    if (checker >= 0){
+                        if(feld.checkBesetzt(checker, letzterZug.getYkoordinate()) == false){
+                            newX = checker;
+                            newY = letzterZug.getYkoordinate();
+                            gefahrda = gefahrda + 1;
+                        }
+                    }
                 }
-                if (links != 0){
-                    newX = links - 1;
-                    newY = letzterZug.getYkoordinate();
+                //Checken ob Gegner in der Diagonale links unten bis rechts oben 4 Steine hinlegen kann
+                if (feld.checkGefahrenLinksUntenRechtsOben(letzterZug.getXkoordinate(), letzterZug.getYkoordinate()) == true){
+                    checker = feld.checkGegenzugGefahrLinksUnten(letzterZug.getXkoordinate(), letzterZug.getYkoordinate());
+                    if (checker >= 0){
+                        if (feld.checkBesetzt(checker, letzterZug.getYkoordinate() - (letzterZug.getXkoordinate() - checker)) == false){
+                            newX = checker;
+                            newY = letzterZug.getYkoordinate() - (letzterZug.getXkoordinate() - newX);
+                            gefahrda = gefahrda + 1;
+                        }
+                    } 
+                    checker = feld.checkGegenzugGefahrRechtsOben(letzterZug.getXkoordinate(), letzterZug.getYkoordinate());
+                    if(checker >= 0){
+                        if (feld.checkBesetzt(checker, (checker - letzterZug.getXkoordinate() + letzterZug.getYkoordinate())) == false){
+                            newX = checker;
+                            newY = newX - letzterZug.getXkoordinate() + letzterZug.getYkoordinate();
+                            gefahrda = gefahrda + 1;
+                        }
+                    }
                 }
-                if (linksrueber1 != 0){
-                    newX = linksrueber1 - 1;
-                    newY = letzterZug.getYkoordinate() - (letzterZug.getXkoordinate() - linksrueber1 - 1);
+
+                //Checken ob Gegner in der Diagonale links oben bis rechts unten 4 Steine hinlegen kann
+                if (feld.checkGefahrLinksObenRechtsUnten(letzterZug.getXkoordinate(), letzterZug.getYkoordinate()) == true){
+                    checker = feld.checkGegenzugGefahrLinksOben(letzterZug.getXkoordinate(), letzterZug.getYkoordinate());
+                    if (checker >= 0){
+                        if (feld.checkBesetzt(checker, letzterZug.getXkoordinate() - checker + (letzterZug.getXkoordinate())) == false){
+                            newX = checker;
+                            newY = letzterZug.getXkoordinate() - newX + (letzterZug.getXkoordinate());
+                            gefahrda = gefahrda + 1;
+                        }
+                    }
+                    checker = feld.checkGegenzugGefahrRechtsUnten(letzterZug.getXkoordinate(), letzterZug.getYkoordinate());
+                    if (checker >= 0){
+                        if (feld.checkBesetzt(checker, letzterZug.getYkoordinate() - checker - letzterZug.getXkoordinate()) == false){
+                            newX = checker;
+                            newY = letzterZug.getYkoordinate() - newX - letzterZug.getXkoordinate();
+                            gefahrda = gefahrda + 1;
+                        }
+                    }
                 }
-                if (rechtsrueber1 != 0){
-                    newX = rechtsrueber1 - 1;
-                    newY = rechtsrueber1 - 1 - letzterZug.getXkoordinate() + letzterZug.getYkoordinate();
-                }
-                if (linksrueber2 != 0){
-                    newX = linksrueber2 - 1;
-                    newY = letzterZug.getXkoordinate() - linksrueber2 - 1 + letzterZug.getYkoordinate();
-                }
-                if (rechtsrueber2 != 0){
-                    newX = rechtsrueber2 - 1;
-                    newY = letzterZug.getYkoordinate() - (rechtsrueber2 - 1 - letzterZug.getXkoordinate());
-                }
-                if (safe == 1){
+
+                if(gefahrda == 0){
                     int neuerZug = 1;
-                    newX = letzterZug.getXkoordinate() + 1;
-                    do{               
-                        for(; feld.checkBesetzt(newX, i) && i < feld.getVertical(); i++){ //von der untersten y-Koordinate Spielfeld beim eingegebenen x nach oben durchschauen, ob value drauf ist oder nicht
+                    if (letzterZug.getXkoordinate() == feld.getHorizontal() - 1){
+                        newX = 0;
+                    }
+                    else newX = letzterZug.getXkoordinate() + 1;
+                    do{      
+                        i = 0;         
+                        for(;i < feld.getVertical() && feld.checkBesetzt(newX, i); i++){ //von der untersten y-Koordinate Spielfeld beim eingegebenen x nach oben durchschauen, ob value drauf ist oder nicht
                         }       
                         if (i == feld.getVertical()){
                             neuerZug = 1;
@@ -147,7 +198,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                             if (newX == feld.getHorizontal()){
                                 newX = 0;
                             }
-                            //an dieser Stelle nochmal Funktion aufrufen, mit neuem x Wert, falls Spalte voll ist
+                                //an dieser Stelle nochmal Funktion aufrufen, mit neuem x Wert, falls Spalte voll ist
                         }
                         else {
                             neuerZug = 0;
@@ -161,6 +212,9 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                 if (feld.checkGewonnen(newX, newY) == true){
                     setPlayerwin();
                 }
+                if (feld.checkUnentschieden() == true){
+                    setPlayunentschieden();
+                }
             }
         System.out.println();
         feld.printSpielfeld();
@@ -169,10 +223,10 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
 
     @Override
     public void durchgang() {
-        if(!playerwin) {
+        if(!playerwin && !playunentschieden) {
             spielzug(spieler[0]);
         }
-        if(!playerwin) {
+        if(!playerwin && !playunentschieden) {
             spielzug(spieler[1]);
         }
     }
