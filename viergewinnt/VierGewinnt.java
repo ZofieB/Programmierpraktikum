@@ -115,7 +115,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                 
                 //Checken, ob Gefahr da ist, dass der Gegner 4 Steine übereinanderstapelt
                 feld.checkGefahrenOben(letzterZug.getXkoordinate(), letzterZug.getYkoordinate());
-                if (feld.checkGefahrenOben(letzterZug.getXkoordinate(), letzterZug.getYkoordinate()) == true){
+                if (feld.checkGefahrenOben(letzterZug.getXkoordinate(), letzterZug.getYkoordinate()) == true && letzterZug.getYkoordinate() < feld.getVertical() - 1){
                     newX = letzterZug.getXkoordinate();
                     newY = letzterZug.getYkoordinate() + 1;
                     gefahrda = gefahrda + 1;
@@ -164,7 +164,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
 
                 //Checken ob Gegner in der Diagonale links oben bis rechts unten 4 Steine hinlegen kann
                 if (feld.checkGefahrLinksObenRechtsUnten(letzterZug.getXkoordinate(), letzterZug.getYkoordinate()) == true){
-                    checker = feld.checkGegenzugGefahrLinksOben(letzterZug.getXkoordinate(), letzterZug.getYkoordinate());
+                    checker = feld.checkGegenzugGefahrLinksOben(letzterZug.getXkoordinate(), letzterZug.getYkoordinate()) - 1;
                     if (checker >= 0){
                         if (feld.checkBesetzt(checker, letzterZug.getXkoordinate() - checker + (letzterZug.getXkoordinate())) == false){
                             newX = checker;
@@ -172,7 +172,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                             gefahrda = gefahrda + 1;
                         }
                     }
-                    checker = feld.checkGegenzugGefahrRechtsUnten(letzterZug.getXkoordinate(), letzterZug.getYkoordinate());
+                    checker = feld.checkGegenzugGefahrRechtsUnten(letzterZug.getXkoordinate(), letzterZug.getYkoordinate()) - 1;
                     if (checker >= 0){
                         if (feld.checkBesetzt(checker, letzterZug.getYkoordinate() - checker - letzterZug.getXkoordinate()) == false){
                             newX = checker;
