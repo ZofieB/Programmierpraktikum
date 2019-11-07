@@ -48,13 +48,15 @@ public class Chomp extends Spiel implements Protokollierbar{
             int y = feld.getVertical() -1 ;
             System.out.println("Gib bitte nacheinander x und y Koordinate deines Zuges ein:");
             do{
+                System.out.println("Bitte die x-Koordinate eingeben:");
                 x = scan.nextInt();
                 scan.nextLine();
+                System.out.println("Bitte die y-Koordinate eingeben:");
                 y = scan.nextInt();
-                if(feld.getValue(x, y) == 1 || feld.isInRange(x, y) == false) {
+                if(feld.isInRange(x, y) == false || feld.getValue(x, y) == 1) {
                     System.out.println("Du musst ein korrektes Feld nehmen! Wiederhole die Eingabe:");
                 }
-            } while(feld.getValue(x, y) != 0);
+            } while(feld.isInRange(x, y) == false || feld.getValue(x, y) != 0);
 
             //Spielzug daraus erstellen
             Spielzug spielzug = new Spielzug(x, y, spieler);
