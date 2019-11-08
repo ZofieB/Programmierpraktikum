@@ -1,6 +1,6 @@
 package absclasses;
 
-public abstract class Spiel { //Datenkapselung evtl. ändern!
+public abstract class Spiel {
     protected Spieler[] spieler;
     protected Spielfeld spielfeld;
 
