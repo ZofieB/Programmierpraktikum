@@ -7,6 +7,7 @@ import java.util.*;
 public class Session{
     private Socket client;
     public static HashMap<String, String> users = new HashMap<String, String>();
+
     public Session(Socket client){
         this.client = client;
     }
@@ -35,5 +36,4 @@ public class Session{
             }
         }
     }
-    //public void 
 }
