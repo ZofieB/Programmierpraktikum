@@ -32,13 +32,13 @@ class ServerThread extends Thread{
             Session session = new Session(client);
             //Login bzw. Registrierung
             //Bei falscher Eingabe wird Client durch Methode aus Session direkt wieder ausgeloggt
-            out.write("Name eingeben:");
-            out.flush(); //BufferedWriter
             String benutzername = in.readLine();
-            out.write("Passwort eingeben:");
-            out.flush();  //BufferedWriter
             String passwort = in.readLine();
             session.login(benutzername, passwort);
+            System.out.println(benutzername);
+            out.write("Login erfolgreich");
+            out.newLine();
+            out.flush();
 
 
         } catch(IOException e){}
