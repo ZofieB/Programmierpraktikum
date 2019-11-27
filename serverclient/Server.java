@@ -39,6 +39,9 @@ class ServerThread extends Thread{
             out.write("Login erfolgreich");
             out.newLine();
             out.flush();
+            
+            //Nachricht über Anmeldung an alle anderen Nutzer
+            session.message_all_clients(benutzername + "hat sich angemeldet");
 
 
         } catch(IOException e){}
