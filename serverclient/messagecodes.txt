@@ -1,0 +1,3 @@
+111 = Textnachricht an Client, die geprinted werden soll (Nachricht für Message Listener)
+100 = Nachricht von Client die an alle Clients gesendet werden soll
+101 = Logout vom Client

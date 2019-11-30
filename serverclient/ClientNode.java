@@ -5,7 +5,7 @@ import java.net.*;
 
 //Klasse als Datenstruktur zur Speicherung angemeldeter Clients
 public class ClientNode{
-    //Client auch als Variable speichern?
+
     private Socket client;
     private String name;
     private String password;
@@ -30,6 +30,14 @@ public class ClientNode{
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public Socket getClient() {
+        return client;
+    }
+
+    public void setClient(Socket client) {
+        this.client = client;
     }
 
 }
