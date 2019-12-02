@@ -19,6 +19,7 @@ public class Server{
             String input = scan.nextLine();
             if(input.equals("shutdown")){
                 serverstatus = false;
+                socketlistener.shutdown();
             }
         }
         scan.close();

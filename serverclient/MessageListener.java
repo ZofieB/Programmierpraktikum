@@ -16,6 +16,9 @@ public class MessageListener extends Thread{
                 if(input.equals("111")){
                     System.out.println(in.readLine());
                 }
+                else if(input.equals("222")){
+                    System.exit(0);
+                }
             }
         }catch(Exception e){}
     }

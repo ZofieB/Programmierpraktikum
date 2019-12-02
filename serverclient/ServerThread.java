@@ -44,4 +44,17 @@ class ServerThread extends Thread{
 
         } catch(IOException e){}
     }
+
+    public void shutdown() throws IOException{
+        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
+        out.write("111");
+        out.newLine();
+        out.write("Der Server wurde geschlossen!");
+        out.newLine();
+        out.flush();
+        out.write("222");
+        out.newLine();
+        out.flush();
+        client.close();
+    }
 }

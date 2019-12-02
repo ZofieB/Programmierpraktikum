@@ -1,6 +1,5 @@
 package serverclient;
 
-import java.io.*;
 import java.net.*;
 
 //Klasse als Datenstruktur zur Speicherung angemeldeter Clients
