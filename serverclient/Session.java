@@ -14,8 +14,6 @@ public class Session{
     }
 
     public void login(String benutzername, String passwort) throws IOException {
-        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(client.getOutputStream()));
-       
         //Es gab keine registrierten Nutzer
         if(users.isEmpty()){
             users.put(benutzername, passwort);

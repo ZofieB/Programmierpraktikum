@@ -21,6 +21,7 @@ public class Server{
                 serverstatus = false;
             }
         }
+        scan.close();
         server.close();
     }
 }

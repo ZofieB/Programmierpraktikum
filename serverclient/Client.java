@@ -31,7 +31,7 @@ public class Client{
                 boolean login = true;
 
                 //Nachrichten empfangen
-                MessageListener messages = new MessageListener(in, out);
+                MessageListener messages = new MessageListener(in);
                 messages.start();
 
                 //Abmeldung vom Server

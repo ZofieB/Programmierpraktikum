@@ -1,16 +1,12 @@
 package serverclient;
 
 import java.io.*;
-import java.net.*;
-import java.util.*;
 
 public class MessageListener extends Thread{
-    private BufferedWriter out;
     private BufferedReader in;
 
-    public MessageListener(BufferedReader in, BufferedWriter out) {
+    public MessageListener(BufferedReader in) {
         this.in = in;
-        this.out = out;
     }
 
     public void run(){
