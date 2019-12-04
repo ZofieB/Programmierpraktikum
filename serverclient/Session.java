@@ -51,6 +51,7 @@ public class Session{
             ClientNode current_client = clients.get(i);
             if(current_client.getName().equals(benutzername)) {
                 clients.remove(i);
+                break;
             }
         }
     }

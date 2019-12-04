@@ -8,3 +8,11 @@ absclasses/Spielfeld.java
 absclasses/Spielzug.java
 viergewinnt/VierGewinnt.java
 viergewinnt/VierGewinntFeld.java
+serverclient/Client.java
+serverclient/ClientNode.java
+serverclient/MessageListener.java
+serverclient/Server.java
+serverclient/ServerThread.java
+serverclient/Session.java
+serverclient/SocketListener.java
+

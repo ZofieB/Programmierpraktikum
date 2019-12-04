@@ -26,7 +26,9 @@ class SocketListener extends Thread {
         int size = currentThreads.size();
         for(int i = 0; i < size; i++){
             ServerThread thread = currentThreads.get(i);
-            thread.shutdown();
+            if (thread.getState() != State.TERMINATED){
+                thread.shutdown();
+            }
         }
     }
 }
