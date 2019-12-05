@@ -6,7 +6,6 @@ import java.util.*;
 
 class ServerThread extends Thread{
     Socket client;
-    static ArrayList<ClientNode> activeClients = new ArrayList<ClientNode>();
     ServerThread(Socket client) {
         this.client = client;
     }
