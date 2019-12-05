@@ -8,11 +8,13 @@ public class ClientNode{
     private Socket client;
     private String name;
     private String password;
+    private boolean loggedin;
 
-    public ClientNode(Socket client, String name, String password){
+    public ClientNode(Socket client, String name, String password, boolean loggedin){
         this.client = client;
         this.name = name;
         this.password = password;
+        this.loggedin = loggedin;
     }
 
     public void setName(String name) {
@@ -37,6 +39,14 @@ public class ClientNode{
 
     public void setClient(Socket client) {
         this.client = client;
+    }
+
+    public boolean isLoggedin() {
+        return loggedin;
+    }
+
+    public void setLoggedin(boolean loggedin) {
+        this.loggedin = loggedin;
     }
 
 }

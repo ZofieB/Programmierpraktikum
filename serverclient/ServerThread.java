@@ -32,7 +32,7 @@ class ServerThread extends Thread{
             while(!logout){
                 String[] input = session.get_message();
                 if(input[0].equals("101")){
-                    session.client_logout(benutzername);
+                    session.client_logout(client);
                     session.message_all_clients(benutzername + " hat sich ausgeloggt!");
                     logout = true;
                 }

@@ -29,7 +29,10 @@ public class Client{
                 out.newLine();
                 out.flush();
                 boolean login = true;
-
+                if(in.readLine().equals("111")){
+                    System.out.println(in.readLine());
+                }
+                
                 //Nachrichten empfangen
                 MessageListener messages = new MessageListener(in);
                 messages.start();
@@ -47,6 +50,7 @@ public class Client{
                     }
                 }
                 scan.close();
+                server.close();
             }catch(UnknownHostException e) {
                 System.out.println("Cannot find host.");
             }catch (IOException e) {
