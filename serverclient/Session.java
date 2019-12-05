@@ -13,7 +13,7 @@ public class Session{
         this.client = client;
     }
 
-    public void login(String benutzername, String passwort) throws IOException {
+    public boolean login(String benutzername, String passwort) throws IOException {
         //Es gab keine registrierten Nutzer
         //Name noch nicht vergeben
         int listsize = clients.size();
@@ -29,14 +29,17 @@ public class Session{
                     //Socket aktualisieren
                     current_client.setClient(this.client);
                     current_client.setLoggedin(true);
+                    return true;
                 }
                 else if(passwort.equals(current_client.getPassword()) && current_client.isLoggedin() == true){
                     send_message("Dieser Nutzer ist schon eingeloggt! Die Verbindung wird getrennt!", "111", this.client);
                     client.close();
+                    return false;
                 }
                 else{
                     send_message("Login fehlgeschlagen! Die Verbindung wird getrennt!", "111", this.client);
                     client.close();
+                    return false;
                 }
             }
             i++;
@@ -46,7 +49,9 @@ public class Session{
             send_message("Sie werden jetzt registriert und eingeloggt!", "111", this.client);
             ClientNode newclient = new ClientNode(this.client, benutzername, passwort, true);
             clients.add(newclient);
+            return true;
         }
+        return false;
     }
     
     public void client_logout(Socket logout_client) {

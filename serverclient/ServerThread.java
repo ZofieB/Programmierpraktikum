@@ -19,13 +19,15 @@ class ServerThread extends Thread{
             //Bei falscher Eingabe wird Client durch Methode aus Session direkt wieder ausgeloggt
             String benutzername = in.readLine();
             String passwort = in.readLine();
-            session.login(benutzername, passwort);
+            boolean success = session.login(benutzername, passwort);
             
-            //Nachricht über Anmeldung an alle anderen Nutzer
-            session.message_all_clients(benutzername + " hat sich angemeldet");
+            if(success){
+                //Nachricht über Anmeldung an alle anderen Nutzer
+                session.message_all_clients(benutzername + " hat sich angemeldet");
 
-            //Zusendung aktuell angemeldeter Nutzer an Client
-            session.send_client_list();
+                //Zusendung aktuell angemeldeter Nutzer an Client
+                session.send_client_list();
+            }
 
             boolean logout = false;
             while(!logout){
