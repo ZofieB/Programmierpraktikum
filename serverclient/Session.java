@@ -14,8 +14,6 @@ public class Session{
     }
 
     public boolean login(String benutzername, String passwort) throws IOException {
-        //Es gab keine registrierten Nutzer
-        //Name noch nicht vergeben
         int listsize = clients.size();
         boolean stop = false;
         int i = 0;
@@ -24,6 +22,7 @@ public class Session{
             //Suche nach bekanntem Nutzernamen
             if(benutzername.equals(current_client.getName())){
                 stop = true;
+                //Richtiges Passwort und Nutzer war nicht eingeloggt
                 if(passwort.equals(current_client.getPassword()) && current_client.isLoggedin() == false){
                     send_message("Login erfolgreich! Willkommen zurück " + benutzername, "111", this.client);
                     //Socket aktualisieren
@@ -31,11 +30,13 @@ public class Session{
                     current_client.setLoggedin(true);
                     return true;
                 }
+                //richtiges passwort aber nutzer war schon eingeloggt
                 else if(passwort.equals(current_client.getPassword()) && current_client.isLoggedin() == true){
                     send_message("Dieser Nutzer ist schon eingeloggt! Die Verbindung wird getrennt!", "111", this.client);
                     client.close();
                     return false;
                 }
+                //falsches passwort
                 else{
                     send_message("Login fehlgeschlagen! Die Verbindung wird getrennt!", "111", this.client);
                     client.close();

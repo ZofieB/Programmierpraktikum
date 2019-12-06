@@ -29,6 +29,7 @@ class ServerThread extends Thread{
                 session.send_client_list();
             }
 
+            //Input vom Client empfangen (Message Listener)
             boolean logout = false;
             while(!logout){
                 String[] input = session.get_message();

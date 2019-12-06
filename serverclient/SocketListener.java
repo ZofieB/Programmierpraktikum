@@ -11,7 +11,7 @@ class SocketListener extends Thread {
     public SocketListener(ServerSocket server){
         this.server = server;
     }
-
+    //Annahme neuer Clients durch öffnen eines neuen Threads
     public void run(){
         try{
             while(true) {
@@ -21,7 +21,7 @@ class SocketListener extends Thread {
             }
         }catch(Exception e){}
     }
-
+    //Schließen des Servers
     public void shutdown() throws IOException{
         int size = currentThreads.size();
         for(int i = 0; i < size; i++){
