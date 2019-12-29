@@ -22,7 +22,7 @@ public class ClientControllerTest extends Application
         // Create the FXMLLoader 
         FXMLLoader loader = new FXMLLoader();
         // Path to the FXML File
-        String fxmlDocPath = "/home/sophie/Documents/Programmierpraktikum/serverclient/Client.fxml";
+        String fxmlDocPath = "/home/sophie/Documents/Programmierpraktikum/serverclient/ClientLogin.fxml";
         FileInputStream fxmlStream = new FileInputStream(fxmlDocPath);
 
         // Create the Pane and all Details

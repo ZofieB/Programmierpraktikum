@@ -38,7 +38,7 @@ public class ClientController {
         }
 
         @FXML
-        private void printOutput() {
-            output.setText(username.getText() + password.getText());
+        private void printOutput(String string) {
+            output.setText(username.getText() + password.getText() + string);
         }
 }

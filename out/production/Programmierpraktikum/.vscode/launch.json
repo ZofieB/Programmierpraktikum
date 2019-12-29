@@ -1,0 +1,39 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Client",
+            "request": "launch",
+            "mainClass": "serverclient.Client",
+            "projectName": "Programmierpraktikum_bb80a4a"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Server",
+            "request": "launch",
+            "mainClass": "serverclient.Server",
+            "projectName": "Programmierpraktikum_bb80a4a"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Main",
+            "request": "launch",
+            "mainClass": "game.Main",
+            "projectName": "Programmierpraktikum_bb80a4a"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Main",
+            "request": "launch",
+            "mainClass": "Game.Main",
+            "projectName": "Programmierpraktikum_bb80a4a"
+        },
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - Chomp",
+            "request": "launch",
+            "mainClass": "chomp.Chomp",
+            "projectName": "Programmierpraktikum_bb80a4a"
+        }
+    ]
+}
