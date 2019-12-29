@@ -28,49 +28,31 @@ public class Client extends Application {
     {
         // Create the FXMLLoader
         FXMLLoader loader = new FXMLLoader();
+
         // Path to the FXML File
-        String fxmlDocPath = "/home/sophie/Documents/Programmierpraktikum/serverclient/ClientWindow.fxml";
-        FileInputStream fxmlStream = new FileInputStream(fxmlDocPath);
+        String fxmlDocPathLogin = "/home/sophie/Documents/Programmierpraktikum/serverclient/ClientLogin.fxml";
+        //String fxmlDocPath = "/home/sophie/Documents/Programmierpraktikum/serverclient/ClientWindow.fxml";
+
+        //FileInputStream fxmlWindowStream = new FileInputStream(fxmlDocPath);
+        FileInputStream fxmlLoginStream = new FileInputStream(fxmlDocPathLogin);
 
         // Create the Pane and all Details
-        AnchorPane root = (AnchorPane) loader.load(fxmlStream);
+        AnchorPane rootLogin = (AnchorPane) loader.load(fxmlLoginStream);
+        //AnchorPane root = (AnchorPane) loader.load(fxmlWindowStream);
 
         // Create the Scene
-        Scene scene = new Scene(root);
+        Scene loginScene = new Scene(rootLogin);
+        //Scene scene = new Scene(root);
+
         // Set the Scene to the Stage
-        stage.setScene(scene);
+        stage.setScene(loginScene);
+        //stage.setScene(scene);
+
         // Set the Title to the Stage
-        stage.setTitle("Connected to Server");
+        stage.setTitle("Blumonovs Spieleserver");
+
         // Display the Stage
         stage.show();
     }
 
-    static public void send_server_message(String message, String code, Socket server)throws IOException{
-        BufferedWriter out = new BufferedWriter(new OutputStreamWriter(server.getOutputStream()));
-        out.write(code);
-        out.newLine();
-        out.write(message);
-        out.newLine();
-        out.flush();
-    }
 }
-
-/*
-        //Login Versuch (Methode login disconnected client wenn login fehlgeschlagen)
-        System.out.println("Benutzername:");
-        String client_benutzername = scan.nextLine();
-        out.write(client_benutzername);
-        out.newLine();
-        out.flush();
-        System.out.println("Passwort:");
-        out.write(scan.nextLine());
-        out.newLine();
-        out.flush();
-        boolean login = true;
-        if(in.readLine().equals("111")){
-        System.out.println(in.readLine());
-        }
-
-        //Nachrichten empfangen
-
-*/
