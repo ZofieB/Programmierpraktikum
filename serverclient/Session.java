@@ -13,7 +13,10 @@ public class Session{
         this.client = client;
     }
 
+    public Session(){}
+
     public boolean login(String benutzername, String passwort) throws IOException {
+        System.out.println("Server login invoked");
         int listsize = clients.size();
         boolean stop = false;
         int i = 0;
@@ -24,7 +27,7 @@ public class Session{
                 stop = true;
                 //Richtiges Passwort und Nutzer war nicht eingeloggt
                 if(passwort.equals(current_client.getPassword()) && current_client.isLoggedin() == false){
-                    send_message("Login erfolgreich! Willkommen zurück " + benutzername, "111", this.client);
+                    send_message("Willkommen zurück " + benutzername, "111", this.client);
                     //Socket aktualisieren
                     current_client.setClient(this.client);
                     current_client.setLoggedin(true);
@@ -32,13 +35,11 @@ public class Session{
                 }
                 //richtiges passwort aber nutzer war schon eingeloggt
                 else if(passwort.equals(current_client.getPassword()) && current_client.isLoggedin() == true){
-                    send_message("Dieser Nutzer ist schon eingeloggt! Die Verbindung wird getrennt!", "111", this.client);
                     client.close();
                     return false;
                 }
                 //falsches passwort
                 else{
-                    send_message("Login fehlgeschlagen! Die Verbindung wird getrennt!", "111", this.client);
                     client.close();
                     return false;
                 }
@@ -47,7 +48,7 @@ public class Session{
         }
         //Schleife ist vollständig durchgelaufen und es gab keinen Benutzernamenmatch oder es ist noch niemand registriert--> Registrierung
         if((i == listsize  && stop == false) || clients.isEmpty() == true){
-            send_message("Sie werden jetzt registriert und eingeloggt!", "111", this.client);
+            send_message("Willkommen auf dem Server!", "111", this.client);
             ClientNode newclient = new ClientNode(this.client, benutzername, passwort, true);
             clients.add(newclient);
             return true;
@@ -66,6 +67,7 @@ public class Session{
     }
 
     public void send_message(String message, String code, Socket curr_client) throws IOException {
+        System.out.println(code + ' ' + message);
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(curr_client.getOutputStream()));
         out.write(code);
         out.newLine();
@@ -103,5 +105,18 @@ public class Session{
     public String[] get_message()throws IOException{
         BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
         return new String[]{in.readLine(), in.readLine()};
+    }
+
+    public ArrayList<String> returnClientList() {
+        int listsize = clients.size();
+        ArrayList<String> clientsArray = new ArrayList<String>();
+        int x = 0;
+        for(int i = 0; i < listsize; i++){
+            ClientNode current_client = clients.get(i);
+            if(current_client.isLoggedin() == true) {
+                clientsArray.add(current_client.getName());
+            }
+        }
+        return clientsArray;
     }
 }

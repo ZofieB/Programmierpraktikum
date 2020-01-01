@@ -31,28 +31,22 @@ public class Client extends Application {
 
         // Path to the FXML File
         String fxmlDocPathLogin = "/home/sophie/Documents/Programmierpraktikum/serverclient/ClientLogin.fxml";
-        //String fxmlDocPath = "/home/sophie/Documents/Programmierpraktikum/serverclient/ClientWindow.fxml";
 
-        //FileInputStream fxmlWindowStream = new FileInputStream(fxmlDocPath);
         FileInputStream fxmlLoginStream = new FileInputStream(fxmlDocPathLogin);
 
         // Create the Pane and all Details
         AnchorPane rootLogin = (AnchorPane) loader.load(fxmlLoginStream);
-        //AnchorPane root = (AnchorPane) loader.load(fxmlWindowStream);
 
         // Create the Scene
         Scene loginScene = new Scene(rootLogin);
-        //Scene scene = new Scene(root);
 
         // Set the Scene to the Stage
         stage.setScene(loginScene);
-        //stage.setScene(scene);
 
         // Set the Title to the Stage
-        stage.setTitle("Blumonovs Spieleserver");
+        stage.setTitle("Blumunovs Spieleserver");
 
         // Display the Stage
         stage.show();
     }
-
 }

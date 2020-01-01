@@ -4,21 +4,32 @@ import java.io.*;
 import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
+import javafx.scene.text.TextFlow;
+import javafx.stage.Stage;
 
 
-public class ClientController extends Thread{
+public class ClientController{
+    private static boolean initialized = false;
     //Login Fenster
     @FXML
     private PasswordField password;
 
     @FXML
     private TextField username;
+
+    @FXML
+    private TextArea textOutput;
 
     //Client Fenster
     @FXML
@@ -35,14 +46,26 @@ public class ClientController extends Thread{
 
     private static Socket server;
 
+    private Session session;
+
+    private FXMLLoader loader;
+
+    private static MessageListener messages;
+
     // Add a public no-args constructor
     public ClientController() {
     }
 
     @FXML
     private void initialize() throws IOException {
-        createSocket();
-        createMessageListener();
+        System.out.println("### Initialize invoked");
+        if (!initialized)
+        {
+            initialized = true;
+            createSocket();
+            createMessageListener();
+            session = new Session();
+        }
     }
 
     @FXML
@@ -53,13 +76,16 @@ public class ClientController extends Thread{
     }
     @FXML
     private void logout() throws IOException{
-        send_server_message("", "101");
+        Stage stage = (Stage) inputField.getScene().getWindow();
+        send_server_message("101", "101");
         server.close();
-        //Client disconnecten
+        stage.close();
+
     }
 
     @FXML
     private void login() throws  IOException{
+        System.out.println("### Login invoked");
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(server.getOutputStream()));
         out.write(username.getText());
         out.newLine();
@@ -67,6 +93,13 @@ public class ClientController extends Thread{
         out.write(password.getText());
         out.newLine();
         out.flush();
+
+        Stage stage = (Stage) username.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("ClientWindow.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+
     }
     private void createSocket(){
         try {
@@ -80,7 +113,7 @@ public class ClientController extends Thread{
 
     private void createMessageListener() throws IOException{
         BufferedReader in = new BufferedReader(new InputStreamReader(server.getInputStream()));
-        MessageListener messages = new MessageListener(in, outputField);
+        messages = new MessageListener(in, outputField);
         messages.start();
     }
 
@@ -91,5 +124,9 @@ public class ClientController extends Thread{
         out.write(message);
         out.newLine();
         out.flush();
+    }
+
+    public void getClients(){
+        ArrayList<String> clients = session.returnClientList();
     }
 }

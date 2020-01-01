@@ -3,11 +3,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverclient.ClientController">
+<AnchorPane prefHeight="400.0" prefWidth="765.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverclient.ClientController">
    <children>
-      <TextArea fx:id="outputField" editable="false" layoutX="14.0" layoutY="14.0" prefHeight="289.0" prefWidth="571.0" />
-      <TextField fx:id="inputField" layoutX="14.0" layoutY="317.0" prefHeight="26.0" prefWidth="405.0" />
-      <Button fx:id="sendInput" layoutX="429.0" layoutY="317.0" mnemonicParsing="false" onAction="#sendMessage" text="Send" />
-      <Button layoutX="522.0" layoutY="317.0" mnemonicParsing="false" onAction="#logout" text="Logout" />
+      <TextArea fx:id="outputField" editable="false" layoutX="180.0" layoutY="14.0" prefHeight="289.0" prefWidth="571.0" />
+      <TextField fx:id="inputField" layoutX="180.0" layoutY="317.0" prefHeight="26.0" prefWidth="405.0" />
+      <Button fx:id="sendInput" layoutX="595.0" layoutY="317.0" mnemonicParsing="false" onAction="#sendMessage" text="Send" />
+      <Button layoutX="688.0" layoutY="317.0" mnemonicParsing="false" onAction="#logout" text="Logout" />
+      <TextArea fx:id="activeClients" layoutX="14.0" layoutY="42.0" prefHeight="344.0" prefWidth="148.0" />
+      <Label layoutX="14.0" layoutY="14.0" text="Aktive Nutzer" />
    </children>
 </AnchorPane>

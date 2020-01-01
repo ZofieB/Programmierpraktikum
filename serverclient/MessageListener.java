@@ -16,12 +16,16 @@ public class MessageListener extends Thread{
         try{
             while(true) {
                 String input = in.readLine();
+                System.out.println(input);
                 if(input.equals("111")){
                     outputField.setText(in.readLine());
                     //System.out.println(in.readLine());
                 }
                 else if(input.equals("222")){
                     System.exit(0);
+                }
+                else if(input.equals("099")) {
+                //Userliste aktualisieren
                 }
             }
         }catch(Exception e){}

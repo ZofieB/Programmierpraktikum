@@ -10,5 +10,6 @@
       <Label layoutX="215.0" layoutY="130.0" text="Nutzername" />
       <Label layoutX="215.0" layoutY="192.0" text="Passwort" />
       <Button layoutX="214.0" layoutY="256.0" mnemonicParsing="false" onAction="#login" text="Login" />
+      <TextArea fx:id="textOutput" editable="false" layoutX="214.0" layoutY="294.0" prefHeight="34.0" prefWidth="200.0" />
    </children>
 </AnchorPane>
