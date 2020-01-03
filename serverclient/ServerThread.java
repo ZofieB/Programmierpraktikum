@@ -24,13 +24,8 @@ class ServerThread extends Thread{
             
             if(success){
                 //Nachricht über Anmeldung an alle anderen Nutzer
-                session.message_all_clients(benutzername + " hat sich angemeldet");
-                //Nachricht, das Nutzerliste aktualisiert werden muss
-                /*out.write("099");
-                out.newLine();
-                out.flush();*/
-                session.send_message("","099", client);
-
+                session.message_all_clients_except_self(benutzername + " hat sich angemeldet");
+                session.send_client_list();
                 //Zusendung aktuell angemeldeter Nutzer an Client
                 //session.send_client_list();
             }

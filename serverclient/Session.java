@@ -80,6 +80,16 @@ public class Session{
         int listsize = clients.size();
         for(int i = 0; i < listsize; i++){
             ClientNode current_client = clients.get(i);
+            if(current_client.isLoggedin() == true){
+                send_message(message, "111", current_client.getClient());
+            }
+        }
+    }
+
+    public void message_all_clients_except_self(String message) throws IOException{
+        int listsize = clients.size();
+        for(int i = 0; i < listsize; i++){
+            ClientNode current_client = clients.get(i);
             if(current_client.getClient() != this.client && current_client.isLoggedin() == true){
                 send_message(message, "111", current_client.getClient());
             }
@@ -87,18 +97,12 @@ public class Session{
     }
 
     public void send_client_list() throws IOException{
-        send_message("Aktuell angemeldete Nutzer:", "111", this.client);
         int listsize = clients.size();
-        boolean alone = true;
         for(int i = 0; i < listsize; i++){
             ClientNode current_client = clients.get(i);
-            if(current_client.getClient() != this.client && current_client.isLoggedin() == true){
-                send_message(current_client.getName(), "111", this.client);
-                alone = false;
+            if(current_client.isLoggedin() == true){
+                send_message("", "099", current_client.getClient());
             }
-        }
-        if(alone == true){
-            send_message("Niemand, denn du bist ganz alleine hier!", "111", this.client);
         }
     }
 

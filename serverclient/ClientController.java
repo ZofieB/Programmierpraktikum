@@ -28,15 +28,15 @@ public class ClientController{
     @FXML
     private TextField username;
 
-    @FXML
-    private TextArea textOutput;
-
     //Client Fenster
     @FXML
     private TextField inputField;
 
     @FXML
     private TextArea outputField;
+
+    @FXML
+    private TextArea activeClients;
 
     @FXML
     private URL location;
@@ -63,8 +63,10 @@ public class ClientController{
         {
             initialized = true;
             createSocket();
-            createMessageListener();
             session = new Session();
+        }
+        else{
+            createMessageListener();
         }
     }
 
@@ -73,6 +75,7 @@ public class ClientController{
         if(server != null) {
             send_server_message(inputField.getText(), "100");
         }
+        inputField.clear();
     }
     @FXML
     private void logout() throws IOException{
@@ -113,7 +116,7 @@ public class ClientController{
 
     private void createMessageListener() throws IOException{
         BufferedReader in = new BufferedReader(new InputStreamReader(server.getInputStream()));
-        messages = new MessageListener(in, outputField);
+        messages = new MessageListener(in, outputField, this);
         messages.start();
     }
 
@@ -126,7 +129,17 @@ public class ClientController{
         out.flush();
     }
 
-    public void getClients(){
-        ArrayList<String> clients = session.returnClientList();
+    public void updateTextArea(String message){
+        outputField.appendText(message + "\n");
+    }
+
+    public void updateClientList(){
+        System.out.println("### Clients Update invoked");
+        ArrayList<String> clientArray= session.returnClientList();
+        activeClients.clear();
+        for (String s : clientArray) {
+            activeClients.appendText(s + "\n");
+        }
+        System.out.println("### Clients Update finished");
     }
 }
