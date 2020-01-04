@@ -3,4 +3,6 @@
 101 = Logout vom Client
 222 = Server wurde geschlossen 
 1 = Server schließen
-099 = ClientListe muss aktualisiert werden
+099 = Client hinzufügen
+098 = Client entfernen
+001 = fehlgeschlagener Login

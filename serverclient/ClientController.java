@@ -5,6 +5,8 @@ import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
@@ -52,6 +54,10 @@ public class ClientController{
 
     private static MessageListener messages;
 
+    private ArrayList<String> clients;
+
+    private List<String> client_list;
+
     // Add a public no-args constructor
     public ClientController() {
     }
@@ -67,6 +73,8 @@ public class ClientController{
         }
         else{
             createMessageListener();
+            clients = new ArrayList<String>();
+            //client_list = Collections.synchronizedList(clients);
         }
     }
 
@@ -96,6 +104,7 @@ public class ClientController{
         out.write(password.getText());
         out.newLine();
         out.flush();
+
 
         Stage stage = (Stage) username.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("ClientWindow.fxml"));
@@ -135,11 +144,34 @@ public class ClientController{
 
     public void updateClientList(){
         System.out.println("### Clients Update invoked");
-        ArrayList<String> clientArray= session.returnClientList();
         activeClients.clear();
-        for (String s : clientArray) {
+        for (String s : clients) {
             activeClients.appendText(s + "\n");
         }
         System.out.println("### Clients Update finished");
+    }
+
+    public void deleteClient(String newClient){
+        System.out.println("### DeleteClient invoked");
+        int clients_size = clients.size();
+        for(int i = 0; i < clients_size; i++){
+            if(clients.get(i).equals(newClient)){
+                clients.remove(i);
+                break;
+            }
+        }
+        System.out.println("### DelteClient finished");
+    }
+
+    public void addClient(String newClient){
+        System.out.println("### AddClient invoked");
+        clients.add(newClient); //Programm bleibt stehen!
+        System.out.println("### AddClient finished");
+    }
+
+    public void closeWindow() throws IOException{
+        Stage stage = (Stage) inputField.getScene().getWindow();
+        //server.close();
+        stage.close();
     }
 }

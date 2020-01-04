@@ -6,6 +6,7 @@ import java.util.*;
 
 public class Session{
     private Socket client;
+    private boolean failed;
     //public static HashMap<String, String> users = new HashMap<String, String>();
     public static ArrayList<ClientNode> clients = new ArrayList<ClientNode>();
 
@@ -35,12 +36,10 @@ public class Session{
                 }
                 //richtiges passwort aber nutzer war schon eingeloggt
                 else if(passwort.equals(current_client.getPassword()) && current_client.isLoggedin() == true){
-                    client.close();
                     return false;
                 }
                 //falsches passwort
                 else{
-                    client.close();
                     return false;
                 }
             }
@@ -51,6 +50,7 @@ public class Session{
             send_message("Willkommen auf dem Server!", "111", this.client);
             ClientNode newclient = new ClientNode(this.client, benutzername, passwort, true);
             clients.add(newclient);
+            failed = false;
             return true;
         }
         return false;
@@ -76,12 +76,12 @@ public class Session{
         out.flush();
     }
 
-    public void message_all_clients(String message) throws IOException{
+    public void message_all_clients(String message, String code) throws IOException{
         int listsize = clients.size();
         for(int i = 0; i < listsize; i++){
             ClientNode current_client = clients.get(i);
             if(current_client.isLoggedin() == true){
-                send_message(message, "111", current_client.getClient());
+                send_message(message, code, current_client.getClient());
             }
         }
     }
@@ -96,7 +96,7 @@ public class Session{
         }
     }
 
-    public void send_client_list() throws IOException{
+    /*public void send_client_list() throws IOException{
         int listsize = clients.size();
         for(int i = 0; i < listsize; i++){
             ClientNode current_client = clients.get(i);
@@ -104,14 +104,14 @@ public class Session{
                 send_message("", "099", current_client.getClient());
             }
         }
-    }
+    }*/
 
     public String[] get_message()throws IOException{
         BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
         return new String[]{in.readLine(), in.readLine()};
     }
 
-    public ArrayList<String> returnClientList() {
+/*    public ArrayList<String> returnClientList() {
         int listsize = clients.size();
         ArrayList<String> clientsArray = new ArrayList<String>();
         int x = 0;
@@ -122,5 +122,19 @@ public class Session{
             }
         }
         return clientsArray;
+    }*/
+
+    public void update_all_active_clients()throws IOException{
+        int listsize = clients.size();
+        for(int i = 0; i < listsize; i++){
+            ClientNode current_client = clients.get(i);
+            if(current_client.getClient() != this.client && current_client.isLoggedin() == true){
+                send_message(current_client.getName(), "099", this.client);
+            }
+        }
+    }
+
+    public boolean getFailed(){
+        return this.failed;
     }
 }

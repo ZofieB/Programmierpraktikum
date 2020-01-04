@@ -25,9 +25,13 @@ class ServerThread extends Thread{
             if(success){
                 //Nachricht über Anmeldung an alle anderen Nutzer
                 session.message_all_clients_except_self(benutzername + " hat sich angemeldet");
-                session.send_client_list();
+                session.update_all_active_clients();
+                session.message_all_clients(benutzername, "099");
                 //Zusendung aktuell angemeldeter Nutzer an Client
                 //session.send_client_list();
+            }
+            else{
+                session.send_message("", "001", client);
             }
 
             //Input vom Client empfangen (Message Listener)
@@ -38,11 +42,12 @@ class ServerThread extends Thread{
                 System.out.println(input[1]);
                 if(input[0].equals("101")){
                     session.client_logout(client);
-                    session.message_all_clients(benutzername + " hat sich ausgeloggt!");
+                    session.message_all_clients(benutzername + " hat sich ausgeloggt!", "111");
+                    session.message_all_clients(benutzername, "098");
                     logout = true;
                 }
                 else if(input[0].equals("100")){
-                    session.message_all_clients(benutzername + ": " + input[1]);
+                    session.message_all_clients(benutzername + ": " + input[1], "111");
                 }
             }
             client.close();

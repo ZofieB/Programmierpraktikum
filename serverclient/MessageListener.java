@@ -30,7 +30,21 @@ public class MessageListener extends Thread{
                     System.exit(0);
                 }
                 else if(input.equals("099")) {
-                    //controller.updateClientList();
+                    //Neuer Login wird in ClientListe aufgenommen
+                    System.out.println("### Message Listener add Client invoked");
+                    controller.addClient(in.readLine());
+                    controller.updateClientList();
+                }
+                else if(input.equals("098")) {
+                    //Logout muss aus ClientListe entfernt werden
+                    String username = in.readLine();
+                    System.out.println(username);
+                    controller.deleteClient(username);
+                    controller.updateClientList();
+                }
+                else if(input.equals("001")){
+                    //Fenster schließen bei fehlgeschlagenem Login -- GEHT NOCH NICHT
+                    controller.closeWindow();
                 }
             }
         }catch(Exception E){}
