@@ -6,16 +6,19 @@ import java.util.*;
 
 class SocketListener extends Thread {
     private ServerSocket server;
+    private ServerController controller;
     ArrayList<ServerThread> currentThreads = new ArrayList<ServerThread>();
 
-    public SocketListener(ServerSocket server){
+    public SocketListener(ServerSocket server, ServerController controller){
         this.server = server;
+        this.controller = controller;
     }
     //Annahme neuer Clients durch öffnen eines neuen Threads
     public void run(){
+        controller.printOutput("SERVERSTATUS\tDer Server wurde gestartet!");
         try{
             while(true) {
-                ServerThread serverThread = new ServerThread(server.accept());
+                ServerThread serverThread = new ServerThread(server.accept(), controller);
                 currentThreads.add(serverThread);
                 serverThread.start();
             }

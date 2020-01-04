@@ -44,6 +44,7 @@ public class MessageListener extends Thread{
                 }
                 else if(input.equals("001")){
                     //Fenster schließen bei fehlgeschlagenem Login -- GEHT NOCH NICHT
+                    System.out.println("fehlgeschlagene Anmeldung");
                     controller.closeWindow();
                 }
             }

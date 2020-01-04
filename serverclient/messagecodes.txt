@@ -6,3 +6,4 @@
 099 = Client hinzufügen
 098 = Client entfernen
 001 = fehlgeschlagener Login
+002 = erfolgreicher Login

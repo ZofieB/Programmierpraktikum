@@ -3,10 +3,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverclient.Server">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverclient.ServerController">
    <children>
-      <TextArea fx:id="logField" layoutX="23.0" layoutY="26.0" prefHeight="317.0" prefWidth="553.0" />
-      <Button fx:id="shutdown" layoutX="23.0" layoutY="360.0" mnemonicParsing="false" text="Shutdown" />
+      <TextArea fx:id="logField" editable="false" layoutX="23.0" layoutY="26.0" prefHeight="317.0" prefWidth="413.0" />
+      <Button fx:id="shutdown" layoutX="23.0" layoutY="360.0" mnemonicParsing="false" onAction="#shutdown" text="Shutdown" />
+      <TextArea fx:id="activeClients" editable="false" layoutX="442.0" layoutY="56.0" prefHeight="287.0" prefWidth="144.0" />
+      <Label layoutX="442.0" layoutY="26.0" text="ActiveClients" />
    </children>
 </AnchorPane>

@@ -7,11 +7,13 @@ import java.util.*;
 public class Session{
     private Socket client;
     private boolean failed;
+    private ServerController controller;
     //public static HashMap<String, String> users = new HashMap<String, String>();
     public static ArrayList<ClientNode> clients = new ArrayList<ClientNode>();
 
-    public Session(Socket client){
+    public Session(Socket client, ServerController controller){
         this.client = client;
+        this.controller = controller;
     }
 
     public Session(){}
@@ -36,10 +38,12 @@ public class Session{
                 }
                 //richtiges passwort aber nutzer war schon eingeloggt
                 else if(passwort.equals(current_client.getPassword()) && current_client.isLoggedin() == true){
+                    controller.printOutput("VERBINDUNG\tAnmeldung fehlgeschlagen! Verbindung wird getrennt!");
                     return false;
                 }
                 //falsches passwort
                 else{
+                    controller.printOutput("VERBINDUNG\tAnmeldung fehlgeschlagen! Verbindung wird getrennt!");
                     return false;
                 }
             }
@@ -51,6 +55,7 @@ public class Session{
             ClientNode newclient = new ClientNode(this.client, benutzername, passwort, true);
             clients.add(newclient);
             failed = false;
+            controller.printOutput("USER\tNeue Registrierung von " + benutzername );
             return true;
         }
         return false;
@@ -111,7 +116,7 @@ public class Session{
         return new String[]{in.readLine(), in.readLine()};
     }
 
-/*    public ArrayList<String> returnClientList() {
+    public ArrayList<String> returnClientList() {
         int listsize = clients.size();
         ArrayList<String> clientsArray = new ArrayList<String>();
         int x = 0;
@@ -122,7 +127,7 @@ public class Session{
             }
         }
         return clientsArray;
-    }*/
+    }
 
     public void update_all_active_clients()throws IOException{
         int listsize = clients.size();
