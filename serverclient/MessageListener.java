@@ -9,6 +9,7 @@ public class MessageListener extends Thread{
     private BufferedReader in;
     private TextArea outputField;
     private ClientController controller;
+    private boolean loggedIn = true;
 
     public MessageListener(BufferedReader in, TextArea outputField, ClientController controller) {
         this.in = in;
@@ -16,6 +17,9 @@ public class MessageListener extends Thread{
         this.controller = controller;
     }
 
+    public boolean getLoggedIn(){
+        return this.loggedIn;
+    }
     public void run(){
         try{
             while(true) {
@@ -43,9 +47,8 @@ public class MessageListener extends Thread{
                     controller.updateClientList();
                 }
                 else if(input.equals("001")){
-                    //Fenster schließen bei fehlgeschlagenem Login -- GEHT NOCH NICHT
-                    System.out.println("fehlgeschlagene Anmeldung");
-                    controller.closeWindow();
+                    //Fehlgeschlagener Login
+                    controller.updateTextArea("Der Login ist fehlgeschlagen! Das Fenster kann geschlossen werden!");
                 }
             }
         }catch(Exception E){}

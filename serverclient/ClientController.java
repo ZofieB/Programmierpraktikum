@@ -95,7 +95,7 @@ public class ClientController{
     }
 
     @FXML
-    private void login() throws  IOException{
+    private void login() throws  Exception{
         System.out.println("### Login invoked");
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(server.getOutputStream()));
         out.write(username.getText());
@@ -104,7 +104,6 @@ public class ClientController{
         out.write(password.getText());
         out.newLine();
         out.flush();
-
 
         Stage stage = (Stage) username.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("ClientWindow.fxml"));
@@ -167,11 +166,5 @@ public class ClientController{
         System.out.println("### AddClient invoked");
         clients.add(newClient); //Programm bleibt stehen!
         System.out.println("### AddClient finished");
-    }
-
-    public void closeWindow() throws IOException{
-        Stage stage = (Stage) inputField.getScene().getWindow();
-        //server.close();
-        stage.close();
     }
 }
