@@ -112,10 +112,17 @@ public class Session{
     }*/
 
     public String[] get_message()throws IOException{
-        BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
-        return new String[]{in.readLine(), in.readLine()};
+        if(client != null) {
+            BufferedReader in = new BufferedReader(new InputStreamReader(client.getInputStream()));
+            return new String[]{in.readLine(), in.readLine()};
+        }
+        else{
+            client_logout(client);
+            return null;
+        }
     }
 
+    //neue Methode
     public ArrayList<String> returnClientList() {
         int listsize = clients.size();
         ArrayList<String> clientsArray = new ArrayList<String>();
@@ -129,6 +136,7 @@ public class Session{
         return clientsArray;
     }
 
+    //neue Methode
     public void update_all_active_clients()throws IOException{
         int listsize = clients.size();
         for(int i = 0; i < listsize; i++){

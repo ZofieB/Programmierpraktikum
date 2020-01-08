@@ -22,7 +22,6 @@ import javafx.stage.Stage;
 
 
 public class ClientController{
-    private static boolean initialized = false;
     //Login Fenster
     @FXML
     private PasswordField password;
@@ -56,7 +55,7 @@ public class ClientController{
 
     private ArrayList<String> clients;
 
-    private List<String> client_list;
+    private static boolean initialized = false;
 
     // Add a public no-args constructor
     public ClientController() {
@@ -74,7 +73,6 @@ public class ClientController{
         else{
             createMessageListener();
             clients = new ArrayList<String>();
-            //client_list = Collections.synchronizedList(clients);
         }
     }
 
@@ -86,10 +84,12 @@ public class ClientController{
         inputField.clear();
     }
     @FXML
-    private void logout() throws IOException{
+    public void logout() throws IOException{
         Stage stage = (Stage) inputField.getScene().getWindow();
-        send_server_message("101", "101");
-        server.close();
+        if(server!= null){
+            send_server_message("101", "101");
+            server.close();
+        }
         stage.close();
 
     }
@@ -124,7 +124,7 @@ public class ClientController{
 
     private void createMessageListener() throws IOException{
         BufferedReader in = new BufferedReader(new InputStreamReader(server.getInputStream()));
-        messages = new MessageListener(in, outputField, this);
+        messages = new MessageListener(in, this);
         messages.start();
     }
 

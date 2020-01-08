@@ -7,13 +7,11 @@ import javafx.scene.control.TextArea;
 
 public class MessageListener extends Thread{
     private BufferedReader in;
-    private TextArea outputField;
     private ClientController controller;
     private boolean loggedIn = true;
 
-    public MessageListener(BufferedReader in, TextArea outputField, ClientController controller) {
+    public MessageListener(BufferedReader in, ClientController controller) {
         this.in = in;
-        this.outputField = outputField;
         this.controller = controller;
     }
 
