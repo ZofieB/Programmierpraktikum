@@ -39,11 +39,13 @@ public class Session{
                 //richtiges passwort aber nutzer war schon eingeloggt
                 else if(passwort.equals(current_client.getPassword()) && current_client.isLoggedin() == true){
                     controller.printOutput("VERBINDUNG\tAnmeldung fehlgeschlagen! Verbindung wird getrennt!");
+                    client.close();
                     return false;
                 }
                 //falsches passwort
                 else{
                     controller.printOutput("VERBINDUNG\tAnmeldung fehlgeschlagen! Verbindung wird getrennt!");
+                    client.close();
                     return false;
                 }
             }
