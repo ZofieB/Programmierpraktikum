@@ -2,4 +2,8 @@
 100 = Nachricht von Client die an alle Clients gesendet werden soll
 101 = Logout vom Client
 222 = Server wurde geschlossen 
-1 = Server schließen 
+1 = Server schließen
+099 = Client hinzufügen
+098 = Client entfernen
+001 = fehlgeschlagener Login
+002 = erfolgreicher Login
