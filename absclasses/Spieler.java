@@ -1,8 +1,11 @@
 package absclasses;
 
+import javafx.scene.paint.Color;
+
 public class Spieler {
     protected String spielername;
     protected int spielerart; //0-Computer 1-richtiger Spieler
+    private Color farbe;
 
     public Spieler() {}
     public Spieler(String spielername, int spielerart) {
@@ -21,6 +24,12 @@ public class Spieler {
     }
     public void setSpielerart(int spielerart) {
         this.spielerart = spielerart;
+    }
+    public void setFarbe(Color farbe){
+        this.farbe = farbe;
+    }
+    public Color getFarbe(){
+        return this.farbe;
     }
 
 }
