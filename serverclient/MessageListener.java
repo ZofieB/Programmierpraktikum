@@ -48,6 +48,12 @@ public class MessageListener extends Thread{
                     //Fehlgeschlagener Login
                     controller.updateTextArea("Der Login ist fehlgeschlagen! Das Fenster kann geschlossen werden!");
                 }
+                else if(input.equals("501")){
+                    //eingehende Spieleanfrage TODO
+                }
+                else if(input.equals("505")){
+                    //Gegner hat einen Zug gemacht TODO
+                }
             }
         }catch(Exception E){}
     }
