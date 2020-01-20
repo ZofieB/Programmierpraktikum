@@ -9,13 +9,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
@@ -57,6 +60,8 @@ public class ClientController{
 
     private static boolean initialized = false;
 
+    private static boolean gameWindow = false;
+
     // Add a public no-args constructor
     public ClientController() {
     }
@@ -64,15 +69,18 @@ public class ClientController{
     @FXML
     private void initialize() throws IOException {
         System.out.println("### Initialize invoked");
-        if (!initialized)
-        {
-            initialized = true;
-            createSocket();
-            session = new Session();
+        if(gameWindow == false) {
+            if (!initialized) {
+                initialized = true;
+                createSocket();
+                session = new Session();
+            } else {
+                createMessageListener();
+                clients = new ArrayList<String>();
+            }
         }
         else{
-            createMessageListener();
-            clients = new ArrayList<String>();
+            choiceGames.setItems(FXCollections.observableArrayList("Chomp", "Vier Gewinnt"));
         }
     }
 
@@ -167,4 +175,71 @@ public class ClientController{
         clients.add(newClient); //Programm bleibt stehen!
         System.out.println("### AddClient finished");
     }
+
+    //
+    // GAME SECTION
+    //
+
+    @FXML
+    private ChoiceBox choiceGames;
+
+    @FXML
+    private TextField opponentField;
+
+    @FXML
+    private void createNewGame(){
+        gameWindow = true;
+        Parent root;
+        try {
+            Stage stage = new Stage();
+            // Create the FXMLLoader
+            FXMLLoader loader = new FXMLLoader();
+
+            // Path to the FXML File
+            String fxmlDocPathGame = "/home/sophie/Documents/Programmierpraktikum/serverclient/Game.fxml";
+
+            FileInputStream fxmlLoginStream = new FileInputStream(fxmlDocPathGame);
+
+            // Create the Pane and all Details
+            AnchorPane rootGame = (AnchorPane) loader.load(fxmlLoginStream);
+
+            // Create the Scene
+            Scene gameScene = new Scene(rootGame);
+
+            // Set the Scene to the Stage
+            stage.setScene(gameScene);
+
+            // Set the Title to the Stage
+            stage.setTitle("New Game");
+
+            // Display the Stage
+            stage.show();
+
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @FXML
+    private void checkOpponent() throws IOException{
+        String opponent = opponentField.getText();
+        if(clients.contains(opponent)){
+            //Eröffne entsprechendes Spiel TODO!
+            send_server_message("opponent", "500");
+        }
+        else{
+            Stage thisStage = (Stage) opponentField.getScene().getWindow();
+            thisStage.close();
+        }
+
+    }
+
+    @FXML
+    private void cancel(){
+        Stage thisStage = (Stage) opponentField.getScene().getWindow();
+        thisStage.close();
+    }
+
+
 }

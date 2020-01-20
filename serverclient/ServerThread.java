@@ -7,6 +7,7 @@ import java.util.*;
 class ServerThread extends Thread{
     Socket client;
     ServerController controller;
+    String opponent;
     ServerThread(Socket client, ServerController controller) {
         this.client = client;
         this.controller = controller;
@@ -60,6 +61,16 @@ class ServerThread extends Thread{
                 else if(input[0].equals("100")){
                     controller.printOutput("MESSAGE\t" + benutzername + ": " + input[1]);
                     session.message_all_clients(benutzername + ": " + input[1], "111");
+                }
+                else if(input[0].equals("500")){
+                    //Message?
+                    //Spieleanfrage weiterschicken an entsprechenden Gegner und Gegner in Variable speichern
+                    session.message_this_client(benutzername, input[1], "501");
+                    opponent = input[1];
+                }
+                else if(input[0].equals("555")){
+                    //Client hat Spielzug gemacht, Spielzug wird weitergegeben
+                    session.message_this_client("Hier muss der Spielzug stehen", opponent, "505");
                 }
             }
             client.close();

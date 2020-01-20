@@ -7,3 +7,7 @@
 098 = Client entfernen
 001 = fehlgeschlagener Login
 002 = erfolgreicher Login
+500 = Spieleanfrage ausgehend (vom Client aus gesehen)
+501 = Spieleanfrage eingehend (vom Client aus gesehen)
+505 = eingehender Spielzug
+555 = ausgehender Spielzug
