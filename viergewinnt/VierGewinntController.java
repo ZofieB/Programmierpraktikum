@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.layout.GridPane;
+import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Circle;
 
@@ -30,7 +31,14 @@ public class VierGewinntController{
     private void initialize() throws IOException {
         //Größe später parametisieren auf Eingabe
         for (int i = 0; i < 9; i++){
-            for (int j = 0; j < 6; j++){
+            int j = 0;
+            Polygon pol = new Polygon();
+            pol.getPoints().addAll(0.0, 0.0, 45.0, 45.0, 90.0, 0.0);
+            pol.setFill(BLACK);
+            feld.add(pol, i, j);
+        }
+        for (int i = 0; i < 9; i++){
+            for (int j = 1; j < 6; j++){
                 Rectangle rec = new Rectangle();
                 rec.setX(0);
                 rec.setY(0);
@@ -43,22 +51,36 @@ public class VierGewinntController{
             }
         }
         for (int i = 0; i < 9; i++){
-            for (int j = 0; j < 6; j++){
+            for (int j = 1; j < 6; j++){
                 Circle cir = new Circle();
                 cir.setCenterX(45.0);
                 cir.setCenterY(45.0);
                 cir.setRadius(45.0);
-
                 cir.setStroke(BLACK);
-
-                if (i == 0 && j == 0){
+                //Ausprobieren von Farben um zu schauen, ob man von denen Augenkrebs bekommt und welche am besten miteinander harmonieren
+                if (i == 0 && j == 2){
                     cir.setFill(LIGHTPINK);
                 }
                 else if (i == 0 && j == 1){
-                    cir.setFill(LIGHTSKYBLUE);
+                    cir.setFill(LIGHTBLUE);
                 }
-                else if (i == 1 && j == 0){
+                else if (i == 1 && j ==3){
                     cir.setFill(LIGHTGOLDENRODYELLOW);
+                }
+                else if (i == 1 && j == 1){
+                    cir.setFill(PALEGREEN);
+                }
+                else if (i == 1 && j == 2){
+                    cir.setFill(PALETURQUOISE);
+                }
+                else if (i == 5 && j == 3){
+                    cir.setFill(POWDERBLUE);
+                }
+                else if (i == 5 && j == 1){
+                    cir.setFill(PINK);
+                }
+                else if (i == 5 && j == 2){
+                    cir.setFill(PLUM);
                 }
                 else {cir.setFill(WHITE);}
                 feld.add(cir, i, j);
@@ -70,8 +92,8 @@ public class VierGewinntController{
         ObservableList<Node>children = feld.getChildren();
         for(Node n : children){
             if(feld.getRowIndex(n) == y && feld.getColumnIndex(n) == x){
-                Rectangle rec = (Rectangle) n;
-                rec.setFill(spieler.getFarbe());
+                Circle cir = (Circle) n;
+                cir.setFill(spieler.getFarbe());
             }
         }
     }

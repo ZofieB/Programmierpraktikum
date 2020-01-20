@@ -35,7 +35,7 @@ public class VierGewinntMain extends Application {
         stage.setScene(loginScene);
 
         // Set the Title to the Stage
-        stage.setTitle("Server Log");
+        stage.setTitle("VierGewinnt");
 
         // Display the Stage
         stage.show();
