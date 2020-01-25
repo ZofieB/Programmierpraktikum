@@ -5,10 +5,9 @@ import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.ResourceBundle;
 
+import chomp.ChompMain;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,8 +18,6 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.text.TextFlow;
 import javafx.stage.Stage;
 
 
@@ -62,6 +59,10 @@ public class ClientController{
 
     private static boolean gameWindow = false;
 
+    public static ClientController thisController;
+
+    private String nutzername;
+
     // Add a public no-args constructor
     public ClientController() {
     }
@@ -73,6 +74,7 @@ public class ClientController{
             if (!initialized) {
                 initialized = true;
                 createSocket();
+                thisController = this;
                 session = new Session();
             } else {
                 createMessageListener();
@@ -112,6 +114,8 @@ public class ClientController{
         out.write(password.getText());
         out.newLine();
         out.flush();
+
+        this.nutzername = username.getText();
 
         Stage stage = (Stage) username.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("ClientWindow.fxml"));
@@ -187,6 +191,18 @@ public class ClientController{
     private TextField opponentField;
 
     @FXML
+    private TextField horizontal;
+
+    @FXML
+    private TextField vertical;
+
+    private String gameOpponent;
+
+    private int horizontalField;
+
+    private int verticalField;
+
+    @FXML
     private void createNewGame(){
         gameWindow = true;
         Parent root;
@@ -225,8 +241,11 @@ public class ClientController{
     private void checkOpponent() throws IOException{
         String opponent = opponentField.getText();
         if(clients.contains(opponent)){
-            //Eröffne entsprechendes Spiel TODO!
+            Stage thisStage = (Stage) opponentField.getScene().getWindow();
+            thisStage.close();
+            this.gameOpponent = opponent;
             send_server_message("opponent", "500");
+            ChompMain.launch();
         }
         else{
             Stage thisStage = (Stage) opponentField.getScene().getWindow();
@@ -240,6 +259,13 @@ public class ClientController{
         Stage thisStage = (Stage) opponentField.getScene().getWindow();
         thisStage.close();
     }
+
+    public String getGameOpponent(){
+        return this.gameOpponent;
+    }
+    public int getVerticalField() { return verticalField; }
+    public int getHorizontalField() { return horizontalField; }
+    public String getNutzername() { return this.nutzername; }
 
 
 }
