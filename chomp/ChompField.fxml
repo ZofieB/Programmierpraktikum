@@ -15,7 +15,7 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
          <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="90.0" onMouseClicked="#changeColor" stroke="BLACK" strokeType="INSIDE" width="90.0" />
+            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="90.0" stroke="BLACK" strokeType="INSIDE" width="90.0" />
          </children>
       </GridPane>
    </children>
