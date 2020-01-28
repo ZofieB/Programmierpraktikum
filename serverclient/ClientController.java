@@ -7,7 +7,7 @@ import java.net.UnknownHostException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-import chomp.ChompMain;
+import chomp.ChompController;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -53,13 +53,13 @@ public class ClientController{
 
     private static MessageListener messages;
 
-    private ArrayList<String> clients;
+    private static ArrayList<String> clients;
 
     private static boolean initialized = false;
 
     private static boolean gameWindow = false;
 
-    public static ClientController thisController;
+    //public static ClientController thisController;
 
     private String nutzername;
 
@@ -74,7 +74,7 @@ public class ClientController{
             if (!initialized) {
                 initialized = true;
                 createSocket();
-                thisController = this;
+                //thisController = this;
                 session = new Session();
             } else {
                 createMessageListener();
@@ -214,10 +214,10 @@ public class ClientController{
             // Path to the FXML File
             String fxmlDocPathGame = "/home/sophie/Documents/Programmierpraktikum/serverclient/Game.fxml";
 
-            FileInputStream fxmlLoginStream = new FileInputStream(fxmlDocPathGame);
+            FileInputStream fxmlGameStream = new FileInputStream(fxmlDocPathGame);
 
             // Create the Pane and all Details
-            AnchorPane rootGame = (AnchorPane) loader.load(fxmlLoginStream);
+            AnchorPane rootGame = (AnchorPane) loader.load(fxmlGameStream);
 
             // Create the Scene
             Scene gameScene = new Scene(rootGame);
@@ -239,15 +239,22 @@ public class ClientController{
 
     @FXML
     private void checkOpponent() throws IOException{
+        System.out.println("### OpponentCheck invoked");
         String opponent = opponentField.getText();
         if(clients.contains(opponent)){
+            System.out.println("### Opponent found");
             Stage thisStage = (Stage) opponentField.getScene().getWindow();
             thisStage.close();
             this.gameOpponent = opponent;
+            this.verticalField = Integer.parseInt(vertical.getText());
+            this.horizontalField = Integer.parseInt(horizontal.getText());
+
             send_server_message("opponent", "500");
-            ChompMain.launch();
+            System.out.println("### Chomp start invoked");
+            startChomp();
         }
         else{
+            System.out.println("### Opponent not found");
             Stage thisStage = (Stage) opponentField.getScene().getWindow();
             thisStage.close();
         }
@@ -260,12 +267,35 @@ public class ClientController{
         thisStage.close();
     }
 
-    public String getGameOpponent(){
-        return this.gameOpponent;
+    @FXML
+    private void startChomp() throws IOException{
+        Stage chompWindow = new Stage();
+
+        // Create the FXMLLoader
+        FXMLLoader chompLoader = new FXMLLoader();
+
+        // Path to the FXML File
+        String fxmlDocPathChomp = "/home/sophie/Documents/Programmierpraktikum/chomp/StartGame.fxml";
+        FileInputStream fxmlChompStream = new FileInputStream(fxmlDocPathChomp);
+
+        AnchorPane rootChomp = (AnchorPane) chompLoader.load(fxmlChompStream);
+
+        ChompController chompController = chompLoader.getController();
+        chompController.setParameters(this, verticalField, horizontalField, nutzername, gameOpponent);
+
+        // Create the Scene
+        Scene chompScene = new Scene(rootChomp);
+        chompWindow.setScene(chompScene);
+
+        chompWindow.setTitle("Chomp Game");
+
+        /*chompWindow.initModality(Modality.NONE);
+
+        chompWindow.initOwner(inputField.getScene().getWindow());*/
+
+        System.out.println("### Show Window");
+        chompWindow.show();
     }
-    public int getVerticalField() { return verticalField; }
-    public int getHorizontalField() { return horizontalField; }
-    public String getNutzername() { return this.nutzername; }
 
 
 }

@@ -29,8 +29,8 @@ public class Client extends Application {
         FXMLLoader loader = new FXMLLoader();
 
         // Path to the FXML File
-        //String fxmlDocPathLogin = "/home/sophie/Documents/Programmierpraktikum/serverclient/ClientLogin.fxml";
-        String fxmlDocPathLogin = "C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/serverclient/ClientLogin.fxml";
+        String fxmlDocPathLogin = "/home/sophie/Documents/Programmierpraktikum/serverclient/ClientLogin.fxml";
+        //String fxmlDocPathLogin = "C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/serverclient/ClientLogin.fxml";
         FileInputStream fxmlLoginStream = new FileInputStream(fxmlDocPathLogin);
 
         // Create the Pane and all Details
