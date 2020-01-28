@@ -64,7 +64,7 @@ class ServerThread extends Thread{
                 }
                 else if(input[0].equals("500")){
                     //Message?
-                    //Spieleanfrage weiterschicken an entsprechenden Gegner und Gegner in Variable speichern
+                    //Spieleanfrage weiterschicken an entsprechenden Gegner (input[1]) und Gegner in Variable speichern
                     session.message_this_client(benutzername, input[1], "501");
                     opponent = input[1];
                 }

@@ -9,15 +9,15 @@ import java.util.ResourceBundle;
 
 import chomp.ChompController;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 
@@ -295,6 +295,41 @@ public class ClientController{
 
         System.out.println("### Show Window");
         chompWindow.show();
+    }
+
+    public void gotInvite(String opponent) throws IOException{
+        Stage thisStage = (Stage) activeClients.getScene().getWindow();
+        Popup popup = new Popup();
+        popup.setX(300);
+        popup.setY(200);
+        Label text = new Label(opponent + " hat dich zum Spielen eingeladen!");
+        Button accept = new Button("Annehmen");
+        accept.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    //Nachricht über Annahme an Server senden
+                    send_server_message(opponent, "503");
+                    popup.hide();
+                }catch(Exception e) {}
+            }
+        });
+        Button reject = new Button("Ablehnen");
+        reject.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent){
+                try {
+                    //Nachricht über Ablehnung an Server senden
+                    send_server_message(opponent, "502");
+                }catch(Exception e) {}
+                popup.hide();
+            }
+        });
+        popup.getContent().addAll(reject, accept);
+        popup.show(thisStage);
+    }
+    private void acceptedInvite(){
+        //Methode falls man zum Spielen aufgefordert wurde und die Herausforderung annimmt
     }
 
 
