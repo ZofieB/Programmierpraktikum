@@ -50,6 +50,7 @@ public class MessageListener extends Thread{
                 }
                 else if(input.equals("501")){
                     //Methode mit eingelesenem Gegnernutzernamen aufrufen
+                    System.out.println("### Eingehende Einladung");
                     controller.gotInvite(in.readLine());
                 }
                 else if(input.equals("505")){

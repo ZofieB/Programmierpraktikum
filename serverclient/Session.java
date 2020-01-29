@@ -103,18 +103,16 @@ public class Session{
         }
     }
 
-    public boolean message_this_client(String message, String messClient, String code) throws IOException{
+    public void message_this_client(String message, String messClient, String code) throws IOException{
+        System.out.println("### Message this Client invoked");
         int listsize = clients.size();
         for(int i = 0; i < listsize; i++) {
             ClientNode current_client = clients.get(i);
-            if (current_client.getClient() != this.client && current_client.isLoggedin() == true && current_client.getName() == messClient) {
+            if (current_client.getClient() != this.client && current_client.isLoggedin() == true && current_client.getName().equals(messClient)) {
+                System.out.println("### Message sent to " + current_client.getName());
                 send_message(message, code, current_client.getClient());
-                return true;
-            } else {
-                return false;
             }
         }
-        return false;
     }
 
     /*public void send_client_list() throws IOException{

@@ -249,7 +249,7 @@ public class ClientController{
             this.verticalField = Integer.parseInt(vertical.getText());
             this.horizontalField = Integer.parseInt(horizontal.getText());
 
-            send_server_message("opponent", "500");
+            send_server_message(opponent, "500");
             System.out.println("### Chomp start invoked");
             startChomp();
         }
