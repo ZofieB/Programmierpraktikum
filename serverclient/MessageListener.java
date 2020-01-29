@@ -49,7 +49,9 @@ public class MessageListener extends Thread{
                     controller.updateTextArea("Der Login ist fehlgeschlagen! Das Fenster kann geschlossen werden!");
                 }
                 else if(input.equals("501")){
-                    //eingehende Spieleanfrage TODO
+                    //Methode mit eingelesenem Gegnernutzernamen aufrufen
+                    System.out.println("### Eingehende Einladung");
+                    controller.gotInvite(in.readLine());
                 }
                 else if(input.equals("505")){
                     //Gegner hat einen Zug gemacht TODO

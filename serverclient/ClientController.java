@@ -5,22 +5,19 @@ import java.net.Socket;
 import java.net.URL;
 import java.net.UnknownHostException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 import java.util.ResourceBundle;
 
+import chomp.ChompController;
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.Pane;
-import javafx.scene.text.TextFlow;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 
 
@@ -56,11 +53,15 @@ public class ClientController{
 
     private static MessageListener messages;
 
-    private ArrayList<String> clients;
+    private static ArrayList<String> clients;
 
     private static boolean initialized = false;
 
     private static boolean gameWindow = false;
+
+    //public static ClientController thisController;
+
+    private String nutzername;
 
     // Add a public no-args constructor
     public ClientController() {
@@ -73,6 +74,7 @@ public class ClientController{
             if (!initialized) {
                 initialized = true;
                 createSocket();
+                //thisController = this;
                 session = new Session();
             } else {
                 createMessageListener();
@@ -112,6 +114,8 @@ public class ClientController{
         out.write(password.getText());
         out.newLine();
         out.flush();
+
+        this.nutzername = username.getText();
 
         Stage stage = (Stage) username.getScene().getWindow();
         Parent root = FXMLLoader.load(getClass().getResource("ClientWindow.fxml"));
@@ -187,6 +191,18 @@ public class ClientController{
     private TextField opponentField;
 
     @FXML
+    private TextField horizontal;
+
+    @FXML
+    private TextField vertical;
+
+    private String gameOpponent;
+
+    private int horizontalField;
+
+    private int verticalField;
+
+    @FXML
     private void createNewGame(){
         gameWindow = true;
         Parent root;
@@ -198,10 +214,10 @@ public class ClientController{
             // Path to the FXML File
             String fxmlDocPathGame = "/home/sophie/Documents/Programmierpraktikum/serverclient/Game.fxml";
 
-            FileInputStream fxmlLoginStream = new FileInputStream(fxmlDocPathGame);
+            FileInputStream fxmlGameStream = new FileInputStream(fxmlDocPathGame);
 
             // Create the Pane and all Details
-            AnchorPane rootGame = (AnchorPane) loader.load(fxmlLoginStream);
+            AnchorPane rootGame = (AnchorPane) loader.load(fxmlGameStream);
 
             // Create the Scene
             Scene gameScene = new Scene(rootGame);
@@ -223,12 +239,22 @@ public class ClientController{
 
     @FXML
     private void checkOpponent() throws IOException{
+        System.out.println("### OpponentCheck invoked");
         String opponent = opponentField.getText();
         if(clients.contains(opponent)){
-            //Eröffne entsprechendes Spiel TODO!
-            send_server_message("opponent", "500");
+            System.out.println("### Opponent found");
+            Stage thisStage = (Stage) opponentField.getScene().getWindow();
+            thisStage.close();
+            this.gameOpponent = opponent;
+            this.verticalField = Integer.parseInt(vertical.getText());
+            this.horizontalField = Integer.parseInt(horizontal.getText());
+
+            send_server_message(opponent, "500");
+            System.out.println("### Chomp start invoked");
+            startChomp();
         }
         else{
+            System.out.println("### Opponent not found");
             Stage thisStage = (Stage) opponentField.getScene().getWindow();
             thisStage.close();
         }
@@ -239,6 +265,71 @@ public class ClientController{
     private void cancel(){
         Stage thisStage = (Stage) opponentField.getScene().getWindow();
         thisStage.close();
+    }
+
+    @FXML
+    private void startChomp() throws IOException{
+        Stage chompWindow = new Stage();
+
+        // Create the FXMLLoader
+        FXMLLoader chompLoader = new FXMLLoader();
+
+        // Path to the FXML File
+        String fxmlDocPathChomp = "/home/sophie/Documents/Programmierpraktikum/chomp/StartGame.fxml";
+        FileInputStream fxmlChompStream = new FileInputStream(fxmlDocPathChomp);
+
+        AnchorPane rootChomp = (AnchorPane) chompLoader.load(fxmlChompStream);
+
+        ChompController chompController = chompLoader.getController();
+        chompController.setParameters(this, verticalField, horizontalField, nutzername, gameOpponent);
+
+        // Create the Scene
+        Scene chompScene = new Scene(rootChomp);
+        chompWindow.setScene(chompScene);
+
+        chompWindow.setTitle("Chomp Game");
+
+        /*chompWindow.initModality(Modality.NONE);
+
+        chompWindow.initOwner(inputField.getScene().getWindow());*/
+
+        System.out.println("### Show Window");
+        chompWindow.show();
+    }
+
+    public void gotInvite(String opponent) throws IOException{
+        Stage thisStage = (Stage) activeClients.getScene().getWindow();
+        Popup popup = new Popup();
+        popup.setX(300);
+        popup.setY(200);
+        Label text = new Label(opponent + " hat dich zum Spielen eingeladen!");
+        Button accept = new Button("Annehmen");
+        accept.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    //Nachricht über Annahme an Server senden
+                    send_server_message(opponent, "503");
+                    popup.hide();
+                }catch(Exception e) {}
+            }
+        });
+        Button reject = new Button("Ablehnen");
+        reject.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent actionEvent){
+                try {
+                    //Nachricht über Ablehnung an Server senden
+                    send_server_message(opponent, "502");
+                }catch(Exception e) {}
+                popup.hide();
+            }
+        });
+        popup.getContent().addAll(reject, accept);
+        popup.show(thisStage);
+    }
+    private void acceptedInvite(){
+        //Methode falls man zum Spielen aufgefordert wurde und die Herausforderung annimmt
     }
 
 

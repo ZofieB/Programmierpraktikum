@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import javafx.scene.shape.*?>
 
-<AnchorPane prefHeight="550.0" prefWidth="876.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chomp.ChompController">
+<AnchorPane prefHeight="600.0" prefWidth="884.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="chomp.ChompController">
    <children>
       <GridPane fx:id="feld" gridLinesVisible="true" layoutX="10.0" layoutY="10.0" prefHeight="540.0" prefWidth="810.0">
         <columnConstraints>
@@ -14,9 +14,7 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
-         <children>
-            <Rectangle arcHeight="5.0" arcWidth="5.0" fill="WHITE" height="90.0" onMouseClicked="#changeColor" stroke="BLACK" strokeType="INSIDE" width="90.0" />
-         </children>
       </GridPane>
+      <Button fx:id="cancel" layoutX="807.0" layoutY="560.0" mnemonicParsing="false" text="Cancel" />
    </children>
 </AnchorPane>

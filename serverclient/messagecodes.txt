@@ -9,5 +9,7 @@
 002 = erfolgreicher Login
 500 = Spieleanfrage ausgehend (vom Client aus gesehen)
 501 = Spieleanfrage eingehend (vom Client aus gesehen)
+502 = Spieleanfrage abgelehnt
+503 = Spieleanfrage angenommen
 505 = eingehender Spielzug
 555 = ausgehender Spielzug

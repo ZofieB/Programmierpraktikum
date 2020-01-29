@@ -8,9 +8,10 @@ public class Spieler {
     private Color farbe;
 
     public Spieler() {}
-    public Spieler(String spielername, int spielerart) {
+    public Spieler(String spielername, int spielerart, Color farbe) {
         this.spielerart = spielerart;
         this.spielername = spielername;
+        this.farbe = farbe;
     }
 
     public String getSpielername() {

@@ -3,12 +3,17 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="127.0" prefWidth="501.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverclient.ClientController">
+<AnchorPane prefHeight="155.0" prefWidth="501.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverclient.ClientController">
    <children>
       <Label layoutX="22.0" layoutY="26.0" text="Choose your opponent !" />
-      <TextField fx:id="opponent" layoutX="207.0" layoutY="21.0" prefWidth="234.0" />
-      <Button layoutX="371.0" layoutY="80.0" mnemonicParsing="false" onAction="#checkOpponent" text="Confirm" />
-      <Button layoutX="207.0" layoutY="80.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
-      <ChoiceBox fx:id="choiceGames" layoutX="22.0" layoutY="80.0" prefWidth="150.0" />
+      <TextField fx:id="opponentField" layoutX="207.0" layoutY="21.0" prefHeight="26.0" prefWidth="279.0" />
+      <Button layoutX="416.0" layoutY="106.0" mnemonicParsing="false" onAction="#checkOpponent" text="Confirm" />
+      <Button layoutX="207.0" layoutY="106.0" mnemonicParsing="false" onAction="#cancel" text="Cancel" />
+      <ChoiceBox fx:id="choiceGames" layoutX="19.0" layoutY="106.0" prefWidth="150.0" />
+      <Label layoutX="23.0" layoutY="70.0" text="Choose the field size!" />
+      <TextField fx:id="horizontal" layoutX="283.0" layoutY="65.0" prefHeight="26.0" prefWidth="55.0" />
+      <TextField fx:id="vertical" layoutX="432.0" layoutY="65.0" prefHeight="26.0" prefWidth="55.0" />
+      <Label layoutX="206.0" layoutY="70.0" text="horizontal" />
+      <Label layoutX="367.0" layoutY="70.0" text="vertical" />
    </children>
 </AnchorPane>
