@@ -80,6 +80,7 @@ public class Chomp extends Spiel implements Protokollierbar{
             //Ein Spieler hat verloren ?
             if(feld.getValue(0, 0) == 1) {
                 setPlayerlost();
+                controller.playerLost(spieler);
             }
         }
         else{ //der Computer spielt
@@ -128,6 +129,7 @@ public class Chomp extends Spiel implements Protokollierbar{
     }    
     @Override
     public void durchgang() {
+        //TODO: Methode überhaupt nötig?
         if(!playerlost) {
             spielzug(spieler[0]);
         }

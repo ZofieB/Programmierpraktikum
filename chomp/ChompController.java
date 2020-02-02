@@ -61,6 +61,18 @@ public class ChompController {
     // Add a public no-args constructor
     public ChompController() {
     }
+    //Erste Methode, die vom ClientController zur Initialisierung aufgerufen wird
+    public void setParameters(ClientController newClientController, int newFeldvertical, int newFeldhorizontal, String nutzername, String opponent){
+        System.out.println("Übergebener Parameter feldvertical: " + newFeldvertical);
+        System.out.println("### setParameters invoked");
+        feldvertical = newFeldvertical;
+        System.out.println("feldvertical gesetzt auf: " + feldvertical);
+        feldhorizontal = newFeldhorizontal;
+        clientController = newClientController;
+        spieler1Name = nutzername;
+        spieler2Name = opponent;
+    }
+
     @FXML
     private void initialize() throws IOException {
         if(!initialized) {
@@ -82,7 +94,7 @@ public class ChompController {
             spielfeld.setVertical(feldvertical);
             spielfeld.initializeSpielfeld();
 
-            Chomp chomp = new Chomp(spielfeld, spielerarr, this);
+            chomp = new Chomp(spielfeld, spielerarr, this);
             //Größe Rectangles Parametrisieren auf Eingabe!!
             for (int i = 0; i < feldhorizontal; i++) {
                 for (int j = 0; j < feldvertical; j++) {
@@ -120,6 +132,7 @@ public class ChompController {
 
     //TODO: Unterscheidung Spieler 1 und Spieler 2
 
+    //Spielzug-Methode, die einen selbst gemachten Spielzug (durch klicken auf Viereck) auslöst
     public void spielzugAction(Rectangle clickedRec) throws IOException{
         //TODO: Zug nur zulassen, wenn man auch dran ist! --> boolean Variable die angibt, wer am Zug ist??
         ObservableList<Node> children = feld.getChildren();
@@ -144,10 +157,13 @@ public class ChompController {
                 }
                 //gemachten Spielzug an den Server schicken
                 clientController.send_server_message("", "");
+                //Spielzug im ChompSpiel im Hintergrund ausführen
+                chomp.spielzug(spieler1, recColumn, recRow);
             }
         }
     }
 
+    //Spielzug-Methode die einen vom Gegner ausgeführten Spielzug durchführt
     private void setSpielzug(int recRow, int recColumn){
         //MessageListener ruft diese Methode auf  wenn neuer Spielzug vorliegt
         //Ausführen des reinkommenden Spielzugs
@@ -163,20 +179,10 @@ public class ChompController {
                 Rectangle rec = (Rectangle) n;
                 if(rec.getFill() == LIGHTGREY) {
                     rec.setFill(spieler2.getFarbe());
+                    chomp.spielzug(spieler2, recColumn, recRow);
                 }
             }
         }
-    }
-
-    public void setParameters(ClientController newClientController, int newFeldvertical, int newFeldhorizontal, String nutzername, String opponent){
-        System.out.println("Übergebener Parameter feldvertical: " + newFeldvertical);
-        System.out.println("### setParameters invoked");
-        feldvertical = newFeldvertical;
-        System.out.println("feldvertical gesetzt auf: " + feldvertical);
-        feldhorizontal = newFeldhorizontal;
-        clientController = newClientController;
-        spieler1Name = nutzername;
-        spieler2Name = opponent;
     }
 
     @FXML
@@ -192,6 +198,10 @@ public class ChompController {
     private void cancelGame(){
         Stage stage = (Stage) cancel.getScene().getWindow();
         stage.close();
+    }
+
+    public void playerLost(Spieler spieler){
+
     }
 
 
