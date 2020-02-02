@@ -1,8 +1,7 @@
 package serverclient;
 
 import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.net.Socket;
 
 class ServerThread extends Thread{
     Socket client;
@@ -71,7 +70,7 @@ class ServerThread extends Thread{
                 }
                 else if(input[0].equals("555")){
                     //Client hat Spielzug gemacht, Spielzug wird weitergegeben
-                    session.message_this_client("Hier muss der Spielzug stehen", opponent, "505");
+                    session.message_this_client(input[1], opponent, "505");
                 }
             }
             client.close();

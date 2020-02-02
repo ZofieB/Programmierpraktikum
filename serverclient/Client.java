@@ -1,19 +1,13 @@
 package serverclient;
 
-import java.awt.*;
-import java.io.*;
-import java.net.*;
-import java.nio.channels.OverlappingFileLockException;
-import java.util.*;
-
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+
+import java.io.FileInputStream;
+import java.io.IOException;
 
 
 public class Client extends Application {
@@ -29,8 +23,9 @@ public class Client extends Application {
         FXMLLoader loader = new FXMLLoader();
 
         // Path to the FXML File
-        String fxmlDocPathLogin = "/home/sophie/Documents/Programmierpraktikum/serverclient/ClientLogin.fxml";
+        //String fxmlDocPathLogin = "/home/sophie/Documents/Programmierpraktikum/serverclient/ClientLogin.fxml";
         //String fxmlDocPathLogin = "C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/serverclient/ClientLogin.fxml";
+        String fxmlDocPathLogin = "C:\\Users\\Sophie\\IdeaProjects\\Programmierpraktikum\\serverclient\\ClientLogin.fxml";
         FileInputStream fxmlLoginStream = new FileInputStream(fxmlDocPathLogin);
 
         // Create the Pane and all Details

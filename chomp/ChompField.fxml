@@ -15,6 +15,6 @@
           <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
-      <Button fx:id="cancel" layoutX="807.0" layoutY="560.0" mnemonicParsing="false" text="Cancel" />
+      <Button fx:id="cancel" layoutX="807.0" layoutY="560.0" mnemonicParsing="false" onAction="#cancelGame" text="Cancel" />
    </children>
 </AnchorPane>

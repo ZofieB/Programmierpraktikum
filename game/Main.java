@@ -1,9 +1,14 @@
 package game;
 
-import chomp.*;
-import absclasses.*;
-import java.util.*;
-import viergewinnt.*;
+import absclasses.Spieler;
+import absclasses.Spielzug;
+import chomp.Chomp;
+import chomp.ChompController;
+import chomp.ChompFeld;
+import viergewinnt.VierGewinnt;
+import viergewinnt.VierGewinntFeld;
+
+import java.util.Scanner;
 
 public class Main{
     public static void main(String[] args){
@@ -72,7 +77,7 @@ public class Main{
             spielfeld.initializeSpielfeld();
             spielfeld.printSpielfeld();
 
-            Chomp chomp = new Chomp(spielfeld, spielerarr);
+            Chomp chomp = new Chomp(spielfeld, spielerarr, new ChompController());
             while(!chomp.getPlayerlost()) {
                 chomp.durchgang();
             }

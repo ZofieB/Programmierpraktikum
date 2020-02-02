@@ -1,7 +1,6 @@
 package chomp;
 
 import absclasses.Spieler;
-import absclasses.Spielzug;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
@@ -12,13 +11,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import serverclient.ClientController;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -32,6 +29,9 @@ public class ChompController {
 
     @FXML
     private Button startButton;
+
+    @FXML
+    private Button cancel;
 
     @FXML
     private URL location;
@@ -99,8 +99,10 @@ public class ChompController {
                             new EventHandler() {
                                 @Override
                                 public void handle(Event event) {
-                                    spielzugAction(rec);
-                                    event.consume();
+                                    try {
+                                        spielzugAction(rec);
+                                        event.consume();
+                                    }catch(IOException e){}
                                 }
                             });
                     rec.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
@@ -114,31 +116,53 @@ public class ChompController {
             }
         }
     }
-    //TODO; CHOMPSPIEL STARTEN
+    //TODO: CHOMPSPIEL STARTEN
 
-    public void setFeld(Spieler spieler, int x, int y) throws IOException{
+    public void spielzugAction(Rectangle clickedRec) throws IOException{
         ObservableList<Node> children = feld.getChildren();
-        //cast von group zu rectangle nicht möglich! TODO
+
+        Integer recRowIndex = GridPane.getRowIndex(clickedRec);
+        Integer recColumnIndex = GridPane.getColumnIndex(clickedRec);
+
+        int recRow = recRowIndex == null ? 0 : recRowIndex;
+        int recColumn = recColumnIndex == null ? 0 : recColumnIndex;
+
         for(Node n : children){
-            if(feld.getRowIndex(n) == y && feld.getColumnIndex(n) == x){
+            Integer rowIndex = GridPane.getRowIndex(n);
+            Integer columnIndex = GridPane.getColumnIndex(n);
+
+            int row = rowIndex == null? 0 : rowIndex;
+            int column = columnIndex == null? 0 : columnIndex;
+
+            if(row == recRow && column == recColumn){
                 Rectangle rec = (Rectangle) n;
-                rec.setFill(spieler.getFarbe());
+                if(rec.getFill() == LIGHTGREY) {
+                    rec.setFill(spieler1.getFarbe());
+                }
                 //gemachten Spielzug an den Server schicken
                 clientController.send_server_message("", "");
             }
         }
     }
 
-    public void spielzugAction(Rectangle rec) {
-        //Koordinaten des angeklickten Rechtecks bekommen
-        int x = feld.getColumnIndex(rec);
-        int y = feld.getRowIndex(rec);
-        //chomp.spielzug(spieler1, x, y);
-        rec.setFill(BLUEVIOLET);
-    }
-
-    private void setSpielzug(Spielzug spielzug){
+    private void setSpielzug(int recRow, int recColumn){
         //MessageListener ruft diese Methode auf  wenn neuer Spielzug vorliegt
+        //Ausführen des reinkommenden Spielzugs
+        ObservableList<Node> children = feld.getChildren();
+        for(Node n : children){
+            Integer rowIndex = GridPane.getRowIndex(n);
+            Integer columnIndex = GridPane.getColumnIndex(n);
+
+            int row = rowIndex == null? 0 : rowIndex;
+            int column = columnIndex == null? 0 : columnIndex;
+
+            if(row == recRow && column == recColumn){
+                Rectangle rec = (Rectangle) n;
+                if(rec.getFill() == LIGHTGREY) {
+                    rec.setFill(spieler2.getFarbe());
+                }
+            }
+        }
     }
 
     public void setParameters(ClientController newClientController, int newFeldvertical, int newFeldhorizontal, String nutzername, String opponent){
@@ -161,6 +185,11 @@ public class ChompController {
         stage.show();
     }
 
+    @FXML
+    private void cancelGame(){
+        Stage stage = (Stage) cancel.getScene().getWindow();
+        stage.close();
+    }
 
 
 }

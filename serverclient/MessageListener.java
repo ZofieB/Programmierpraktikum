@@ -1,9 +1,6 @@
 package serverclient;
 
-import java.io.*;
-
-import javafx.application.Platform;
-import javafx.scene.control.TextArea;
+import java.io.BufferedReader;
 
 public class MessageListener extends Thread{
     private BufferedReader in;
@@ -54,7 +51,13 @@ public class MessageListener extends Thread{
                     controller.gotInvite(in.readLine());
                 }
                 else if(input.equals("505")){
-                    //Gegner hat einen Zug gemacht TODO
+                    //Spielzug kommt als String der Form "x-y" als Nachricht an und wir aufgeteilt in x und y Koordinate
+                    String spielzug = in.readLine();
+                    String[] splittedString = spielzug.split("-");
+                    int xKoordinate = Integer.parseInt(splittedString[0]);
+                    int yKoordinate = Integer.parseInt(splittedString[1]);
+                    //TODO Spielzug Methode aufrufen
+
                 }
             }
         }catch(Exception E){}
