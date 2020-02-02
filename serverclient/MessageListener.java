@@ -1,9 +1,6 @@
 package serverclient;
 
-import java.io.*;
-
-import javafx.application.Platform;
-import javafx.scene.control.TextArea;
+import java.io.BufferedReader;
 
 public class MessageListener extends Thread{
     private BufferedReader in;
@@ -50,11 +47,24 @@ public class MessageListener extends Thread{
                 }
                 else if(input.equals("501")){
                     //Methode mit eingelesenem Gegnernutzernamen aufrufen
+                    //Nachricht enthält auch weitere Informationen: "gegner-spiel-horizontal-vertikal"
                     System.out.println("### Eingehende Einladung");
-                    controller.gotInvite(in.readLine());
+                    String message = in.readLine();
+                    String[] splitted = message.split("-");
+                    int horizontal = Integer.parseInt(splitted[2]);
+                    int vertical = Integer.parseInt(splitted[3]);
+                    String game = splitted[1];
+                    String opponent = splitted[0];
+                    controller.gotInvite(opponent, game, horizontal, vertical);
                 }
                 else if(input.equals("505")){
-                    //Gegner hat einen Zug gemacht TODO
+                    //Spielzug kommt als String der Form "x-y" als Nachricht an und wir aufgeteilt in x und y Koordinate
+                    String spielzug = in.readLine();
+                    String[] splittedString = spielzug.split("-");
+                    int xKoordinate = Integer.parseInt(splittedString[0]);
+                    int yKoordinate = Integer.parseInt(splittedString[1]);
+                    //TODO Spielzug Methode aufrufen
+
                 }
             }
         }catch(Exception E){}

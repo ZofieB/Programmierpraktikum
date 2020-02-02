@@ -1,9 +1,11 @@
 package chomp;
 
-import absclasses.*;
+import absclasses.Protokollierbar;
+import absclasses.Spiel;
+import absclasses.Spieler;
+import absclasses.Spielzug;
 
-import java.io.IOException;
-import java.util.*;
+import java.util.Stack;
 
 public class Chomp extends Spiel implements Protokollierbar{
     protected ChompFeld feld = new ChompFeld();
@@ -41,9 +43,9 @@ public class Chomp extends Spiel implements Protokollierbar{
                 
             }
         }
-        try {
+        /*try {
             controller.setFeld(spielzug.getSpieler(), spielzug.getXkoordinate(), spielzug.getYkoordinate());
-        } catch(IOException e){}
+        } catch(IOException e){}*/
     }
     @Override
     public void spielzug(Spieler spieler){
@@ -66,7 +68,7 @@ public class Chomp extends Spiel implements Protokollierbar{
                 y = scan.nextInt();*/
                 if(feld.isInRange(x, y) == false || feld.getValue(x, y) == 1) {
                     //System.out.println("Du musst ein korrektes Feld nehmen! Wiederhole die Eingabe:");
-                    //EINGABE DES RICHTIGEN FELDES BEHANDELN TODO
+                    //TODO EINGABE DES RICHTIGEN FELDES BEHANDELN
                 }
             } while(feld.isInRange(x, y) == false || feld.getValue(x, y) != 0);
 
@@ -78,6 +80,7 @@ public class Chomp extends Spiel implements Protokollierbar{
             //Ein Spieler hat verloren ?
             if(feld.getValue(0, 0) == 1) {
                 setPlayerlost();
+                controller.playerLost(spieler);
             }
         }
         else{ //der Computer spielt
@@ -126,6 +129,7 @@ public class Chomp extends Spiel implements Protokollierbar{
     }    
     @Override
     public void durchgang() {
+        //TODO: Methode überhaupt nötig?
         if(!playerlost) {
             spielzug(spieler[0]);
         }
