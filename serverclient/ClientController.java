@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import chomp.ChompController;
+import viergewinnt.VierGewinntController;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -19,6 +20,7 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
+import javafx.stage.Modality;
 
 
 public class ClientController{
@@ -171,7 +173,7 @@ public class ClientController{
                 break;
             }
         }
-        System.out.println("### DelteClient finished");
+        System.out.println("### DeleteClient finished");
     }
 
     public void addClient(String newClient){
@@ -212,7 +214,8 @@ public class ClientController{
             FXMLLoader loader = new FXMLLoader();
 
             // Path to the FXML File
-            String fxmlDocPathGame = "/home/sophie/Documents/Programmierpraktikum/serverclient/Game.fxml";
+            // String fxmlDocPathGame = "/home/sophie/Documents/Programmierpraktikum/serverclient/Game.fxml";
+            String fxmlDocPathGame = "C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/serverclient/Game.fxml";
 
             FileInputStream fxmlGameStream = new FileInputStream(fxmlDocPathGame);
 
@@ -250,8 +253,14 @@ public class ClientController{
             this.horizontalField = Integer.parseInt(horizontal.getText());
 
             send_server_message(opponent, "500");
-            System.out.println("### Chomp start invoked");
-            startChomp();
+            /*if(choiceGames.getSelectionModel().equals("Chomp")){
+                System.out.println("### Chomp start invoked");
+                startChomp();
+            }*/
+            //else if(choiceGames.getSelectionModel().equals("Vier Gewinnt")){
+                System.out.println("### VierGewinnt start invoked");
+                startVierGewinnt();
+            //}
         }
         else{
             System.out.println("### Opponent not found");
@@ -275,7 +284,8 @@ public class ClientController{
         FXMLLoader chompLoader = new FXMLLoader();
 
         // Path to the FXML File
-        String fxmlDocPathChomp = "/home/sophie/Documents/Programmierpraktikum/chomp/StartGame.fxml";
+        //String fxmlDocPathChomp = "/home/sophie/Documents/Programmierpraktikum/chomp/StartGame.fxml";
+        String fxmlDocPathChomp = "/C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/chomp/StartGame.fxml";
         FileInputStream fxmlChompStream = new FileInputStream(fxmlDocPathChomp);
 
         AnchorPane rootChomp = (AnchorPane) chompLoader.load(fxmlChompStream);
@@ -295,6 +305,36 @@ public class ClientController{
 
         System.out.println("### Show Window");
         chompWindow.show();
+    }
+
+    @FXML
+    private void startVierGewinnt() throws IOException{
+        Stage vierGewinntWindow = new Stage();
+
+        // Create the FXMLLoader
+        FXMLLoader vierGewinntLoader = new FXMLLoader();
+
+        // Path to the FXML File
+        String fxmlDocPathVierGewinnt = "/C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/viergewinnt/StartGameVierGewinnt.fxml";
+        FileInputStream fxmlVierGewinntStream = new FileInputStream(fxmlDocPathVierGewinnt);
+
+        AnchorPane rootChomp = (AnchorPane) vierGewinntLoader.load(fxmlVierGewinntStream);
+
+        VierGewinntController vierGewinntController = vierGewinntLoader.getController();
+        vierGewinntController.setParameters(this, verticalField, horizontalField, nutzername, gameOpponent);
+
+        // Create the Scene
+        Scene vierGewinntScene = new Scene(rootChomp);
+        vierGewinntWindow.setScene(vierGewinntScene);
+
+        vierGewinntWindow.setTitle("Vier Gewinnt Game");
+
+        vierGewinntWindow.initModality(Modality.NONE);
+
+        vierGewinntWindow.initOwner(inputField.getScene().getWindow());
+
+        System.out.println("### Show Window");
+        vierGewinntWindow.show();
     }
 
     public void gotInvite(String opponent) throws IOException{
