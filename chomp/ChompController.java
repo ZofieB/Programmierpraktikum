@@ -103,12 +103,6 @@ public class ChompController {
                                     event.consume();
                                 }
                             });
-                    rec.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-                        @Override
-                        public void handle(MouseEvent mouseEvent) {
-
-                        }
-                    });
                     feld.add(rec, i, j);
                 }
             }

@@ -8,7 +8,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
     private boolean playerwin = false;
     private boolean playunentschieden = false;
 
-    public VierGewinnt(VierGewinntFeld feld, Spieler[] spieler) {
+    public VierGewinnt(VierGewinntFeld feld, Spieler[] spieler, VierGewinntController controller) {
         this.feld = feld;
         this.spieler = spieler;
         
