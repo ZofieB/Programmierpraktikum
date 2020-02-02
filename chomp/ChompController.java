@@ -118,7 +118,10 @@ public class ChompController {
     }
     //TODO: CHOMPSPIEL STARTEN
 
+    //TODO: Unterscheidung Spieler 1 und Spieler 2
+
     public void spielzugAction(Rectangle clickedRec) throws IOException{
+        //TODO: Zug nur zulassen, wenn man auch dran ist! --> boolean Variable die angibt, wer am Zug ist??
         ObservableList<Node> children = feld.getChildren();
 
         Integer recRowIndex = GridPane.getRowIndex(clickedRec);
