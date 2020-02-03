@@ -168,7 +168,6 @@ public class ClientController {
         for (String s : clients) {
             activeClients.appendText(s + "\n");
         }
-        System.out.println("### Clients Update finished");
     }
 
     public void deleteClient(String newClient) {
@@ -260,7 +259,6 @@ public class ClientController {
         String opponent = opponentField.getText();
         if(clients.contains(opponent)){
             String selectedGame = choiceGames.getValue();
-            System.out.println("### selected Game " + selectedGame);
             System.out.println("### Opponent found");
             Stage thisStage = (Stage) opponentField.getScene().getWindow();
             thisStage.close();
@@ -273,7 +271,7 @@ public class ClientController {
 
             chatWindowController.updateTextArea("Anfrage wurde versendet. Es wird auf eine Antwort gewartet. Spielt beginnt in 30 Sekunden...");
             //Gegner Zeit geben, zu antworten
-            Thread.sleep(30000);
+            Thread.sleep(7000);
             if(isAccepted){
                 if(selectedGame.equals("Chomp")){
                     startChomp();
@@ -324,8 +322,6 @@ public class ClientController {
         chompWindow.setScene(chompScene);
 
         chompWindow.setTitle("Chomp Game");
-
-        System.out.println("### Show Window");
         chompWindow.show();
     }
 
@@ -396,9 +392,7 @@ public class ClientController {
                  return null;
              }
         };
-        System.out.println("### Task created");
         new Thread(popupTask).start();
-        System.out.println("### Taskthread started");
     }
     private void acceptedInvite(String game) throws IOException{
         firstPlayer = false;
@@ -413,8 +407,13 @@ public class ClientController {
 
 
     public void setSpielzug(int col, int row){
+        System.out.println("### SetSpielzug invoked");
         chompController.setSpielzug(col, row);
 
     }
+    public void setChompController(ChompController newChompController){
+        chompController = newChompController;
+    }
+
 
 }
