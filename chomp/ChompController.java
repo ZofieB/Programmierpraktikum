@@ -1,7 +1,9 @@
 package chomp;
 
 import absclasses.Spieler;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -88,9 +90,11 @@ public class ChompController {
         }
         else {
             System.out.println("### second Initialize invoked");
-            System.out.println("Wert von feldhorizontal: " + feldhorizontal + " Und wert von feldvertical: " + feldvertical);
-            spieler1 = new Spieler(spieler1Name, 1, BLUE);
-            spieler2 = new Spieler(spieler2Name, 1, GREEN);
+            //Set the Reference for the new Controller in ClientController
+            clientController.setChompController(this);
+            //System.out.println("Wert von feldhorizontal: " + feldhorizontal + " Und wert von feldvertical: " + feldvertical);
+            spieler1 = new Spieler(spieler1Name, 1, POWDERBLUE);
+            spieler2 = new Spieler(spieler2Name, 1, PINK);
 
             Spieler[] spielerarr = {spieler1, spieler2};
 
@@ -151,44 +155,61 @@ public class ChompController {
                 int row = rowIndex == null ? 0 : rowIndex;
                 int column = columnIndex == null ? 0 : columnIndex;
 
-                if (row == recRow && column == recColumn) {
+                if (row >= recRow && column >= recColumn) {
                     Rectangle rec = (Rectangle) n;
                     if (rec.getFill() == LIGHTGREY) {
                         rec.setFill(spieler1.getFarbe());
                     }
-                    //gemachten Spielzug an den Server schicken
-                    clientController.send_server_message(recColumn + "-" + recRow, "555");
-                    //Spielzug im ChompSpiel im Hintergrund ausführen
-                    chomp.spielzug(spieler1, recColumn, recRow);
-                    //Zug an Gegner weitergeben
-                    myTurn = false;
                 }
             }
+            //gemachten Spielzug an den Server schicken
+            clientController.send_server_message(recColumn + "-" + recRow, "555");
+            //Spielzug im ChompSpiel im Hintergrund ausführen
+            chomp.spielzug(spieler1, recColumn, recRow);
+            //Zug an Gegner weitergeben
+            myTurn = false;
         }
     }
 
     //Spielzug-Methode die einen vom Gegner ausgeführten Spielzug durchführt
     public void setSpielzug(int recColumn, int recRow){
+        System.out.println("###SetSpielzug ChompController");
         //MessageListener ruft diese Methode auf  wenn neuer Spielzug vorliegt
         //Ausführen des reinkommenden Spielzugs
-        ObservableList<Node> children = feld.getChildren();
-        for(Node n : children){
-            Integer rowIndex = GridPane.getRowIndex(n);
-            Integer columnIndex = GridPane.getColumnIndex(n);
+        System.out.println("### children Liste erstellen");
+        Task setZugTask = new Task<Void>(){
+            @Override public Void call() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        ObservableList<Node> children = feld.getChildren();
+                        System.out.println("Children Liste erstellt");
+                        for (Node n : children) {
+                            System.out.println("###For Schleife");
+                            Integer rowIndex = GridPane.getRowIndex(n);
+                            Integer columnIndex = GridPane.getColumnIndex(n);
 
-            int row = rowIndex == null? 0 : rowIndex;
-            int column = columnIndex == null? 0 : columnIndex;
+                            int row = rowIndex == null ? 0 : rowIndex;
+                            int column = columnIndex == null ? 0 : columnIndex;
 
-            if(row == recRow && column == recColumn){
-                Rectangle rec = (Rectangle) n;
-                if(rec.getFill() == LIGHTGREY) {
-                    rec.setFill(spieler2.getFarbe());
-                    chomp.spielzug(spieler2, recColumn, recRow);
-                }
+                            if (row >= recRow && column >= recColumn) {
+                                System.out.println("###If-Bedingung");
+                                Rectangle rec = (Rectangle) n;
+                                if (rec.getFill() == LIGHTGREY) {
+                                    rec.setFill(spieler2.getFarbe());
+                                }
+                            }
+                        }
+                        chomp.spielzug(spieler2, recColumn, recRow);
+                        System.out.println("###MyTurn ändern");
+                        //Nach Ausführung des eingehenden Spielzugs sind wir wieder dran
+                        myTurn = true;
+                    }
+                });
+                return null;
             }
-        }
-        //Nach Ausführung des eingehenden Spielzugs sind wir wieder dran
-        myTurn = true;
+        };
+        new Thread(setZugTask).start();
     }
 
     @FXML

@@ -108,7 +108,7 @@ public class ClientController{
 
     @FXML
     private void login() throws  Exception{
-        System.out.println("### Login invoked");
+        //System.out.println("### Login invoked");
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(server.getOutputStream()));
         out.write(username.getText());
         out.newLine();
@@ -156,16 +156,14 @@ public class ClientController{
     }
 
     public void updateClientList(){
-        System.out.println("### Clients Update invoked");
         activeClients.clear();
         for (String s : clients) {
             activeClients.appendText(s + "\n");
         }
-        System.out.println("### Clients Update finished");
     }
 
     public void deleteClient(String newClient){
-        System.out.println("### DeleteClient invoked");
+        //System.out.println("### DeleteClient invoked");
         int clients_size = clients.size();
         for(int i = 0; i < clients_size; i++){
             if(clients.get(i).equals(newClient)){
@@ -173,13 +171,13 @@ public class ClientController{
                 break;
             }
         }
-        System.out.println("### DelteClient finished");
+        //System.out.println("### DelteClient finished");
     }
 
     public void addClient(String newClient){
-        System.out.println("### AddClient invoked");
-        clients.add(newClient); //Programm bleibt stehen!
-        System.out.println("### AddClient finished");
+        //System.out.println("### AddClient invoked");
+        clients.add(newClient);
+        //System.out.println("### AddClient finished");
     }
 
     //
@@ -252,7 +250,6 @@ public class ClientController{
         String opponent = opponentField.getText();
         if(clients.contains(opponent)){
             String selectedGame = choiceGames.getValue();
-            System.out.println("### selected Game " + selectedGame);
             System.out.println("### Opponent found");
             Stage thisStage = (Stage) opponentField.getScene().getWindow();
             thisStage.close();
@@ -265,7 +262,7 @@ public class ClientController{
 
             chatWindowController.updateTextArea("Anfrage wurde versendet. Es wird auf eine Antwort gewartet. Spielt beginnt in 30 Sekunden...");
             //Gegner Zeit geben, zu antworten
-            Thread.sleep(30000);
+            Thread.sleep(7000);
             if(isAccepted){
                 if(selectedGame.equals("Chomp")){
                     startChomp();
@@ -312,8 +309,6 @@ public class ClientController{
         chompWindow.setScene(chompScene);
 
         chompWindow.setTitle("Chomp Game");
-
-        System.out.println("### Show Window");
         chompWindow.show();
     }
 
@@ -355,9 +350,7 @@ public class ClientController{
                  return null;
              }
         };
-        System.out.println("### Task created");
         new Thread(popupTask).start();
-        System.out.println("### Taskthread started");
     }
     private void acceptedInvite(String game) throws IOException{
         firstPlayer = false;
@@ -375,7 +368,12 @@ public class ClientController{
     }
 
     public void setSpielzug(int col, int row){
+        System.out.println("### SetSpielzug invoked");
         chompController.setSpielzug(col, row);
+    }
+
+    public void setChompController(ChompController newChompController){
+        chompController = newChompController;
     }
 
 

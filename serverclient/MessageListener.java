@@ -34,7 +34,7 @@ public class MessageListener extends Thread{
                 }
                 else if(input.equals("099")) {
                     //Neuer Login wird in ClientListe aufgenommen
-                    System.out.println("### Message Listener add Client invoked");
+                    //System.out.println("### Message Listener add Client invoked");
                     controller.addClient(in.readLine());
                     controller.updateClientList();
                 }
@@ -63,6 +63,7 @@ public class MessageListener extends Thread{
                 }
                 else if(input.equals("505")){
                     //Spielzug kommt als String der Form "col-row" als Nachricht an und wir aufgeteilt in col und row Koordinate
+                    System.out.println("###Eingehender Spielzug");
                     String spielzug = in.readLine();
                     String[] splittedString = spielzug.split("-");
                     int col = Integer.parseInt(splittedString[0]);
@@ -70,7 +71,7 @@ public class MessageListener extends Thread{
                     controller.setSpielzug(col, row);
                 }
                 else if(input.equals("503")){
-                    System.out.println("### Invite Accepted invoked");
+                    System.out.println("### Invite Accepted eingehend");
                     //Ausgehende Einladung wurde angenommen --> Ändern des Boolean Wertes
                     controller.isAccepted = true;
                 }
