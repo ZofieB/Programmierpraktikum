@@ -342,6 +342,8 @@ public class ClientController {
 
         AnchorPane rootVierGewinnt = (AnchorPane) vierGewinntLoader.load(fxmlVierGewinntStream);
 
+
+
         VierGewinntController vierGewinntController = vierGewinntLoader.getController();
         vierGewinntController.setParameters(this, verticalField, horizontalField, nutzername, gameOpponent);
 
@@ -350,10 +352,6 @@ public class ClientController {
         vierGewinntWindow.setScene(vierGewinntScene);
 
         vierGewinntWindow.setTitle("Vier Gewinnt Game");
-
-        vierGewinntWindow.initModality(Modality.NONE);
-
-        vierGewinntWindow.initOwner(inputField.getScene().getWindow());
 
         System.out.println("### Show Window");
         vierGewinntWindow.show();
@@ -411,17 +409,12 @@ public class ClientController {
             startVierGewinnt();
         }
 
-            }
-
-        }
-
-    private void startVierGewinnt(){
-
     }
+
 
     public void setSpielzug(int col, int row){
         chompController.setSpielzug(col, row);
-    }
-
 
     }
+
+}

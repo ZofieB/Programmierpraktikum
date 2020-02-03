@@ -98,7 +98,7 @@ public class VierGewinntController {
 
             VierGewinnt vierGewinnt = new VierGewinnt(spielfeld, spielerarr, this);
 
-            for (int i = 1; i <= feldhorizontal; i++) {
+            for (int i = 0; i < feldhorizontal; i++) {
                 int j = 0;
                 Polygon pol = new Polygon();
                 pol.getPoints().addAll(0.0, 0.0, 45.0, 45.0, 90.0, 0.0);
@@ -115,7 +115,7 @@ public class VierGewinntController {
                 feld.add(pol, i, j);
             }
 
-            for (int i = 1; i <= feldhorizontal; i++) {
+            for (int i = 0; i < feldhorizontal; i++) {
                 for (int j = 1; j <= feldvertical; j++) {
                     Rectangle rec = new Rectangle();
                     rec.setX(0);
@@ -128,7 +128,7 @@ public class VierGewinntController {
                     feld.add(rec, i, j);
                 }
             }
-            for (int i = 1; i <= feldhorizontal; i++) {
+            for (int i = 0; i < feldhorizontal; i++) {
                 for (int j = 1; j <= feldvertical; j++) {
                     Circle cir = new Circle();
                     cir.setCenterX(45.0);
@@ -139,6 +139,7 @@ public class VierGewinntController {
                     feld.add(cir, i, j);
                 }
             }
+            feld.setGridLinesVisible(false);
         }
     }
     //TODO: VIERGEWINNTSPIEL STARTEN
@@ -208,7 +209,7 @@ public class VierGewinntController {
     @FXML
     private void startTheGame() throws  IOException{
         Stage stage = (Stage) startButton.getScene().getWindow();
-        Parent root = FXMLLoader.load(getClass().getResource("VierGewinntField.fxml"));
+        Parent root = FXMLLoader.load(getClass().getResource("VierGewinntFeld.fxml"));
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
