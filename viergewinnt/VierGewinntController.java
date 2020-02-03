@@ -2,19 +2,21 @@ package viergewinnt;
 
 import absclasses.Spieler;
 import absclasses.Spielzug;
-import chomp.Chomp;
-import chomp.ChompFeld;
 import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Circle;
+import javafx.stage.Stage;
 import serverclient.ClientController;
 
 
@@ -37,6 +39,8 @@ public class VierGewinntController {
 
     @FXML
     private Button startButton;
+
+    private Button cancel;
 
     private VierGewinnt vierGewinnt;
 
@@ -62,6 +66,16 @@ public class VierGewinntController {
     public VierGewinntController() {
     }
 
+    public void setParameters(ClientController newClientController, int newFeldvertical, int newFeldhorizontal, String nutzername, String opponent) {
+        System.out.println("Übergebener Parameter feldvertical: " + newFeldvertical);
+        System.out.println("### setParameters invoked");
+        feldvertical = newFeldvertical;
+        System.out.println("feldvertical gesetzt auf: " + feldvertical);
+        feldhorizontal = newFeldhorizontal;
+        clientController = newClientController;
+        spieler1Name = nutzername;
+        spieler2Name = opponent;
+    }
     @FXML
     private void initialize() throws IOException {
         if (!initialized) {
@@ -84,7 +98,7 @@ public class VierGewinntController {
 
             VierGewinnt vierGewinnt = new VierGewinnt(spielfeld, spielerarr, this);
 
-            for (int i = 0; i < feldhorizontal; i++) {
+            for (int i = 1; i <= feldhorizontal; i++) {
                 int j = 0;
                 Polygon pol = new Polygon();
                 pol.getPoints().addAll(0.0, 0.0, 45.0, 45.0, 90.0, 0.0);
@@ -101,7 +115,7 @@ public class VierGewinntController {
                 feld.add(pol, i, j);
             }
 
-            for (int i = 0; i < feldhorizontal; i++) {
+            for (int i = 1; i <= feldhorizontal; i++) {
                 for (int j = 1; j <= feldvertical; j++) {
                     Rectangle rec = new Rectangle();
                     rec.setX(0);
@@ -114,58 +128,25 @@ public class VierGewinntController {
                     feld.add(rec, i, j);
                 }
             }
-            for (int i = 0; i < feldhorizontal; i++) {
+            for (int i = 1; i <= feldhorizontal; i++) {
                 for (int j = 1; j <= feldvertical; j++) {
                     Circle cir = new Circle();
                     cir.setCenterX(45.0);
                     cir.setCenterY(45.0);
                     cir.setRadius(45.0);
                     cir.setStroke(BLACK);
-                    //Ausprobieren von Farben um zu schauen, ob man von denen Augenkrebs bekommt und welche am besten miteinander harmonieren
-                    /*if (i == 0 && j == 2){
-                        cir.setFill(LIGHTPINK);
-                    }
-                    else if (i == 0 && j == 1){
-                        cir.setFill(LIGHTBLUE);
-                    }
-                    else if (i == 1 && j ==3){
-                        cir.setFill(LIGHTGOLDENRODYELLOW);
-                    }
-                    else if (i == 1 && j == 1){
-                        cir.setFill(PALEGREEN);
-                    }
-                    else if (i == 1 && j == 2){
-                        cir.setFill(PALETURQUOISE);
-                    }
-                    else if (i == 5 && j == 3){
-                        cir.setFill(POWDERBLUE);
-                    }
-                    else if (i == 5 && j == 1){
-                        cir.setFill(PINK);
-                    }
-                    else if (i == 5 && j == 2){
-                        cir.setFill(PLUM);
-                    }*/
-                    //else {}
                     cir.setFill(WHITE);
                     feld.add(cir, i, j);
                 }
             }
         }
     }
+    //TODO: VIERGEWINNTSPIEL STARTEN
 
-    public void setFeld(Spieler spieler, int x, int y) throws IOException {
-        ObservableList<Node> children = feld.getChildren();
-        //cast von group zu rectangle nicht möglich! TODO
-        for (Node n : children) {
-            if (feld.getRowIndex(n) == y && feld.getColumnIndex(n) == x) {
-                Circle cir = (Circle) n;
-                cir.setFill(spieler.getFarbe());
-                //gemachten Spielzug an den Server schicken
-                clientController.send_server_message("", "");
-            }
-        }
-    }
+    //TODO: Unterscheidung Spieler 1 und Spieler 2
+
+
+    //Spielzug-Methode, die einen selbst gemachten Spielzug (durch klicken auf Dreieck) auslöst
 
     public void spielzugAction(Polygon pol) {
         ObservableList<javafx.scene.Node> children = feld.getChildren();
@@ -173,7 +154,7 @@ public class VierGewinntController {
         int x = feld.getColumnIndex(pol);
         int y = feld.getRowIndex(pol);
 
-        for (; y <= feldvertical; y++) {
+        for (int pruef = 1; pruef <= feldvertical; pruef++) {
             for (javafx.scene.Node node : children) {
                 Integer rowIndex = GridPane.getRowIndex(node);
 
@@ -190,26 +171,61 @@ public class VierGewinntController {
                     newcir = (Circle) node;
                     if (newcir.getFill() == WHITE) {
                         newcir.setFill(spieler1.getFarbe());
+                        break;
                     }
-
+                    else if(pruef == feldvertical && newcir.getFill() != WHITE){
+                        //TODO Spieler muss andere Reihe auswählen
+                    }
                 }
             }
         }
     }
 
-    private void setSpielzug(Spielzug spielzug) {
+    //Spielzug-Methode die einen vom Gegner ausgeführten Spielzug durchführt
+    private void setSpielzug(int x, int pruef){
         //MessageListener ruft diese Methode auf  wenn neuer Spielzug vorliegt
+        //Ausführen des reinkommenden Spielzugs
+        ObservableList<Node> children = feld.getChildren();
+        for(Node n : children){
+            Integer rowIndex = GridPane.getRowIndex(n);
+            Integer columnIndex = GridPane.getColumnIndex(n);
+
+            int row = rowIndex == null? 0 : rowIndex;
+            int column = columnIndex == null? 0 : columnIndex;
+
+            if(row == pruef && column == x){
+                Circle cir = (Circle) n;
+                if(cir.getFill() == WHITE) {
+                    cir.setFill(spieler2.getFarbe());
+                    //TODO schauen wie mit prüfen gemacht wird usw.
+                    //vierGewinnt.spielzug(spieler2, x, pruef);
+                }
+            }
+        }
     }
 
-    public void setParameters(ClientController newClientController, int newFeldvertical, int newFeldhorizontal, String nutzername, String opponent) {
-        System.out.println("Übergebener Parameter feldvertical: " + newFeldvertical);
-        System.out.println("### setParameters invoked");
-        feldvertical = newFeldvertical;
-        System.out.println("feldvertical gesetzt auf: " + feldvertical);
-        feldhorizontal = newFeldhorizontal;
-        clientController = newClientController;
-        spieler1Name = nutzername;
-        spieler2Name = opponent;
+
+    @FXML
+    private void startTheGame() throws  IOException{
+        Stage stage = (Stage) startButton.getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("VierGewinntField.fxml"));
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    private void cancelGame(){
+        Stage stage = (Stage) cancel.getScene().getWindow();
+        stage.close();
+    }
+
+    public void playerWon(Spieler spieler){
+
+    }
+
+    public void playDrawn(){
+
     }
 }
 

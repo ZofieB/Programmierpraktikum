@@ -13,6 +13,10 @@ import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 import javafx.stage.Modality;
+import javafx.stage.Popup;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 
 import java.io.*;
 import java.net.Socket;
@@ -23,7 +27,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 
-public class ClientController{
+public class ClientController {
     //Login Fenster
     @FXML
     private PasswordField password;
@@ -67,40 +71,40 @@ public class ClientController{
     public ClientController() {
     }
 
+
     @FXML
     private void initialize() throws IOException {
         System.out.println("### Initialize invoked");
-        if(!gameWindow) {
+        if (!gameWindow) {
             if (!initialized) {
                 initialized = true;
                 createSocket();
                 //thisController = this;
             } else {
-                if(!inviteWindow){
+                if (!inviteWindow) {
                     createMessageListener();
                     clients = new ArrayList<String>();
-                }
-                else{
+                } else {
                     //inviteWindow ist true
                 }
             }
-        }
-        else{
+        } else {
             choiceGames.setItems(FXCollections.observableArrayList("Chomp", "Vier Gewinnt"));
         }
     }
 
     @FXML
-    private void sendMessage() throws IOException{
-        if(server != null) {
+    private void sendMessage() throws IOException {
+        if (server != null) {
             send_server_message(inputField.getText(), "100");
         }
         inputField.clear();
     }
+
     @FXML
-    public void logout() throws IOException{
+    public void logout() throws IOException {
         Stage stage = (Stage) inputField.getScene().getWindow();
-        if(server!= null){
+        if (server != null) {
             send_server_message("101", "101");
             server.close();
         }
@@ -109,7 +113,7 @@ public class ClientController{
     }
 
     @FXML
-    private void login() throws  Exception{
+    private void login() throws Exception {
         System.out.println("### Login invoked");
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(server.getOutputStream()));
         out.write(username.getText());
@@ -128,23 +132,24 @@ public class ClientController{
         stage.show();
 
     }
-    private void createSocket(){
+
+    private void createSocket() {
         try {
             server = new Socket("localhost", 6666);
-        }catch(UnknownHostException e) {
+        } catch (UnknownHostException e) {
             System.out.println("Cannot find host.");
-        }catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("Error connecting to host.");
         }
     }
 
-    private void createMessageListener() throws IOException{
+    private void createMessageListener() throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(server.getInputStream()));
         MessageListener messages = new MessageListener(in, this);
         messages.start();
     }
 
-    public void send_server_message(String message, String code)throws IOException{
+    public void send_server_message(String message, String code) throws IOException {
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(server.getOutputStream()));
         out.write(code);
         out.newLine();
@@ -153,11 +158,11 @@ public class ClientController{
         out.flush();
     }
 
-    public void updateTextArea(String message){
+    public void updateTextArea(String message) {
         outputField.appendText(message + "\n");
     }
 
-    public void updateClientList(){
+    public void updateClientList() {
         System.out.println("### Clients Update invoked");
         activeClients.clear();
         for (String s : clients) {
@@ -166,11 +171,11 @@ public class ClientController{
         System.out.println("### Clients Update finished");
     }
 
-    public void deleteClient(String newClient){
+    public void deleteClient(String newClient) {
         System.out.println("### DeleteClient invoked");
         int clients_size = clients.size();
-        for(int i = 0; i < clients_size; i++){
-            if(clients.get(i).equals(newClient)){
+        for (int i = 0; i < clients_size; i++) {
+            if (clients.get(i).equals(newClient)) {
                 clients.remove(i);
                 break;
             }
@@ -178,7 +183,7 @@ public class ClientController{
         System.out.println("### DeleteClient finished");
     }
 
-    public void addClient(String newClient){
+    public void addClient(String newClient) {
         System.out.println("### AddClient invoked");
         clients.add(newClient); //Programm bleibt stehen!
         System.out.println("### AddClient finished");
@@ -207,7 +212,7 @@ public class ClientController{
     private static int verticalField;
 
     @FXML
-    private void createNewGame(){
+    private void createNewGame() {
         gameWindow = true;
         try {
             Stage stage = new Stage();
@@ -237,17 +242,16 @@ public class ClientController{
             // Display the Stage
             stage.show();
 
-        }
-        catch (IOException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
     @FXML
-    private void checkOpponent() throws IOException{
+    private void checkOpponent() throws IOException {
         System.out.println("### OpponentCheck invoked");
         String opponent = opponentField.getText();
-        if(clients.contains(opponent)){
+        if (clients.contains(opponent)) {
             System.out.println("### Opponent found");
             Stage thisStage = (Stage) opponentField.getScene().getWindow();
             thisStage.close();
@@ -257,16 +261,14 @@ public class ClientController{
 
             //TODO : Spielauswahl integrieren, versendete Nachricht anpassen (siehe Message Listener)
             send_server_message(opponent, "500");
-            /*if(choiceGames.getSelectionModel().equals("Chomp")){
-                System.out.println("### Chomp start invoked");
-                startChomp();
-            }*/
-            //else if(choiceGames.getSelectionModel().equals("Vier Gewinnt")){
+            //if (choiceGames.getSelectionModel().equals("Chomp")) {
+               //System.out.println("### Chomp start invoked");
+                //startChomp();
+            //} else if (choiceGames.getSelectionModel().equals("Vier Gewinnt")) {
                 System.out.println("### VierGewinnt start invoked");
                 startVierGewinnt();
-            //}
-        }
-        else{
+            }
+        else {
             System.out.println("### Opponent not found");
             Stage thisStage = (Stage) opponentField.getScene().getWindow();
             thisStage.close();
@@ -275,13 +277,13 @@ public class ClientController{
     }
 
     @FXML
-    private void cancel(){
+    private void cancel() {
         Stage thisStage = (Stage) opponentField.getScene().getWindow();
         thisStage.close();
     }
 
     @FXML
-    private void startChomp() throws IOException{
+    private void startChomp() throws IOException {
         Stage chompWindow = new Stage();
         FXMLLoader chompLoader = new FXMLLoader();
 
@@ -290,6 +292,7 @@ public class ClientController{
         String fxmlDocPathChomp = "/C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/chomp/StartGame.fxml";
         //String fxmlDocPathChomp = "/home/sophie/Documents/Programmierpraktikum/chomp/StartGame.fxml";
         //String fxmlDocPathChomp = "C:\\Users\\Sophie\\IdeaProjects\\Programmierpraktikum\\chomp\\StartGame.fxml";
+
         FileInputStream fxmlChompStream = new FileInputStream(fxmlDocPathChomp);
         AnchorPane rootChomp = (AnchorPane) chompLoader.load(fxmlChompStream);
 
@@ -307,7 +310,7 @@ public class ClientController{
     }
 
     @FXML
-    private void startVierGewinnt() throws IOException{
+    private void startVierGewinnt() throws IOException {
         Stage vierGewinntWindow = new Stage();
 
         // Create the FXMLLoader
@@ -317,13 +320,13 @@ public class ClientController{
         String fxmlDocPathVierGewinnt = "/C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/viergewinnt/StartGameVierGewinnt.fxml";
         FileInputStream fxmlVierGewinntStream = new FileInputStream(fxmlDocPathVierGewinnt);
 
-        AnchorPane rootChomp = (AnchorPane) vierGewinntLoader.load(fxmlVierGewinntStream);
+        AnchorPane rootVierGewinnt = (AnchorPane) vierGewinntLoader.load(fxmlVierGewinntStream);
 
         VierGewinntController vierGewinntController = vierGewinntLoader.getController();
         vierGewinntController.setParameters(this, verticalField, horizontalField, nutzername, gameOpponent);
 
         // Create the Scene
-        Scene vierGewinntScene = new Scene(rootChomp);
+        Scene vierGewinntScene = new Scene(rootVierGewinnt);
         vierGewinntWindow.setScene(vierGewinntScene);
 
         vierGewinntWindow.setTitle("Vier Gewinnt Game");
@@ -336,85 +339,55 @@ public class ClientController{
         vierGewinntWindow.show();
     }
 
-    public void gotInvite(String opponent) throws IOException{
-        Stage thisStage = (Stage) activeClients.getScene().getWindow();
-        Popup popup = new Popup();
-        popup.setX(300);
-        popup.setY(200);
-        Label text = new Label(opponent + " hat dich zum Spielen eingeladen!");
-        Button accept = new Button("Annehmen");
-        accept.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    //Nachricht über Annahme an Server senden
-                    send_server_message(opponent, "503");
-                    popup.hide();
-                }catch(Exception e) {}
-            }
-        });
-        Button reject = new Button("Ablehnen");
-        reject.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent actionEvent){
-                try {
-                    //Nachricht über Ablehnung an Server senden
-                    send_server_message(opponent, "502");
-                }catch(Exception e) {}
-                popup.hide();
-            }
-        });
-        popup.getContent().addAll(reject, accept);
-        popup.show(thisStage);
-    public void gotInvite(String opponent, String game, int horizontal, int vertical) throws IOException{
+
+    public void gotInvite (String opponent, String game,int horizontal, int vertical) throws IOException {
         inviteWindow = true;
         gameOpponent = opponent;
         horizontalField = horizontal;
         verticalField = vertical;
-        Task popupTask = new Task<Void>(){
-             @Override public Void call() {
-                 Platform.runLater(new Runnable(){
-                     @Override
-                     public void run() {
-                         String accept = "Annehmen";
-                         String reject = "Ablehnen";
+        Task popupTask = new Task<Void>() {
+            @Override
+                public Void call() {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            String accept = "Annehmen";
+                            String reject = "Ablehnen";
 
-                         ChoiceDialog<String> dialog = new ChoiceDialog<String>(accept, accept, reject);
+                            ChoiceDialog<String> dialog = new ChoiceDialog<String>(accept, accept, reject);
 
-                         dialog.setTitle("Einladung");
-                         dialog.setHeaderText("Du wurdest von " + opponent + " zu einer Runde " + game + " eingeladen!");
-                         dialog.setContentText("Einladung annehmen?");
+                            dialog.setTitle("Einladung");
+                            dialog.setHeaderText("Du wurdest von " + opponent + " zu einer Runde " + game + " eingeladen!");
+                            dialog.setContentText("Einladung annehmen?");
 
-                         Optional<String> result = dialog.showAndWait();
-                         if(result.isPresent()) {
-                             String res = result.get();
-                             if(res.equals("Annehmen")){
-                                 //Einladung wurde angenommen
-                                 acceptedInvite(game);
-                             }
-                             else if(res.equals("Ablehnen")){
-                                 //Einladung wurde abgelehnt --> nichts tun
-                             }
-                         }
-                     }
-                 });
-                 return null;
-             }
-        };
-        System.out.println("### Task created");
-        new Thread(popupTask).start();
-        System.out.println("### Taskthread started");
-    }
-    private void acceptedInvite(String game){
-        //TODO: Spielstart von Spieler 2 aus generieren
-        if(game.equals("chomp")){
+                            Optional<String> result = dialog.showAndWait();
+                            if (result.isPresent()) {
+                                String res = result.get();
+                                if (res.equals("Annehmen")) {
+                                    //Einladung wurde angenommen
+                                    acceptedInvite(game);
+                                } else if (res.equals("Ablehnen")) {
+                                    //Einladung wurde abgelehnt --> nichts tun
+                                }
+                            }
+                        }
+                    });
+                    return null;
+                }
+            };
+            System.out.println("### Task created");
+            new Thread(popupTask).start();
+            System.out.println("### Taskthread started");
+        }
+        private void acceptedInvite(String game){
+            //TODO: Spielstart von Spieler 2 aus generieren
+            if (game.equals("chomp")) {
+
+            } else if (game.equals("viergewinnt")) {
+
+            }
 
         }
-        else if(game.equals("viergewinnt")){
 
-        }
 
     }
-
-
-}
