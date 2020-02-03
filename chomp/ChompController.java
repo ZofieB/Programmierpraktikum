@@ -64,6 +64,7 @@ public class ChompController {
 
     // Add a public no-args constructor
     public ChompController() {
+        //TODO : Spielverlauf spielbar machen (-> Kommunikation?)
     }
     //Erste Methode, die vom ClientController zur Initialisierung aufgerufen wird
     public void setParameters(ClientController newClientController, int newFeldvertical, int newFeldhorizontal, String nutzername, String opponent, boolean startSpieler){

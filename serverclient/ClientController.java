@@ -360,7 +360,6 @@ public class ClientController{
         System.out.println("### Taskthread started");
     }
     private void acceptedInvite(String game) throws IOException{
-        //TODO: Spielstart von Spieler 2 aus generieren
         firstPlayer = false;
         if(game.equals("Chomp")){
             startChomp();
