@@ -79,8 +79,10 @@ class ServerThread extends Thread{
                     session.message_this_client("", input[1], "502");
                 }
                 else if(input[0].equals("503")){
-                    //Eine eingehende Einladung wurde angenommen
-                    session.message_this_client("", input[1], "503");
+                    //Eine eingehende Einladung wurde angenommen und Nachricht hat Form : spiel-gegner
+                    String[] splitted = input[1].split("-");
+                    opponent = splitted[1];
+                    session.message_this_client(splitted[0], opponent, "503");
                 }
             }
             client.close();

@@ -265,7 +265,7 @@ public class ClientController{
 
             chatWindowController.updateTextArea("Anfrage wurde versendet. Es wird auf eine Antwort gewartet. Spielt beginnt in 30 Sekunden...");
             //Gegner Zeit geben, zu antworten
-            //Thread.sleep(30000);
+            Thread.sleep(30000);
             if(isAccepted){
                 if(selectedGame.equals("Chomp")){
                     startChomp();
@@ -342,7 +342,7 @@ public class ClientController{
                              try {
                                  if (res.equals("Annehmen")) {
                                      //Einladung wurde angenommen
-                                     send_server_message(opponent, "503");
+                                     send_server_message(game + "-" + opponent, "503");
                                      acceptedInvite(game);
                                  } else if (res.equals("Ablehnen")) {
                                      //Einladung wurde abgelehnt --> nichts tun

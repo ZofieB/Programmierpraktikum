@@ -70,6 +70,7 @@ public class MessageListener extends Thread{
                     controller.setSpielzug(col, row);
                 }
                 else if(input.equals("503")){
+                    System.out.println("### Invite Accepted invoked");
                     //Ausgehende Einladung wurde angenommen --> Ändern des Boolean Wertes
                     controller.isAccepted = true;
                 }
