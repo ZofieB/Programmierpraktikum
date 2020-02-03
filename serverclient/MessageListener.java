@@ -7,17 +7,12 @@ import java.io.BufferedReader;
 public class MessageListener extends Thread{
     private BufferedReader in;
     private ClientController controller;
-    private ChompController chompController;
-    private boolean loggedIn = true;
 
     public MessageListener(BufferedReader in, ClientController controller) {
         this.in = in;
         this.controller = controller;
     }
 
-    public boolean getLoggedIn(){
-        return this.loggedIn;
-    }
 
     public void run(){
         try{
@@ -77,6 +72,17 @@ public class MessageListener extends Thread{
                 }
                 else if(input.equals("502")){
                     //Ausgehende Einladung wurde abgelehnt --> Boolean Wert muss nicht geändert werden
+                    controller.cancelMessage = "----Die Einladung wurde abgelehnt!----";
+                    //TODO besseres Einladungshandling
+                }
+                else if(input.equals("504")){
+                    //Eingeladener Spieler ist schon in einem Spiel
+                    controller.cancelMessage = "----Dieser Spieler ist schon in einem Spiel!----";
+                    //TODO : Was wenn eingeladener Spieler schon im Spiel war
+                }
+                else if(input.equals("560")){
+                    //Spiel wurde von Gegner abgebrochen
+                    controller.gameCancel();
                 }
             }
         }catch(Exception E){}

@@ -2,11 +2,13 @@ package serverclient;
 
 import java.io.*;
 import java.net.Socket;
+import java.util.ArrayList;
 
 class ServerThread extends Thread{
     Socket client;
     ServerController controller;
     String opponent;
+    ArrayList<String> matchesList = new ArrayList<>();
     ServerThread(Socket client, ServerController controller) {
         this.client = client;
         this.controller = controller;
@@ -78,11 +80,31 @@ class ServerThread extends Thread{
                     //Eine eingehende Einladung wurde abgelehnt
                     session.message_this_client("", input[1], "502");
                 }
-                else if(input[0].equals("503")){
+                else if (input[0].equals("504")) {
+                    //Ich bin schon in einem spiel, benachrichtie einladenden Spieler darüber
+                    session.message_this_client("", input[1], "504");
+                }
+                else if (input[0].equals("503")) {
                     //Eine eingehende Einladung wurde angenommen und Nachricht hat Form : spiel-gegner
                     String[] splitted = input[1].split("-");
                     opponent = splitted[1];
                     session.message_this_client(splitted[0], opponent, "503");
+                }
+                else if (input[0].equals("560")) {
+                    //Spieler hat aktuelles Spiel abgebrochen
+                    session.message_this_client("", opponent, "560");
+                }
+                else if (input[0].equals("565")) {
+                    //Ich habe das Spiel verloren
+                    session.send_message("----Du hast leider verloren!----", "111", client);
+                }
+                else if (input[0].equals("566")) {
+                    //Ich habe das Spiel gewonnen
+                    session.send_message("----Du hast das Spiel gegen " + opponent + " gewonnen!----", "111", client);
+                }
+                else if (input[0].equals("599")) {
+                    //Neues Spiel wurde begonnen
+                    controller.updateMatchList(input[1]);
                 }
             }
             client.close();

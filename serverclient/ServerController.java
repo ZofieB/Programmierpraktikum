@@ -19,6 +19,9 @@ public class ServerController {
     private TextArea activeClients;
 
     @FXML
+    private TextArea matches;
+
+    @FXML
     private URL location;
 
     @FXML
@@ -27,6 +30,8 @@ public class ServerController {
     private ServerSocket server;
 
     private SocketListener socketlistener;
+
+    private ArrayList<String> matchesList = new ArrayList<>();
 
     @FXML
     private void initialize() throws IOException {
@@ -53,6 +58,15 @@ public class ServerController {
 
     public void printOutput(String output){
         logField.appendText(output + "\n");
+    }
+
+    public void updateMatchList(String newMatch){
+        matchesList.add(newMatch);
+        matches.clear();
+        for (String s : matchesList) {
+            String[] splittedString = s.split("-");
+            matches.appendText( splittedString[1] + " - " + splittedString[2] + " (" + splittedString[0] + ")" + "\n");
+        }
     }
 
     public void updateClientList(ArrayList<String> clients){

@@ -66,7 +66,6 @@ public class ChompController {
 
     // Add a public no-args constructor
     public ChompController() {
-        //TODO : Spielverlauf spielbar machen (-> Kommunikation?)
     }
     //Erste Methode, die vom ClientController zur Initialisierung aufgerufen wird
     public void setParameters(ClientController newClientController, int newFeldvertical, int newFeldhorizontal, String nutzername, String opponent, boolean startSpieler){
@@ -133,6 +132,7 @@ public class ChompController {
                     feld.add(rec, i, j);
                 }
             }
+            feld.setGridLinesVisible(false);
         }
     }
 
@@ -222,13 +222,53 @@ public class ChompController {
     }
 
     @FXML
-    private void cancelGame(){
+    private void cancelGame() throws IOException{
+        clientController.send_server_message("", "560");
         Stage stage = (Stage) cancel.getScene().getWindow();
         stage.close();
     }
 
     public void playerLost(Spieler spieler){
+        Task cancelGame = new Task<Void>(){
+            @Override public Void call(){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run(){
+                        try {
+                            if (spieler.getSpielername().equals(spieler1.getSpielername())) {
+                                //Dieser Spieler ist derjenige der verloren hat
+                                Stage stage = (Stage) cancel.getScene().getWindow();
+                                stage.close();
+                                clientController.send_server_message("", "565");
+                            } else {
+                                //Der Gegner hat verloren
+                                Stage stage = (Stage) cancel.getScene().getWindow();
+                                stage.close();
+                                clientController.send_server_message("", "566");
+                            }
+                        }catch(Exception e){}
+                    }
+                });
+                return null;
+            }
+        };
+        new Thread(cancelGame).start();
+    }
 
+    public void gameGotCanceled(){
+        Task cancelGame = new Task<Void>(){
+            @Override public Void call(){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run(){
+                        Stage stage = (Stage) cancel.getScene().getWindow();
+                        stage.close();
+                    }
+                });
+                return null;
+            }
+        };
+        new Thread(cancelGame).start();
     }
 
 

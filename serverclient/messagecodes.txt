@@ -13,3 +13,7 @@
 503 = Spieleanfrage angenommen
 505 = eingehender Spielzug
 555 = ausgehender Spielzug
+560 = Spiel abgebrochen
+565 = ich habe Spiel verloren
+566 = Gegner hat Spiel verloren
+599 = Spiel gestartet, Liste aktualisieren
