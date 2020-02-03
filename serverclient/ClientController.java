@@ -227,7 +227,6 @@ public class ClientController {
             // Path to the FXML File
             // String fxmlDocPathGame = "/home/sophie/Documents/Programmierpraktikum/serverclient/Game.fxml";
             String fxmlDocPathGame = "C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/serverclient/Game.fxml";
-            //String fxmlDocPathGame = "/home/sophie/Documents/Programmierpraktikum/serverclient/Game.fxml";
             //String fxmlDocPathGame = "C:\\Users\\Sophie\\IdeaProjects\\Programmierpraktikum\\serverclient\\Game.fxml";
             //String fxmlDocPathGame = "/home/zo73qoh/IdeaProjects/Programmierpraktikum/serverclient/Game.fxml";
 
@@ -308,9 +307,9 @@ public class ClientController {
         // Path to the FXML File
         //String fxmlDocPathChomp = "/home/sophie/Documents/Programmierpraktikum/chomp/StartGame.fxml";
         String fxmlDocPathChomp = "/C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/chomp/StartGame.fxml";
-        //String fxmlDocPathChomp = "/home/sophie/Documents/Programmierpraktikum/chomp/StartGame.fxml";
         //String fxmlDocPathChomp = "C:\\Users\\Sophie\\IdeaProjects\\Programmierpraktikum\\chomp\\StartGame.fxml";
         //String fxmlDocPathChomp = "/home/zo73qoh/IdeaProjects/Programmierpraktikum/chomp/StartGame.fxml";
+
         FileInputStream fxmlChompStream = new FileInputStream(fxmlDocPathChomp);
         AnchorPane rootChomp = (AnchorPane) chompLoader.load(fxmlChompStream);
 
@@ -334,11 +333,10 @@ public class ClientController {
 
         // Path to the FXML File
         String fxmlDocPathVierGewinnt = "/C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/viergewinnt/StartGameVierGewinnt.fxml";
+
         FileInputStream fxmlVierGewinntStream = new FileInputStream(fxmlDocPathVierGewinnt);
 
         AnchorPane rootVierGewinnt = (AnchorPane) vierGewinntLoader.load(fxmlVierGewinntStream);
-
-
 
         VierGewinntController vierGewinntController = vierGewinntLoader.getController();
         vierGewinntController.setParameters(this, verticalField, horizontalField, nutzername, gameOpponent);

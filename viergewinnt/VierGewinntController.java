@@ -2,7 +2,9 @@ package viergewinnt;
 
 import absclasses.Spieler;
 import absclasses.Spielzug;
+import javafx.application.Platform;
 import javafx.collections.ObservableList;
+import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -62,6 +64,10 @@ public class VierGewinntController {
 
     private static String spieler2Name;
 
+    private static boolean firstPlayer;
+
+    private static boolean myTurn;
+
     // Add a public no-args constructor
     public VierGewinntController() {
     }
@@ -75,6 +81,7 @@ public class VierGewinntController {
         clientController = newClientController;
         spieler1Name = nutzername;
         spieler2Name = opponent;
+        myTurn = firstPlayer;
     }
     @FXML
     private void initialize() throws IOException {
@@ -108,8 +115,12 @@ public class VierGewinntController {
                         new EventHandler() {
                             @Override
                             public void handle(Event event) {
-                                spielzugAction(pol);
-                                event.consume();
+                                try {
+                                    if (myTurn) {
+                                        spielzugAction(pol);
+                                        event.consume();
+                                    }
+                                }catch(IOException e){}
                             }
                         });
                 feld.add(pol, i, j);
@@ -149,62 +160,92 @@ public class VierGewinntController {
 
     //Spielzug-Methode, die einen selbst gemachten Spielzug (durch klicken auf Dreieck) auslöst
 
-    public void spielzugAction(Polygon pol) {
-        ObservableList<javafx.scene.Node> children = feld.getChildren();
-        //Koordinaten des angeklickten Polygons bekommen
-        int x = feld.getColumnIndex(pol);
-        int y = feld.getRowIndex(pol);
+    public void spielzugAction(Polygon clickedPol) throws IOException{
+        //Nur wenn Dreieck schwarz ist, kann Spielzug durchgeführt werden
+        if (clickedPol.getFill() == BLACK){
+            ObservableList<Node> children = feld.getChildren();
 
-        for (int pruef = 1; pruef <= feldvertical; pruef++) {
-            for (javafx.scene.Node node : children) {
-                Integer rowIndex = GridPane.getRowIndex(node);
+            Integer polRowIndex = GridPane.getRowIndex(clickedPol);
+            Integer polColumnIndex = GridPane.getColumnIndex(clickedPol);
 
-                // handle null values for index=0
-                int r = rowIndex == null ? 0 : rowIndex;
+            int polRow = polRowIndex == null ? 0 : polRowIndex;
+            int polColumn = polColumnIndex == null ? 0 : polColumnIndex;
 
-                Integer colIndex = GridPane.getColumnIndex(node);
+            //row = y, column = x
+            boolean feldGesetzt = false;
+            int controlRow = 0;
+            while(!feldGesetzt) {
+                    controlRow = controlRow + 1;
+                    for (Node n : children) {
+                        Integer rowIndex = GridPane.getRowIndex(n);
+                        Integer columnIndex = GridPane.getColumnIndex(n);
 
-                // handle null values for index=0
-                int c = colIndex == null ? 0 : colIndex;
+                        int row = rowIndex == null ? 0 : rowIndex;
+                        int column = columnIndex == null ? 0 : columnIndex;
 
-                if (x == c) {
-                    Circle newcir = new Circle();
-                    newcir = (Circle) node;
-                    if (newcir.getFill() == WHITE) {
-                        newcir.setFill(spieler1.getFarbe());
-                        break;
+                        if (controlRow == row && column == polColumn) {
+                            Circle cir = (Circle) n;
+                            if (cir.getFill() == WHITE && row == feldvertical) {
+                                cir.setFill(spieler1.getFarbe());
+                                clickedPol.setFill(LIGHTGREY);
+                                feldGesetzt = true;
+                            } else if (cir.getFill() == WHITE) {
+                                cir.setFill(spieler1.getFarbe());
+                                feldGesetzt = true;
+                            }
+                        }
                     }
-                    else if(pruef == feldvertical && newcir.getFill() != WHITE){
-                        //TODO Spieler muss andere Reihe auswählen
-                    }
-                }
             }
+            //gemachten Spielzug an den Server schicken
+            clientController.send_server_message(polColumn + "-" + controlRow, "555");
+            //Spielzug im VierGewinntSpiel im Hintergrund ausführen
+            vierGewinnt.spielzug(spieler1, polColumn, controlRow);
+            //Zug an Gegner weitergeben
+            myTurn = false;
         }
     }
 
     //Spielzug-Methode die einen vom Gegner ausgeführten Spielzug durchführt
-    private void setSpielzug(int x, int pruef){
+    public void setSpielzug(int polColumn, int polRow){
+        System.out.println("###SetSpielzug VierGewinntController");
         //MessageListener ruft diese Methode auf  wenn neuer Spielzug vorliegt
         //Ausführen des reinkommenden Spielzugs
-        ObservableList<Node> children = feld.getChildren();
-        for(Node n : children){
-            Integer rowIndex = GridPane.getRowIndex(n);
-            Integer columnIndex = GridPane.getColumnIndex(n);
+        System.out.println("### children Liste erstellen");
+        Task setZugTask = new Task<Void>(){
+            @Override public Void call() {
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        ObservableList<Node> children = feld.getChildren();
+                        System.out.println("Children Liste erstellt");
+                        for (Node n : children) {
+                            System.out.println("###For Schleife");
+                            Integer rowIndex = GridPane.getRowIndex(n);
+                            Integer columnIndex = GridPane.getColumnIndex(n);
 
-            int row = rowIndex == null? 0 : rowIndex;
-            int column = columnIndex == null? 0 : columnIndex;
+                            int row = rowIndex == null ? 0 : rowIndex;
+                            int column = columnIndex == null ? 0 : columnIndex;
 
-            if(row == pruef && column == x){
-                Circle cir = (Circle) n;
-                if(cir.getFill() == WHITE) {
-                    cir.setFill(spieler2.getFarbe());
-                    //TODO schauen wie mit prüfen gemacht wird usw.
-                    //vierGewinnt.spielzug(spieler2, x, pruef);
-                }
+                            if (row == polRow && column == polColumn) {
+                                System.out.println("###If-Bedingung");
+                                Circle cir = (Circle) n;
+                                if (cir.getFill() == WHITE) {
+                                    cir.setFill(spieler2.getFarbe());
+                                }
+                            }
+                        }
+                        vierGewinnt.spielzug(spieler2, polColumn, polRow);
+                        System.out.println("###MyTurn ändern");
+                        //Nach Ausführung des eingehenden Spielzugs sind wir wieder dran
+                        myTurn = true;
+                    }
+                });
+                return null;
             }
-        }
+            //TODO prüfen ob gewonnen oder nicht
+        };
+        new Thread(setZugTask).start();
     }
-
 
     @FXML
     private void startTheGame() throws  IOException{

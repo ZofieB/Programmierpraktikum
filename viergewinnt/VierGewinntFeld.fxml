@@ -5,7 +5,7 @@
 
 <AnchorPane prefHeight="550.0" prefWidth="876.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="viergewinnt.VierGewinntController">
    <children>
-      <GridPane fx:id="feld" gridLinesVisible="true" layoutX="10.0" layoutY="10.0" prefHeight="595.0" prefWidth="810.0">
+      <GridPane fx:id="feld" gridLinesVisible="true" layoutX="10.0" layoutY="10.0" prefHeight="595.0" prefWidth="815.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
