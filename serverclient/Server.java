@@ -22,7 +22,8 @@ public class Server extends Application {
         // Path to the FXML File
         //String fxmlDocPathLogin = "/home/sophie/Documents/Programmierpraktikum/serverclient/Server.fxml";
         //String fxmlDocPathLogin = "C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum//serverclient/Server.fxml";
-        String fxmlDocPathLogin = "C:\\Users\\Sophie\\IdeaProjects\\Programmierpraktikum\\serverclient\\Server.fxml";
+        //String fxmlDocPathLogin = "C:\\Users\\Sophie\\IdeaProjects\\Programmierpraktikum\\serverclient\\Server.fxml";
+        String fxmlDocPathLogin = "/home/zo73qoh/IdeaProjects/Programmierpraktikum/serverclient/Server.fxml";
 
         FileInputStream fxmlLoginStream = new FileInputStream(fxmlDocPathLogin);
 

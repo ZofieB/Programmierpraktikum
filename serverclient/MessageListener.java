@@ -1,10 +1,13 @@
 package serverclient;
 
+import chomp.ChompController;
+
 import java.io.BufferedReader;
 
 public class MessageListener extends Thread{
     private BufferedReader in;
     private ClientController controller;
+    private ChompController chompController;
     private boolean loggedIn = true;
 
     public MessageListener(BufferedReader in, ClientController controller) {
@@ -15,6 +18,7 @@ public class MessageListener extends Thread{
     public boolean getLoggedIn(){
         return this.loggedIn;
     }
+
     public void run(){
         try{
             while(true) {
@@ -47,24 +51,30 @@ public class MessageListener extends Thread{
                 }
                 else if(input.equals("501")){
                     //Methode mit eingelesenem Gegnernutzernamen aufrufen
-                    //Nachricht enthält auch weitere Informationen: "gegner-spiel-horizontal-vertikal"
+                    //Nachricht enthält auch weitere Informationen: "eigeneruser-gegneruser-spiel-horizontal-vertikal"
                     System.out.println("### Eingehende Einladung");
                     String message = in.readLine();
                     String[] splitted = message.split("-");
-                    int horizontal = Integer.parseInt(splitted[2]);
-                    int vertical = Integer.parseInt(splitted[3]);
-                    String game = splitted[1];
-                    String opponent = splitted[0];
+                    int horizontal = Integer.parseInt(splitted[3]);
+                    int vertical = Integer.parseInt(splitted[4]);
+                    String game = splitted[2];
+                    String opponent = splitted[1];
                     controller.gotInvite(opponent, game, horizontal, vertical);
                 }
                 else if(input.equals("505")){
-                    //Spielzug kommt als String der Form "x-y" als Nachricht an und wir aufgeteilt in x und y Koordinate
+                    //Spielzug kommt als String der Form "col-row" als Nachricht an und wir aufgeteilt in col und row Koordinate
                     String spielzug = in.readLine();
                     String[] splittedString = spielzug.split("-");
-                    int xKoordinate = Integer.parseInt(splittedString[0]);
-                    int yKoordinate = Integer.parseInt(splittedString[1]);
-                    //TODO Spielzug Methode aufrufen
-
+                    int col = Integer.parseInt(splittedString[0]);
+                    int row = Integer.parseInt(splittedString[1]);
+                    controller.setSpielzug(col, row);
+                }
+                else if(input.equals("503")){
+                    //Ausgehende Einladung wurde angenommen --> Ändern des Boolean Wertes
+                    controller.isAccepted = true;
+                }
+                else if(input.equals("502")){
+                    //Ausgehende Einladung wurde abgelehnt --> Boolean Wert muss nicht geändert werden
                 }
             }
         }catch(Exception E){}
