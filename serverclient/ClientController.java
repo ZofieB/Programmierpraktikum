@@ -216,6 +216,8 @@ public class ClientController {
 
     private static ChompController chompController;
 
+    private static VierGewinntController vierGewinntController;
+
     private static boolean inGame = false;
 
     public String cancelMessage = "----Der Gegner hat nicht geantwortet. Das Spiel wird nicht gestartet!----";
@@ -423,18 +425,40 @@ public class ClientController {
 
     public void setSpielzug(int col, int row){
         //TODO: VierGewinnt Variante
-        System.out.println("### SetSpielzug invoked");
-        chompController.setSpielzug(col, row);
-
+        //System.out.println("### SetSpielzug invoked");
+        //chompController.setSpielzug(col, row);
+        String selectedGame = choiceGames.getValue();
+        if(selectedGame.equals("Chomp")){
+            System.out.println("### SetSpielzug Chomp invoked");
+            chompController.setSpielzug(col, row);
+        }
+        else if (selectedGame.equals("Vier Gewinnt")){
+            System.out.println("### SetSpielzug VierGewinnt invoked");
+            vierGewinntController.setSpielzug(col, row);
+        }
     }
     public void setChompController(ChompController newChompController){
         chompController = newChompController;
     }
 
+    public void setVierGewinntController (VierGewinntController newVierGewinntController){
+        vierGewinntController = newVierGewinntController;
+    }
+
     public void gameCancel(){
-        chompController.gameGotCanceled();
-        updateTextArea("Dein Spiel wurde abgebrochen!");
+        //chompController.gameGotCanceled();
+        //updateTextArea("Dein Spiel wurde abgebrochen!");
         //TODO VierGewinnt Variante
+
+        String selectedGame = choiceGames.getValue();
+        if(selectedGame.equals("Chomp")){
+            chompController.gameGotCanceled();
+            //updateTextArea("Dein Spiel wurde abgebrochen!");
+        }
+        else if (selectedGame.equals("Vier Gewinnt")){
+            vierGewinntController.gameGotCanceled();
+            //updateTextArea("Dein Spiel wurde abgebrochen!");
+        }
     }
 
 

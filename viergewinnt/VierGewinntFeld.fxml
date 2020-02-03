@@ -3,9 +3,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="550.0" prefWidth="876.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="viergewinnt.VierGewinntController">
+<AnchorPane fx:id="window" prefHeight="550.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="viergewinnt.VierGewinntController">
    <children>
-      <GridPane fx:id="feld" gridLinesVisible="true" layoutX="10.0" layoutY="10.0" prefHeight="595.0" prefWidth="815.0">
+      <GridPane fx:id="feld" gridLinesVisible="true" layoutX="10.0" layoutY="10.0" prefHeight="540.0" prefWidth="790.0">
         <columnConstraints>
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
           <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
@@ -16,6 +16,6 @@
             <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
         </rowConstraints>
       </GridPane>
-       <Button fx:id="cancel" layoutX="805.0" layoutY="590.0" mnemonicParsing="false" text="Cancel" />
+       <Button fx:id="cancel" layoutX="805.0" layoutY="590.0" mnemonicParsing="false" onAction="#cancelGame" text="Cancel" />
    </children>
 </AnchorPane>

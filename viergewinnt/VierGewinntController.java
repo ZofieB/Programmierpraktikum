@@ -14,6 +14,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Polygon;
 import javafx.scene.shape.Rectangle;
@@ -29,9 +30,11 @@ import java.util.ResourceBundle;
 import static javafx.scene.paint.Color.*;
 
 
+
 public class VierGewinntController {
 
-
+    @FXML
+    public AnchorPane window;
     @FXML
     private GridPane feld;
     @FXML
@@ -42,6 +45,7 @@ public class VierGewinntController {
     @FXML
     private Button startButton;
 
+    @FXML
     private Button cancel;
 
     private VierGewinnt vierGewinnt;
@@ -53,6 +57,8 @@ public class VierGewinntController {
     private static int feldhorizontal;
 
     private static int feldvertical;
+
+    private static double paramGroesse;
 
     private Spieler spieler1;
 
@@ -90,7 +96,11 @@ public class VierGewinntController {
             initialized = true;
         } else {
             System.out.println("### second Initialize invoked");
+            //Set the Reference for the new Controller in ClientController
+            clientController.setVierGewinntController(this);
+
             System.out.println("Wert von feldhorizontal: " + feldhorizontal + " Und Wert von feldvertical: " + feldvertical);
+
             spieler1 = new Spieler(spieler1Name, 1, POWDERBLUE);
             spieler2 = new Spieler(spieler2Name, 1, PINK);
 
@@ -103,14 +113,53 @@ public class VierGewinntController {
             spielfeld.setVertical(feldvertical);
             spielfeld.initializeSpielfeld();
 
-            VierGewinnt vierGewinnt = new VierGewinnt(spielfeld, spielerarr, this);
+            if (feldvertical * 2 < feldhorizontal){
+                paramGroesse = 790.00 / feldhorizontal;
+            }
+            else paramGroesse = 540.00 / (feldvertical + 0.50);
+            //}
+            window.setPrefHeight(paramGroesse * feldvertical + 10.0);
+            window.setPrefWidth(paramGroesse * feldhorizontal + 10.0);
+            feld.setPrefHeight(paramGroesse * feldvertical + paramGroesse / 2);
+            feld.setPrefWidth(paramGroesse * feldhorizontal);
+            cancel.setLayoutX(paramGroesse * feldhorizontal + 10.0);
+            cancel.setLayoutY(paramGroesse * feldvertical + paramGroesse / 2 + 10.0);
+
+            vierGewinnt = new VierGewinnt(spielfeld, spielerarr, this);
+            //TODO parametisieren der Größen
+
+
+            for (int i = 0; i < feldhorizontal; i++) {
+                for (int j = 1; j <= feldvertical; j++) {
+                    Rectangle rec = new Rectangle();
+                    rec.setX(0);
+                    rec.setY(0);
+                    rec.setWidth(paramGroesse);
+                    rec.setHeight(paramGroesse);
+                    rec.setArcWidth(5);
+                    rec.setArcHeight(5);
+                    rec.setFill(MINTCREAM);
+                    feld.add(rec, i, j);
+                }
+            }
+            for (int i = 0; i < feldhorizontal; i++) {
+                for (int j = 1; j <= feldvertical; j++) {
+                    Circle cir = new Circle();
+                    cir.setCenterX(paramGroesse/2);
+                    cir.setCenterY(paramGroesse/2);
+                    cir.setRadius((paramGroesse/2)-0.5);
+                    cir.setStroke(BLACK);
+                    cir.setFill(WHITE);
+                    feld.add(cir, i, j);
+                }
+            }
+
 
             for (int i = 0; i < feldhorizontal; i++) {
                 int j = 0;
                 Polygon pol = new Polygon();
-                pol.getPoints().addAll(0.0, 0.0, 45.0, 45.0, 90.0, 0.0);
+                pol.getPoints().addAll(0.0, 0.0, paramGroesse/2, paramGroesse/2, paramGroesse, 0.0);
                 pol.setFill(BLACK);
-                //pol.setOnMouseClicked()
                 pol.addEventHandler(MouseEvent.MOUSE_CLICKED,
                         new EventHandler() {
                             @Override
@@ -125,31 +174,6 @@ public class VierGewinntController {
                         });
                 feld.add(pol, i, j);
             }
-
-            for (int i = 0; i < feldhorizontal; i++) {
-                for (int j = 1; j <= feldvertical; j++) {
-                    Rectangle rec = new Rectangle();
-                    rec.setX(0);
-                    rec.setY(0);
-                    rec.setWidth(90);
-                    rec.setHeight(90);
-                    rec.setArcWidth(5);
-                    rec.setArcHeight(5);
-                    rec.setFill(MINTCREAM);
-                    feld.add(rec, i, j);
-                }
-            }
-            for (int i = 0; i < feldhorizontal; i++) {
-                for (int j = 1; j <= feldvertical; j++) {
-                    Circle cir = new Circle();
-                    cir.setCenterX(45.0);
-                    cir.setCenterY(45.0);
-                    cir.setRadius(45.0);
-                    cir.setStroke(BLACK);
-                    cir.setFill(WHITE);
-                    feld.add(cir, i, j);
-                }
-            }
             feld.setGridLinesVisible(false);
         }
     }
@@ -161,6 +185,7 @@ public class VierGewinntController {
     //Spielzug-Methode, die einen selbst gemachten Spielzug (durch klicken auf Dreieck) auslöst
 
     public void spielzugAction(Polygon clickedPol) throws IOException{
+        System.out.println("### da wird was angeklickt (Vier Gewinnt)");
         //Nur wenn Dreieck schwarz ist, kann Spielzug durchgeführt werden
         if (clickedPol.getFill() == BLACK){
             ObservableList<Node> children = feld.getChildren();
@@ -185,11 +210,12 @@ public class VierGewinntController {
 
                         if (controlRow == row && column == polColumn) {
                             Circle cir = (Circle) n;
-                            if (cir.getFill() == WHITE && row == feldvertical) {
-                                cir.setFill(spieler1.getFarbe());
-                                clickedPol.setFill(LIGHTGREY);
-                                feldGesetzt = true;
-                            } else if (cir.getFill() == WHITE) {
+                            //if (cir.getFill() == WHITE && row == feldvertical) {
+                              //  cir.setFill(spieler1.getFarbe());
+                                //clickedPol.setFill(LIGHTGREY);
+                                //feldGesetzt = true;
+                            //} else
+                                if (cir.getFill() == WHITE) {
                                 cir.setFill(spieler1.getFarbe());
                                 feldGesetzt = true;
                             }
@@ -257,7 +283,8 @@ public class VierGewinntController {
     }
 
     @FXML
-    private void cancelGame(){
+    private void cancelGame() throws IOException{
+        clientController.send_server_message("", "560");
         Stage stage = (Stage) cancel.getScene().getWindow();
         stage.close();
     }
@@ -269,5 +296,22 @@ public class VierGewinntController {
     public void playDrawn(){
 
     }
+
+    public void gameGotCanceled(){
+        Task cancelGame = new Task<Void>(){
+            @Override public Void call(){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run(){
+                        Stage stage = (Stage) cancel.getScene().getWindow();
+                        stage.close();
+                    }
+                });
+                return null;
+            }
+        };
+        new Thread(cancelGame).start();
+    }
+
 }
 

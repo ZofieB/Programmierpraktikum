@@ -1,6 +1,7 @@
 package serverclient;
 
 import chomp.ChompController;
+import viergewinnt.VierGewinntController;
 
 import java.io.BufferedReader;
 
