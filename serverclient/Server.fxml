@@ -5,9 +5,11 @@
 
 <AnchorPane prefHeight="400.0" prefWidth="854.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="serverclient.ServerController">
    <children>
-      <TextArea fx:id="logField" editable="false" layoutX="14.0" layoutY="26.0" prefHeight="317.0" prefWidth="662.0" />
+      <TextArea fx:id="logField" editable="false" layoutX="14.0" layoutY="26.0" prefHeight="317.0" prefWidth="531.0" />
       <Button fx:id="shutdown" layoutX="23.0" layoutY="360.0" mnemonicParsing="false" onAction="#shutdown" text="Shutdown" />
-      <TextArea fx:id="activeClients" editable="false" layoutX="696.0" layoutY="56.0" prefHeight="287.0" prefWidth="147.0" />
-      <Label layoutX="693.0" layoutY="26.0" prefHeight="16.0" prefWidth="147.0" text="ActiveClients" />
+      <TextArea fx:id="activeClients" editable="false" layoutX="733.0" layoutY="56.0" prefHeight="287.0" prefWidth="110.0" />
+      <Label layoutX="730.0" layoutY="26.0" prefHeight="16.0" prefWidth="110.0" text="ActiveClients" />
+      <TextArea fx:id="matches" layoutX="566.0" layoutY="56.0" prefHeight="287.0" prefWidth="146.0" />
+      <Label layoutX="566.0" layoutY="26.0" text="Matches" />
    </children>
 </AnchorPane>

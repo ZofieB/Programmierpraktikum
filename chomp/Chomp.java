@@ -69,7 +69,6 @@ public class Chomp extends Spiel implements Protokollierbar{
                 y = scan.nextInt();*/
                 if(feld.isInRange(x, y) == false || feld.getValue(x, y) == 1) {
                     //System.out.println("Du musst ein korrektes Feld nehmen! Wiederhole die Eingabe:");
-                    //TODO EINGABE DES RICHTIGEN FELDES BEHANDELN
                 }
             } while(feld.isInRange(x, y) == false || feld.getValue(x, y) != 0);
 
@@ -130,7 +129,6 @@ public class Chomp extends Spiel implements Protokollierbar{
     }    
     @Override
     public void durchgang() {
-        //TODO: Methode überhaupt nötig?
         if(!playerlost) {
             spielzug(spieler[0]);
         }

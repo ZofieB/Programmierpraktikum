@@ -53,9 +53,11 @@ public class ClientController {
 
     private static Socket server;
 
-    private FXMLLoader loader;
+    //private FXMLLoader loader;
 
     private static ArrayList<String> clients;
+
+    //Initialisierung Variablen
 
     private static boolean initialized = false;
 
@@ -84,8 +86,6 @@ public class ClientController {
                     createMessageListener();
                     chatWindowController = this;
                     clients = new ArrayList<String>();
-                } else {
-                    //inviteWindow ist true
                 }
             }
         } else {
@@ -216,6 +216,10 @@ public class ClientController {
 
     private static ChompController chompController;
 
+    private static boolean inGame = false;
+
+    public String cancelMessage = "----Der Gegner hat nicht geantwortet. Das Spiel wird nicht gestartet!----";
+
     @FXML
     private void createNewGame() {
         gameWindow = true;
@@ -268,20 +272,22 @@ public class ClientController {
             //versende Nachricht der Form "gegner-spiel-horizontal-vertikal"
             send_server_message(opponent + "-" + nutzername + "-" + selectedGame + "-" + horizontalField + "-" + verticalField, "500");
 
-            chatWindowController.updateTextArea("Anfrage wurde versendet. Es wird auf eine Antwort gewartet. Spielt beginnt in 30 Sekunden...");
             //Gegner Zeit geben, zu antworten
             Thread.sleep(7000);
             if(isAccepted){
                 if(selectedGame.equals("Chomp")){
+                    inGame = true;
                     startChomp();
                 }
                 else if(selectedGame.equals("Vier Gewinnt")){
+                    inGame = true;
                     startVierGewinnt();
                 }
             }
             else{
                 //TODO : nicht gestartetes Spiel bearbeiten --> Anfrage weitersenden
-                chatWindowController.updateTextArea("Der Gegner hat nicht geantwortet. Das Spiel wird nicht gestartet!");
+                //Cancel Message wird je nach Ablehnungsart gesetzt
+                chatWindowController.updateTextArea(cancelMessage);
             }
 
         }
@@ -354,50 +360,61 @@ public class ClientController {
 
     public void gotInvite (String opponent, String game,int horizontal, int vertical) throws IOException {
         inviteWindow = true;
-        gameOpponent = opponent;
-        horizontalField = horizontal;
-        verticalField = vertical;
-        Task popupTask = new Task<Void>(){
-             @Override public Void call() {
-                 Platform.runLater(new Runnable(){
-                     @Override
-                     public void run() {
-                         String accept = "Annehmen";
-                         String reject = "Ablehnen";
+        if(inGame == false) {
+            gameOpponent = opponent;
+            horizontalField = horizontal;
+            verticalField = vertical;
+            Task popupTask = new Task<Void>() {
+                @Override
+                public Void call() {
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            String accept = "Annehmen";
+                            String reject = "Ablehnen";
 
-                         ChoiceDialog<String> dialog = new ChoiceDialog<String>(accept, accept, reject);
+                            ChoiceDialog<String> dialog = new ChoiceDialog<String>(accept, accept, reject);
 
-                         dialog.setTitle("Einladung");
-                         dialog.setHeaderText("Du wurdest von " + opponent + " zu einer Runde " + game + " eingeladen!");
-                         dialog.setContentText("Einladung annehmen?");
+                            dialog.setTitle("Einladung");
+                            dialog.setHeaderText("Du wurdest von " + opponent + " zu einer Runde " + game + " eingeladen!");
+                            dialog.setContentText("Einladung annehmen?");
 
-                         Optional<String> result = dialog.showAndWait();
-                         if(result.isPresent()) {
-                             String res = result.get();
-                             try {
-                                 if (res.equals("Annehmen")) {
-                                     //Einladung wurde angenommen
-                                     send_server_message(game + "-" + opponent, "503");
-                                     acceptedInvite(game);
-                                 } else if (res.equals("Ablehnen")) {
-                                     //Einladung wurde abgelehnt --> nichts tun
-                                     send_server_message(opponent, "502");
-                                 }
-                             }catch(IOException e) {}
-                         }
-                     }
-                 });
-                 return null;
-             }
-        };
-        new Thread(popupTask).start();
+                            Optional<String> result = dialog.showAndWait();
+                            if (result.isPresent()) {
+                                String res = result.get();
+                                try {
+                                    if (res.equals("Annehmen")) {
+                                        //Einladung wurde angenommen
+                                        send_server_message(game + "-" + opponent, "503");
+                                        acceptedInvite(game);
+                                    } else if (res.equals("Ablehnen")) {
+                                        //Einladung wurde abgelehnt --> nichts tun
+                                        send_server_message(opponent, "502");
+                                    }
+                                } catch (IOException e) {
+                                }
+                            }
+                        }
+                    });
+                    return null;
+                }
+            };
+            new Thread(popupTask).start();
+        }
+        else{
+            send_server_message(opponent, "504");
+        }
     }
     private void acceptedInvite(String game) throws IOException{
         firstPlayer = false;
         if(game.equals("Chomp")){
+            send_server_message("Chomp-" + nutzername + "-" + gameOpponent, "599");
+            inGame = true;
             startChomp();
         }
         else if(game.equals("Vier Gewinnt")){
+            send_server_message("Vier Gewinnt-" + nutzername + "-" + gameOpponent, "599");
+            inGame = true;
             startVierGewinnt();
         }
 
@@ -405,12 +422,19 @@ public class ClientController {
 
 
     public void setSpielzug(int col, int row){
+        //TODO: VierGewinnt Variante
         System.out.println("### SetSpielzug invoked");
         chompController.setSpielzug(col, row);
 
     }
     public void setChompController(ChompController newChompController){
         chompController = newChompController;
+    }
+
+    public void gameCancel(){
+        chompController.gameGotCanceled();
+        updateTextArea("Dein Spiel wurde abgebrochen!");
+        //TODO VierGewinnt Variante
     }
 
 
