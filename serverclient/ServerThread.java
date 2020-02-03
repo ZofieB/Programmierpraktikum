@@ -62,15 +62,27 @@ class ServerThread extends Thread{
                     session.message_all_clients(benutzername + ": " + input[1], "111");
                 }
                 else if(input[0].equals("500")){
-                    //Message?
                     //Spieleanfrage weiterschicken an entsprechenden Gegner (input[1]) und Gegner in Variable speichern
+
                     System.out.println("### Code 500 erhalten und bearbeitet");
-                    session.message_this_client(benutzername, input[1], "501");
-                    opponent = input[1];
+                    String[] splittedString = input[1].split("-");
+
+                    session.message_this_client(input[1], splittedString[0], "501");
+                    opponent = splittedString[0];
                 }
                 else if(input[0].equals("555")){
                     //Client hat Spielzug gemacht, Spielzug wird weitergegeben
                     session.message_this_client(input[1], opponent, "505");
+                }
+                else if(input[0].equals("502")){
+                    //Eine eingehende Einladung wurde abgelehnt
+                    session.message_this_client("", input[1], "502");
+                }
+                else if(input[0].equals("503")){
+                    //Eine eingehende Einladung wurde angenommen und Nachricht hat Form : spiel-gegner
+                    String[] splitted = input[1].split("-");
+                    opponent = splitted[1];
+                    session.message_this_client(splitted[0], opponent, "503");
                 }
             }
             client.close();

@@ -63,7 +63,7 @@ public class ClientController {
 
     private static boolean inviteWindow = false;
 
-    //public static ClientController thisController;
+    public static ClientController chatWindowController;
 
     private static String nutzername;
 
@@ -79,10 +79,10 @@ public class ClientController {
             if (!initialized) {
                 initialized = true;
                 createSocket();
-                //thisController = this;
             } else {
                 if (!inviteWindow) {
                     createMessageListener();
+                    chatWindowController = this;
                     clients = new ArrayList<String>();
                 } else {
                     //inviteWindow ist true
@@ -194,7 +194,7 @@ public class ClientController {
     //
 
     @FXML
-    private ChoiceBox choiceGames;
+    private ChoiceBox<String> choiceGames;
 
     @FXML
     private TextField opponentField;
@@ -211,6 +211,12 @@ public class ClientController {
 
     private static int verticalField;
 
+    public static boolean isAccepted = false;
+
+    private static boolean firstPlayer = true;
+
+    private static ChompController chompController;
+
     @FXML
     private void createNewGame() {
         gameWindow = true;
@@ -224,6 +230,7 @@ public class ClientController {
             String fxmlDocPathGame = "C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/serverclient/Game.fxml";
             //String fxmlDocPathGame = "/home/sophie/Documents/Programmierpraktikum/serverclient/Game.fxml";
             //String fxmlDocPathGame = "C:\\Users\\Sophie\\IdeaProjects\\Programmierpraktikum\\serverclient\\Game.fxml";
+            //String fxmlDocPathGame = "/home/zo73qoh/IdeaProjects/Programmierpraktikum/serverclient/Game.fxml";
 
             FileInputStream fxmlGameStream = new FileInputStream(fxmlDocPathGame);
 
@@ -248,10 +255,12 @@ public class ClientController {
     }
 
     @FXML
-    private void checkOpponent() throws IOException {
+    private void checkOpponent() throws Exception{
         System.out.println("### OpponentCheck invoked");
         String opponent = opponentField.getText();
-        if (clients.contains(opponent)) {
+        if(clients.contains(opponent)){
+            String selectedGame = choiceGames.getValue();
+            System.out.println("### selected Game " + selectedGame);
             System.out.println("### Opponent found");
             Stage thisStage = (Stage) opponentField.getScene().getWindow();
             thisStage.close();
@@ -259,16 +268,27 @@ public class ClientController {
             verticalField = Integer.parseInt(vertical.getText());
             horizontalField = Integer.parseInt(horizontal.getText());
 
-            //TODO : Spielauswahl integrieren, versendete Nachricht anpassen (siehe Message Listener)
-            send_server_message(opponent, "500");
-            //if (choiceGames.getSelectionModel().equals("Chomp")) {
-               //System.out.println("### Chomp start invoked");
-                //startChomp();
-            //} else if (choiceGames.getSelectionModel().equals("Vier Gewinnt")) {
-                System.out.println("### VierGewinnt start invoked");
-                startVierGewinnt();
+            //versende Nachricht der Form "gegner-spiel-horizontal-vertikal"
+            send_server_message(opponent + "-" + nutzername + "-" + selectedGame + "-" + horizontalField + "-" + verticalField, "500");
+
+            chatWindowController.updateTextArea("Anfrage wurde versendet. Es wird auf eine Antwort gewartet. Spielt beginnt in 30 Sekunden...");
+            //Gegner Zeit geben, zu antworten
+            Thread.sleep(30000);
+            if(isAccepted){
+                if(selectedGame.equals("Chomp")){
+                    startChomp();
+                }
+                else if(selectedGame.equals("Vier Gewinnt")){
+                    startVierGewinnt();
+                }
             }
-        else {
+            else{
+                //TODO : nicht gestartetes Spiel bearbeiten --> Anfrage weitersenden
+                chatWindowController.updateTextArea("Der Gegner hat nicht geantwortet. Das Spiel wird nicht gestartet!");
+            }
+
+        }
+        else{
             System.out.println("### Opponent not found");
             Stage thisStage = (Stage) opponentField.getScene().getWindow();
             thisStage.close();
@@ -292,12 +312,12 @@ public class ClientController {
         String fxmlDocPathChomp = "/C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/chomp/StartGame.fxml";
         //String fxmlDocPathChomp = "/home/sophie/Documents/Programmierpraktikum/chomp/StartGame.fxml";
         //String fxmlDocPathChomp = "C:\\Users\\Sophie\\IdeaProjects\\Programmierpraktikum\\chomp\\StartGame.fxml";
-
+        //String fxmlDocPathChomp = "/home/zo73qoh/IdeaProjects/Programmierpraktikum/chomp/StartGame.fxml";
         FileInputStream fxmlChompStream = new FileInputStream(fxmlDocPathChomp);
         AnchorPane rootChomp = (AnchorPane) chompLoader.load(fxmlChompStream);
 
-        ChompController chompController = chompLoader.getController();
-        chompController.setParameters(this, verticalField, horizontalField, nutzername, gameOpponent);
+        chompController = chompLoader.getController();
+        chompController.setParameters(this, verticalField, horizontalField, nutzername, gameOpponent, firstPlayer);
 
         // Create the Scene
         Scene chompScene = new Scene(rootChomp);
@@ -345,49 +365,63 @@ public class ClientController {
         gameOpponent = opponent;
         horizontalField = horizontal;
         verticalField = vertical;
-        Task popupTask = new Task<Void>() {
-            @Override
-                public Void call() {
-                    Platform.runLater(new Runnable() {
-                        @Override
-                        public void run() {
-                            String accept = "Annehmen";
-                            String reject = "Ablehnen";
+        Task popupTask = new Task<Void>(){
+             @Override public Void call() {
+                 Platform.runLater(new Runnable(){
+                     @Override
+                     public void run() {
+                         String accept = "Annehmen";
+                         String reject = "Ablehnen";
 
-                            ChoiceDialog<String> dialog = new ChoiceDialog<String>(accept, accept, reject);
+                         ChoiceDialog<String> dialog = new ChoiceDialog<String>(accept, accept, reject);
 
-                            dialog.setTitle("Einladung");
-                            dialog.setHeaderText("Du wurdest von " + opponent + " zu einer Runde " + game + " eingeladen!");
-                            dialog.setContentText("Einladung annehmen?");
+                         dialog.setTitle("Einladung");
+                         dialog.setHeaderText("Du wurdest von " + opponent + " zu einer Runde " + game + " eingeladen!");
+                         dialog.setContentText("Einladung annehmen?");
 
-                            Optional<String> result = dialog.showAndWait();
-                            if (result.isPresent()) {
-                                String res = result.get();
-                                if (res.equals("Annehmen")) {
-                                    //Einladung wurde angenommen
-                                    acceptedInvite(game);
-                                } else if (res.equals("Ablehnen")) {
-                                    //Einladung wurde abgelehnt --> nichts tun
-                                }
-                            }
-                        }
-                    });
-                    return null;
-                }
-            };
-            System.out.println("### Task created");
-            new Thread(popupTask).start();
-            System.out.println("### Taskthread started");
+                         Optional<String> result = dialog.showAndWait();
+                         if(result.isPresent()) {
+                             String res = result.get();
+                             try {
+                                 if (res.equals("Annehmen")) {
+                                     //Einladung wurde angenommen
+                                     send_server_message(game + "-" + opponent, "503");
+                                     acceptedInvite(game);
+                                 } else if (res.equals("Ablehnen")) {
+                                     //Einladung wurde abgelehnt --> nichts tun
+                                     send_server_message(opponent, "502");
+                                 }
+                             }catch(IOException e) {}
+                         }
+                     }
+                 });
+                 return null;
+             }
+        };
+        System.out.println("### Task created");
+        new Thread(popupTask).start();
+        System.out.println("### Taskthread started");
+    }
+    private void acceptedInvite(String game) throws IOException{
+        firstPlayer = false;
+        if(game.equals("Chomp")){
+            startChomp();
         }
-        private void acceptedInvite(String game){
-            //TODO: Spielstart von Spieler 2 aus generieren
-            if (game.equals("chomp")) {
-
-            } else if (game.equals("viergewinnt")) {
+        else if(game.equals("Vier Gewinnt")){
+            startVierGewinnt();
+        }
 
             }
 
         }
+
+    private void startVierGewinnt(){
+
+    }
+
+    public void setSpielzug(int col, int row){
+        chompController.setSpielzug(col, row);
+    }
 
 
     }

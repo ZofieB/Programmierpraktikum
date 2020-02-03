@@ -26,6 +26,9 @@ public class Client extends Application {
         //String fxmlDocPathLogin = "/home/sophie/Documents/Programmierpraktikum/serverclient/ClientLogin.fxml";
         String fxmlDocPathLogin = "C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/serverclient/ClientLogin.fxml";
         //String fxmlDocPathLogin = "C:\\Users\\Sophie\\IdeaProjects\\Programmierpraktikum\\serverclient\\ClientLogin.fxml";
+        //String fxmlDocPathLogin = "C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/serverclient/ClientLogin.fxml";
+        //String fxmlDocPathLogin = "C:\\Users\\Sophie\\IdeaProjects\\Programmierpraktikum\\serverclient\\ClientLogin.fxml";
+        //String fxmlDocPathLogin = "/home/zo73qoh/IdeaProjects/Programmierpraktikum/serverclient/ClientLogin.fxml";
         FileInputStream fxmlLoginStream = new FileInputStream(fxmlDocPathLogin);
 
         // Create the Pane and all Details
