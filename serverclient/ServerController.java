@@ -60,15 +60,6 @@ public class ServerController {
         logField.appendText(output + "\n");
     }
 
-    public void updateMatchList(String newMatch){
-        matchesList.add(newMatch);
-        matches.clear();
-        for (String s : matchesList) {
-            String[] splittedString = s.split("-");
-            matches.appendText( splittedString[1] + " - " + splittedString[2] + " (" + splittedString[0] + ")" + "\n");
-        }
-    }
-
     public void updateClientList(ArrayList<String> clients){
         System.out.println("### Clients Update invoked");
         activeClients.clear();
@@ -76,6 +67,27 @@ public class ServerController {
             activeClients.appendText(s + "\n");
         }
         System.out.println("### Clients Update finished");
+    }
+    public void addNewMatch(String newMatch){
+        //String der Form spiel-nutzer-gegner kommt rein
+        matchesList.add(newMatch);
+        updateMatchList();
+    }
+    public void deleteMatch(String userInMatch){
+        for(String s : matchesList) {
+            String[] splitted = s.split("-");
+            if(splitted[1].equals(userInMatch)  || splitted [2].equals(userInMatch)){
+                matchesList.remove(s);
+            }
+        }
+        updateMatchList();
+    }
+    public void updateMatchList(){
+        matches.clear();
+        for (String s : matchesList) {
+            String[] splittedString = s.split("-");
+            matches.appendText( splittedString[1] + " - " + splittedString[2] + " (" + splittedString[0] + ")" + "\n");
+        }
     }
 
  /*   public void deleteClient(String newClient){
