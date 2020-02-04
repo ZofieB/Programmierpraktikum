@@ -93,18 +93,21 @@ class ServerThread extends Thread{
                 else if (input[0].equals("560")) {
                     //Spieler hat aktuelles Spiel abgebrochen
                     session.message_this_client("", opponent, "560");
+                    controller.deleteMatch(opponent);
                 }
                 else if (input[0].equals("565")) {
                     //Ich habe das Spiel verloren
                     session.send_message("----Du hast leider verloren!----", "111", client);
+                    controller.deleteMatch(opponent);
                 }
                 else if (input[0].equals("566")) {
                     //Ich habe das Spiel gewonnen
                     session.send_message("----Du hast das Spiel gegen " + opponent + " gewonnen!----", "111", client);
+                    controller.deleteMatch(opponent);
                 }
                 else if (input[0].equals("599")) {
                     //Neues Spiel wurde begonnen
-                    controller.updateMatchList(input[1]);
+                    controller.addNewMatch(input[1]);
                 }
             }
             client.close();

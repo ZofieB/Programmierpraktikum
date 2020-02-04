@@ -367,6 +367,7 @@ public class ClientController{
     private void acceptedInvite(String game) throws IOException{
         firstPlayer = false;
         if(game.equals("Chomp")){
+            //Server gestartetes Spiel in der Form spiel-nutzer-gegner schicken
             send_server_message("Chomp-" + nutzername + "-" + gameOpponent, "599");
             inGame = true;
             startChomp();

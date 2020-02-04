@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -34,6 +35,9 @@ public class ChompController {
 
     @FXML
     private Button cancel;
+
+    @FXML
+    private AnchorPane anchor;
 
     @FXML
     private URL location;
@@ -104,6 +108,14 @@ public class ChompController {
             spielfeld.setVertical(feldvertical);
             spielfeld.initializeSpielfeld();
 
+            int[] sizeValues = calcWindowSize(feldhorizontal, feldvertical);
+
+            feld.setPrefHeight(sizeValues[1]);
+            feld.setPrefWidth(sizeValues[2]);
+
+            anchor.setPrefHeight(sizeValues[1] + 50);
+            anchor.setPrefWidth(sizeValues[2] + 70);
+
             chomp = new Chomp(spielfeld, spielerarr, this);
             //Größe Rectangles Parametrisieren auf Eingabe!!
             for (int i = 0; i < feldhorizontal; i++) {
@@ -111,8 +123,8 @@ public class ChompController {
                     Rectangle rec = new Rectangle();
                     rec.setX(0);
                     rec.setY(0);
-                    rec.setWidth(90);
-                    rec.setHeight(90);
+                    rec.setWidth(sizeValues[0]);
+                    rec.setHeight(sizeValues[0]);
                     rec.setArcWidth(5);
                     rec.setArcHeight(5);
                     rec.setFill(LIGHTGREY);
@@ -269,6 +281,17 @@ public class ChompController {
             }
         };
         new Thread(cancelGame).start();
+    }
+
+    private int[] calcWindowSize(int horizontal, int vertical){
+        int recHeight = (int) Math.floor(600/vertical);
+        if(recHeight > 90){
+            recHeight = 90;
+        }
+        int gridHeight = vertical * recHeight;
+        int gridWidth = horizontal * recHeight;
+        int[] values = {recHeight, gridHeight, gridWidth};
+        return values;
     }
 
 
