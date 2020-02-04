@@ -62,9 +62,18 @@ public class MessageListener extends Thread{
                     System.out.println("###Eingehender Spielzug");
                     String spielzug = in.readLine();
                     String[] splittedString = spielzug.split("-");
+                    System.out.println("String wurde gesplittet");
                     int col = Integer.parseInt(splittedString[0]);
+                    System.out.println("Col = "+ col);
                     int row = Integer.parseInt(splittedString[1]);
-                    controller.setSpielzug(col, row);
+                    System.out.println("row = " + row);
+                    int game = Integer.parseInt(splittedString[2]);
+                    if (game == 1) {
+                        controller.setSpielzugChomp(col, row);
+                    }
+                    else if (game == 2){
+                        controller.setSpielzugVierGewinnt(col, row);
+                    }
                 }
                 else if(input.equals("503")){
                     System.out.println("### Invite Accepted eingehend");
@@ -83,7 +92,13 @@ public class MessageListener extends Thread{
                 }
                 else if(input.equals("560")){
                     //Spiel wurde von Gegner abgebrochen
-                    controller.gameCancel();
+                    String message = in.readLine();
+                    if(message.equals("Chomp")) {
+                        controller.gameCancelChomp();
+                    }
+                    else if(message.equals("Vier Gewinnt")){
+                        controller.gameCancelVierGewinnt();
+                    }
                 }
             }
         }catch(Exception E){}

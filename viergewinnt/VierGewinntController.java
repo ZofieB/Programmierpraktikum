@@ -78,7 +78,7 @@ public class VierGewinntController {
     public VierGewinntController() {
     }
 
-    public void setParameters(ClientController newClientController, int newFeldvertical, int newFeldhorizontal, String nutzername, String opponent) {
+    public void setParameters(ClientController newClientController, int newFeldvertical, int newFeldhorizontal, String nutzername, String opponent,boolean startSpieler) {
         System.out.println("Übergebener Parameter feldvertical: " + newFeldvertical);
         System.out.println("### setParameters invoked");
         feldvertical = newFeldvertical;
@@ -87,6 +87,7 @@ public class VierGewinntController {
         clientController = newClientController;
         spieler1Name = nutzername;
         spieler2Name = opponent;
+        firstPlayer = startSpieler;
         myTurn = firstPlayer;
     }
     @FXML
@@ -112,6 +113,7 @@ public class VierGewinntController {
             spielfeld.setHorizontal(feldhorizontal);
             spielfeld.setVertical(feldvertical);
             spielfeld.initializeSpielfeld();
+            spielfeld.printSpielfeld();
 
             if (feldvertical * 2 < feldhorizontal){
                 paramGroesse = 790.00 / feldhorizontal;
@@ -126,10 +128,11 @@ public class VierGewinntController {
             cancel.setLayoutY(paramGroesse * feldvertical + paramGroesse / 2 + 10.0);
 
             vierGewinnt = new VierGewinnt(spielfeld, spielerarr, this);
+
             //TODO parametisieren der Größen
 
 
-            for (int i = 0; i < feldhorizontal; i++) {
+            /*for (int i = 0; i < feldhorizontal; i++) {
                 for (int j = 1; j <= feldvertical; j++) {
                     Rectangle rec = new Rectangle();
                     rec.setX(0);
@@ -141,7 +144,7 @@ public class VierGewinntController {
                     rec.setFill(MINTCREAM);
                     feld.add(rec, i, j);
                 }
-            }
+            }*/
             for (int i = 0; i < feldhorizontal; i++) {
                 for (int j = 1; j <= feldvertical; j++) {
                     Circle cir = new Circle();
@@ -160,12 +163,13 @@ public class VierGewinntController {
                 Polygon pol = new Polygon();
                 pol.getPoints().addAll(0.0, 0.0, paramGroesse/2, paramGroesse/2, paramGroesse, 0.0);
                 pol.setFill(BLACK);
+                //pol.setOnMouseClicked();
                 pol.addEventHandler(MouseEvent.MOUSE_CLICKED,
                         new EventHandler() {
                             @Override
                             public void handle(Event event) {
                                 try {
-                                    if (myTurn) {
+                                    if(myTurn) {
                                         spielzugAction(pol);
                                         event.consume();
                                     }
@@ -177,17 +181,15 @@ public class VierGewinntController {
             feld.setGridLinesVisible(false);
         }
     }
-    //TODO: VIERGEWINNTSPIEL STARTEN
-
-    //TODO: Unterscheidung Spieler 1 und Spieler 2
 
 
     //Spielzug-Methode, die einen selbst gemachten Spielzug (durch klicken auf Dreieck) auslöst
 
-    public void spielzugAction(Polygon clickedPol) throws IOException{
+    public void spielzugAction(Polygon clickedPol) throws IOException {
+        int game = 2;
         System.out.println("### da wird was angeklickt (Vier Gewinnt)");
         //Nur wenn Dreieck schwarz ist, kann Spielzug durchgeführt werden
-        if (clickedPol.getFill() == BLACK){
+        if (clickedPol.getFill() == BLACK) {
             ObservableList<Node> children = feld.getChildren();
 
             Integer polRowIndex = GridPane.getRowIndex(clickedPol);
@@ -198,32 +200,33 @@ public class VierGewinntController {
 
             //row = y, column = x
             boolean feldGesetzt = false;
-            int controlRow = 0;
-            while(!feldGesetzt) {
-                    controlRow = controlRow + 1;
-                    for (Node n : children) {
-                        Integer rowIndex = GridPane.getRowIndex(n);
-                        Integer columnIndex = GridPane.getColumnIndex(n);
+            int controlRow = feldvertical+1;
+            while (!feldGesetzt) {
+                controlRow = controlRow - 1;
+                for (Node n : children) {
+                    Integer rowIndex = GridPane.getRowIndex(n);
+                    Integer columnIndex = GridPane.getColumnIndex(n);
 
-                        int row = rowIndex == null ? 0 : rowIndex;
-                        int column = columnIndex == null ? 0 : columnIndex;
+                    int row = rowIndex == null ? 0 : rowIndex;
+                    int column = columnIndex == null ? 0 : columnIndex;
 
-                        if (controlRow == row && column == polColumn) {
-                            Circle cir = (Circle) n;
-                            //if (cir.getFill() == WHITE && row == feldvertical) {
-                              //  cir.setFill(spieler1.getFarbe());
-                                //clickedPol.setFill(LIGHTGREY);
-                                //feldGesetzt = true;
-                            //} else
-                                if (cir.getFill() == WHITE) {
-                                cir.setFill(spieler1.getFarbe());
-                                feldGesetzt = true;
-                            }
+                    if (controlRow == row && column == polColumn) {
+                        //Rectangle rec = (Rectangle) n;
+                        //rec.getFill();
+                        Circle cir = (Circle) n;
+                        if (cir.getFill() == WHITE && row == 1) {
+                            cir.setFill(spieler1.getFarbe());
+                            clickedPol.setFill(LIGHTGREY);
+                            feldGesetzt = true;
+                        } else if (cir.getFill() == WHITE) {
+                            cir.setFill(spieler1.getFarbe());
+                            feldGesetzt = true;
                         }
                     }
+                }
             }
             //gemachten Spielzug an den Server schicken
-            clientController.send_server_message(polColumn + "-" + controlRow, "555");
+            clientController.send_server_message(polColumn + "-" + controlRow + "-" + game, "555");
             //Spielzug im VierGewinntSpiel im Hintergrund ausführen
             vierGewinnt.spielzug(spieler1, polColumn, controlRow);
             //Zug an Gegner weitergeben
@@ -245,7 +248,7 @@ public class VierGewinntController {
                         ObservableList<Node> children = feld.getChildren();
                         System.out.println("Children Liste erstellt");
                         for (Node n : children) {
-                            System.out.println("###For Schleife");
+                            //System.out.println("###For Schleife");
                             Integer rowIndex = GridPane.getRowIndex(n);
                             Integer columnIndex = GridPane.getColumnIndex(n);
 
@@ -253,9 +256,25 @@ public class VierGewinntController {
                             int column = columnIndex == null ? 0 : columnIndex;
 
                             if (row == polRow && column == polColumn) {
-                                System.out.println("###If-Bedingung");
+                                //System.out.println("###If-Bedingung");
                                 Circle cir = (Circle) n;
-                                if (cir.getFill() == WHITE) {
+                                if (cir.getFill() == WHITE && row == 1) {
+                                    cir.setFill(spieler2.getFarbe());
+                                    for (Node x : children) {
+                                        //System.out.println("###For Schleife");
+                                        Integer rowIndexPol = GridPane.getRowIndex(x);
+                                        Integer columnIndexPol = GridPane.getColumnIndex(x);
+
+                                        int rowPol = rowIndex == null ? 0 : rowIndexPol;
+                                        int columnPol = columnIndex == null ? 0 : columnIndexPol;
+
+                                        if (rowPol == 0 && columnPol == column) {
+                                            Polygon pol = (Polygon) x;
+                                            pol.setFill(LIGHTGREY);
+                                        }
+                                    }
+                                }
+                                else if (cir.getFill() == WHITE) {
                                     cir.setFill(spieler2.getFarbe());
                                 }
                             }
@@ -290,12 +309,54 @@ public class VierGewinntController {
     }
 
     public void playerWon(Spieler spieler){
-
+        Task cancelGame = new Task<Void>(){
+            @Override public Void call(){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run(){
+                        try {
+                            if (spieler.getSpielername().equals(spieler1.getSpielername())) {
+                                //Dieser Spieler ist derjenige der gewonnen hat
+                                Stage stage = (Stage) cancel.getScene().getWindow();
+                                stage.close();
+                                clientController.send_server_message("", "566");
+                            } else {
+                                //Der Gegner hat gewonnen
+                                Stage stage = (Stage) cancel.getScene().getWindow();
+                                stage.close();
+                                clientController.send_server_message("", "565");
+                            }
+                        }catch(Exception e){}
+                    }
+                });
+                return null;
+            }
+        };
+        new Thread(cancelGame).start();
     }
+
+
 
     public void playDrawn(){
-
+        Task cancelGame = new Task<Void>(){
+            @Override public Void call(){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run(){
+                        try {
+                                Stage stage = (Stage) cancel.getScene().getWindow();
+                                stage.close();
+                                clientController.send_server_message("", "567");
+                        }catch(Exception e){}
+                    }
+                });
+                return null;
+            }
+        };
+        new Thread(cancelGame).start();
     }
+
+
 
     public void gameGotCanceled(){
         Task cancelGame = new Task<Void>(){

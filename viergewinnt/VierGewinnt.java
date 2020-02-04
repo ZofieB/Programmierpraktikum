@@ -7,6 +7,9 @@ import absclasses.Spiel;
 import absclasses.Spieler;
 import absclasses.Spielzug;
 
+import static javafx.scene.paint.Color.*;
+
+
 public class VierGewinnt extends Spiel implements Protokollierbar {
     protected VierGewinntFeld feld = new VierGewinntFeld();
     private boolean playerwin = false;
@@ -47,17 +50,22 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
 
     public void executeSpielzug(Spieler spieler, Spielzug spielzug) {
         int number;
-        if (szstack.empty()) {
+        if(spieler.getFarbe() == POWDERBLUE){
+            number = 1;
+        }
+        else number = 2;
+        /*if (szstack.empty()) {
             number = 1;
         } else {
             //Zug des letzten Spielers auslesen
             Spielzug letzterZug = removeSpielzug();
             //Zug wieder auf Stack bringen
             addSpielzug(letzterZug);
-            if (feld.checkNumber(letzterZug.getXkoordinate(), letzterZug.getYkoordinate()) == true) {
+            System.out.println("letzter Zug Koordinaten x" + letzterZug.getXkoordinate() + "y" + letzterZug.getYkoordinate());
+            if (feld.checkNumber(letzterZug.getXkoordinate(), letzterZug.getYkoordinate())) {
                 number = 2;
             } else number = 1;
-        }
+        }*/
         feld.changeCoordinates(spielzug.getXkoordinate(), spielzug.getYkoordinate(), number); //muss unbedingt schauen, wie ich das machen kann mit Spielernummer, vllt durch Anzahl der Spielzüge
     }
 
@@ -65,26 +73,24 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
     //falsche Eingabeparameter
     }
 
-    public void spielzug(Spieler spieler, int x, int y) {
+    /*public void spielzug(Spieler spieler, int x, int y) {
 
-        //int i = 0;
-        //System.out.println(spieler.getSpielername() + " ist dran!");
         if (spieler.getSpielerart() == 1) { //Ein richtiger Spieler spielt
             //Scanner scan = new Scanner(System.in);
             // Koordinaten einlesen
             //int x = feld.getHorizontal() - 1;
             // System.out.println("Gib bitte die x-Koordinate deines Zuges ein:");
-            int neuerZug = 1;
-            do {
+            //int neuerZug = 1;
+            do {*/
                 /*i = 0;
                 x = -1;
                 */
-                if (x < 1 || x > feld.getVertical()) {
+               /* if (x < 1 || x > feld.getVertical()) {
                     System.out.println("Die x-Koorinate befindet sich außerhalb des Spielfeldes. Versuch es mit einer anderen x-Koordinate:");
                 }
                 //}
                 int i = 0;
-                for (; i < feld.getVertical() && feld.checkBesetzt(x - 1, i); i++) { //von der untersten y-Koordinate Spielfeld beim eingegebenen x nach oben durchschauen, ob value drauf ist oder nicht
+                for (; i < feld.getVertical() && feld.checkBesetzt(x, i); i++) { //von der untersten y-Koordinate Spielfeld beim eingegebenen x nach oben durchschauen, ob value drauf ist oder nicht
                 }
                 if (i == feld.getVertical()) {
                     System.out.println("Du musst eine freie Spalte nehmen! Wiederhole die Eingabe:");
@@ -94,20 +100,20 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
             } while (neuerZug == 1);
             //scan.close();*/
             //Spielzug daraus erstellen
-            Spielzug spielzug = new Spielzug(x - 1, y - 1, spieler);
+            /*Spielzug spielzug = new Spielzug(x, i, spieler);
             //Spielzug ausführen
             executeSpielzug(spieler, spielzug);
             addSpielzug(spielzug);
             feld.printSpielfeld();
             //ein Spieler hat verloren
-            if (feld.checkGewonnen(x - 1, y - 1) == true) {
+            if (feld.checkGewonnen(x, y - 1) == true) {
                 setPlayerwin();
                 controller.playerWon(spieler);
             } else if (feld.checkUnentschieden() == true) {
                 setPlayunentschieden();
                 controller.playDrawn();
             }
-        }
+        }*/
         /*else { //der Computer spielt
             if(szstack.empty()){
                 Spielzug spielzug = new Spielzug((feld.getHorizontal() / 2), 0, spieler);
@@ -233,7 +239,26 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
         }
     }
 */
+   // }
+
+    public void spielzug(Spieler spieler, int x, int y) {
+
+        //Spielzug daraus erstellen
+        Spielzug spielzug = new Spielzug(x, y-1, spieler);
+        //Spielzug ausführen
+        executeSpielzug(spieler, spielzug);
+        addSpielzug(spielzug);
+        feld.printSpielfeld();
+        //ein Spieler hat verloren
+        if (feld.checkGewonnen(x, y-1)) {
+            setPlayerwin();
+            controller.playerWon(spieler);
+        } else if (feld.checkUnentschieden()) {
+            setPlayunentschieden();
+            controller.playDrawn();
+        }
     }
+
     @Override
     public void durchgang(){
         if(!playerwin && !playunentschieden) {

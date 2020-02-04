@@ -347,7 +347,7 @@ public class ClientController {
         AnchorPane rootVierGewinnt = (AnchorPane) vierGewinntLoader.load(fxmlVierGewinntStream);
 
         VierGewinntController vierGewinntController = vierGewinntLoader.getController();
-        vierGewinntController.setParameters(this, verticalField, horizontalField, nutzername, gameOpponent);
+        vierGewinntController.setParameters(this, verticalField, horizontalField, nutzername, gameOpponent, firstPlayer);
 
         // Create the Scene
         Scene vierGewinntScene = new Scene(rootVierGewinnt);
@@ -423,20 +423,18 @@ public class ClientController {
     }
 
 
-    public void setSpielzug(int col, int row){
+    public void setSpielzugChomp(int col, int row) {
         //TODO: VierGewinnt Variante
-        //System.out.println("### SetSpielzug invoked");
-        //chompController.setSpielzug(col, row);
-        String selectedGame = choiceGames.getValue();
-        if(selectedGame.equals("Chomp")){
-            System.out.println("### SetSpielzug Chomp invoked");
-            chompController.setSpielzug(col, row);
-        }
-        else if (selectedGame.equals("Vier Gewinnt")){
-            System.out.println("### SetSpielzug VierGewinnt invoked");
-            vierGewinntController.setSpielzug(col, row);
-        }
+        System.out.println("### SetSpielzug Chomp invoked");
+        chompController.setSpielzug(col, row);
+
     }
+
+    public void setSpielzugVierGewinnt(int col, int row) {
+        System.out.println("### SetSpielzug VierGewinnt invoked");
+        vierGewinntController.setSpielzug(col, row);
+    }
+
     public void setChompController(ChompController newChompController){
         chompController = newChompController;
     }
@@ -445,21 +443,15 @@ public class ClientController {
         vierGewinntController = newVierGewinntController;
     }
 
-    public void gameCancel(){
-        //chompController.gameGotCanceled();
+    public void gameCancelChomp(){
+        chompController.gameGotCanceled();
+
         //updateTextArea("Dein Spiel wurde abgebrochen!");
         //TODO VierGewinnt Variante
-
-        String selectedGame = choiceGames.getValue();
-        if(selectedGame.equals("Chomp")){
-            chompController.gameGotCanceled();
-            //updateTextArea("Dein Spiel wurde abgebrochen!");
-        }
-        else if (selectedGame.equals("Vier Gewinnt")){
-            vierGewinntController.gameGotCanceled();
-            //updateTextArea("Dein Spiel wurde abgebrochen!");
-        }
     }
 
-
+    public void gameCancelVierGewinnt() {
+        vierGewinntController.gameGotCanceled();
+        //updateTextArea("Dein Spiel wurde abgebrochen!");
+    }
 }
