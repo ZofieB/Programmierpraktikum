@@ -74,6 +74,7 @@ public class ServerController {
         updateMatchList();
     }
     public void deleteMatch(String userInMatch){
+        System.out.println("###Delete Match started");
         for(String s : matchesList) {
             String[] splitted = s.split("-");
             if(splitted[1].equals(userInMatch)  || splitted [2].equals(userInMatch)){
@@ -83,6 +84,7 @@ public class ServerController {
         updateMatchList();
     }
     public void updateMatchList(){
+        System.out.println("###updateMatchList started");
         matches.clear();
         for (String s : matchesList) {
             String[] splittedString = s.split("-");

@@ -72,17 +72,19 @@ public class MessageListener extends Thread{
                 }
                 else if(input.equals("502")){
                     //Ausgehende Einladung wurde abgelehnt --> Boolean Wert muss nicht geändert werden
-                    controller.cancelMessage = "----Die Einladung wurde abgelehnt!----";
-                    //TODO besseres Einladungshandling
+                    controller.changeCancelMessage("----Die Einladung wurde abgelehnt!----");
                 }
                 else if(input.equals("504")){
                     //Eingeladener Spieler ist schon in einem Spiel
-                    controller.cancelMessage = "----Dieser Spieler ist schon in einem Spiel!----";
-                    //TODO : Was wenn eingeladener Spieler schon im Spiel war
+                    controller.changeCancelMessage("----Dieser Spieler ist schon in einem Spiel!----");
                 }
                 else if(input.equals("560")){
                     //Spiel wurde von Gegner abgebrochen
                     controller.gameCancel();
+                }
+                else if(input.equals("600")){
+                    //Status am Ende des Spiels wieder ändern
+                    controller.finishedGame();
                 }
             }
         }catch(Exception E){}

@@ -1,6 +1,6 @@
 package absclasses;
 
-import javafx.scene.paint.Color;
+import javafx.scene.paint.*;
 
 public class Spieler {
     protected String spielername;

@@ -8,7 +8,6 @@ class ServerThread extends Thread{
     Socket client;
     ServerController controller;
     String opponent;
-    ArrayList<String> matchesList = new ArrayList<>();
     ServerThread(Socket client, ServerController controller) {
         this.client = client;
         this.controller = controller;
@@ -93,16 +92,19 @@ class ServerThread extends Thread{
                 else if (input[0].equals("560")) {
                     //Spieler hat aktuelles Spiel abgebrochen
                     session.message_this_client("", opponent, "560");
+                    System.out.println("### deleteMatch invoked");
                     controller.deleteMatch(opponent);
                 }
                 else if (input[0].equals("565")) {
                     //Ich habe das Spiel verloren
                     session.send_message("----Du hast leider verloren!----", "111", client);
+                    session.send_message("", "600", client);
                     controller.deleteMatch(opponent);
                 }
                 else if (input[0].equals("566")) {
                     //Ich habe das Spiel gewonnen
                     session.send_message("----Du hast das Spiel gegen " + opponent + " gewonnen!----", "111", client);
+                    session.send_message("", "600", client);
                     controller.deleteMatch(opponent);
                 }
                 else if (input[0].equals("599")) {
