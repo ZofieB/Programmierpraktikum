@@ -287,7 +287,6 @@ public class ClientController {
                 }
             }
             else{
-                //TODO : nicht gestartetes Spiel bearbeiten --> Anfrage weitersenden
                 //Cancel Message wird je nach Ablehnungsart gesetzt
                 chatWindowController.updateTextArea(cancelMessage);
             }
@@ -425,7 +424,6 @@ public class ClientController {
 
 
     public void setSpielzugChomp(int col, int row) {
-        //TODO: VierGewinnt Variante
         System.out.println("### SetSpielzug Chomp invoked");
         chompController.setSpielzug(col, row);
 
@@ -446,9 +444,7 @@ public class ClientController {
 
     public void gameCancelChomp(){
         chompController.gameGotCanceled();
-
         //updateTextArea("Dein Spiel wurde abgebrochen!");
-        //TODO VierGewinnt Variante
     }
 
     public void gameCancelVierGewinnt() {

@@ -129,7 +129,7 @@ public class VierGewinntController {
 
             vierGewinnt = new VierGewinnt(spielfeld, spielerarr, this);
 
-            //TODO parametisieren der Größen
+
 
 
             /*for (int i = 0; i < feldhorizontal; i++) {
@@ -287,7 +287,6 @@ public class VierGewinntController {
                 });
                 return null;
             }
-            //TODO prüfen ob gewonnen oder nicht
         };
         new Thread(setZugTask).start();
     }
@@ -303,7 +302,7 @@ public class VierGewinntController {
 
     @FXML
     private void cancelGame() throws IOException{
-        clientController.send_server_message("", "560");
+        clientController.send_server_message("Vier Gewinnt", "560");
         Stage stage = (Stage) cancel.getScene().getWindow();
         stage.close();
     }

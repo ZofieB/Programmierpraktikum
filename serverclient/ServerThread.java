@@ -92,8 +92,9 @@ class ServerThread extends Thread{
                 }
                 else if (input[0].equals("560")) {
                     //Spieler hat aktuelles Spiel abgebrochen
-                    session.message_this_client("", opponent, "560");
+                    session.message_this_client(input[1], opponent, "560");
                     controller.deleteMatch(opponent);
+
                 }
                 else if (input[0].equals("565")) {
                     //Ich habe das Spiel verloren

@@ -62,11 +62,10 @@ public class MessageListener extends Thread{
                     System.out.println("###Eingehender Spielzug");
                     String spielzug = in.readLine();
                     String[] splittedString = spielzug.split("-");
-                    System.out.println("String wurde gesplittet");
                     int col = Integer.parseInt(splittedString[0]);
-                    System.out.println("Col = "+ col);
+
                     int row = Integer.parseInt(splittedString[1]);
-                    System.out.println("row = " + row);
+
                     int game = Integer.parseInt(splittedString[2]);
                     if (game == 1) {
                         controller.setSpielzugChomp(col, row);
@@ -83,20 +82,20 @@ public class MessageListener extends Thread{
                 else if(input.equals("502")){
                     //Ausgehende Einladung wurde abgelehnt --> Boolean Wert muss nicht geändert werden
                     controller.cancelMessage = "----Die Einladung wurde abgelehnt!----";
-                    //TODO besseres Einladungshandling
                 }
                 else if(input.equals("504")){
                     //Eingeladener Spieler ist schon in einem Spiel
                     controller.cancelMessage = "----Dieser Spieler ist schon in einem Spiel!----";
-                    //TODO : Was wenn eingeladener Spieler schon im Spiel war
                 }
                 else if(input.equals("560")){
                     //Spiel wurde von Gegner abgebrochen
+                    System.out.println("Spiel wurde abgebrochen");
                     String message = in.readLine();
                     if(message.equals("Chomp")) {
                         controller.gameCancelChomp();
                     }
-                    else if(message.equals("Vier Gewinnt")){
+                    if(message.equals("Vier Gewinnt")){
+                        System.out.println("Spiel wurde abgebrochen Vier Gewinnt");
                         controller.gameCancelVierGewinnt();
                     }
                 }
