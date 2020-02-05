@@ -91,9 +91,9 @@ class ServerThread extends Thread{
                 }
                 else if (input[0].equals("560")) {
                     //Spieler hat aktuelles Spiel abgebrochen
-                    session.message_this_client("", opponent, "560");
-                    System.out.println("### deleteMatch invoked");
+                    session.message_this_client(input[1], opponent, "560");
                     controller.deleteMatch(opponent);
+
                 }
                 else if (input[0].equals("565")) {
                     //Ich habe das Spiel verloren
@@ -106,6 +106,10 @@ class ServerThread extends Thread{
                     session.send_message("----Du hast das Spiel gegen " + opponent + " gewonnen!----", "111", client);
                     session.send_message("", "600", client);
                     controller.deleteMatch(opponent);
+                }
+                else if (input[0].equals("567")){
+                    //Das Spiel ging unentschieden aus
+                    session.send_message("----Das Spiel ging unentschieden aus!----", "111", client);
                 }
                 else if (input[0].equals("599")) {
                     //Neues Spiel wurde begonnen

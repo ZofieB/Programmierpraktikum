@@ -1,6 +1,7 @@
 package serverclient;
 
 import chomp.ChompController;
+import viergewinnt.VierGewinntController;
 
 import java.io.BufferedReader;
 
@@ -62,8 +63,16 @@ public class MessageListener extends Thread{
                     String spielzug = in.readLine();
                     String[] splittedString = spielzug.split("-");
                     int col = Integer.parseInt(splittedString[0]);
+
                     int row = Integer.parseInt(splittedString[1]);
-                    controller.setSpielzug(col, row);
+
+                    int game = Integer.parseInt(splittedString[2]);
+                    if (game == 1) {
+                        controller.setSpielzugChomp(col, row);
+                    }
+                    else if (game == 2){
+                        controller.setSpielzugVierGewinnt(col, row);
+                    }
                 }
                 else if(input.equals("503")){
                     System.out.println("### Invite Accepted eingehend");
@@ -80,7 +89,15 @@ public class MessageListener extends Thread{
                 }
                 else if(input.equals("560")){
                     //Spiel wurde von Gegner abgebrochen
-                    controller.gameCancel();
+                    System.out.println("Spiel wurde abgebrochen");
+                    String message = in.readLine();
+                    if(message.equals("Chomp")) {
+                        controller.gameCancelChomp();
+                    }
+                    if(message.equals("Vier Gewinnt")){
+                        System.out.println("Spiel wurde abgebrochen Vier Gewinnt");
+                        controller.gameCancelVierGewinnt();
+                    }
                 }
                 else if(input.equals("600")){
                     //Status am Ende des Spiels wieder ändern

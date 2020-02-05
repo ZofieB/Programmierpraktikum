@@ -10,7 +10,7 @@ import viergewinnt.VierGewinntFeld;
 
 import java.util.Scanner;
 
-public class Main{
+/*public class Main{
     public static void main(String[] args){
         Scanner scan = new Scanner(System.in);
         //Auswahl der Spieler
@@ -118,7 +118,7 @@ public class Main{
             spielfeld.initializeSpielfeld();
             spielfeld.printSpielfeld();
 
-            VierGewinnt viergewinnt = new VierGewinnt(spielfeld, spielerarr);
+            VierGewinnt viergewinnt = new VierGewinnt(spielfeld, spielerarr, viergewinnt.VierGewinntController);
             while(!viergewinnt.getPlayerwin() && !viergewinnt.getPlayunentschieden()) {
                 viergewinnt.durchgang();
             }
@@ -138,4 +138,4 @@ public class Main{
         }
         scan.close();
     }
-}
+}*/

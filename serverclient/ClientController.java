@@ -1,6 +1,7 @@
 package serverclient;
 
 import chomp.ChompController;
+import viergewinnt.VierGewinntController;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.concurrent.Task;
@@ -11,6 +12,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
+import javafx.event.Event;
+import javafx.event.EventHandler;
+import javafx.event.ActionEvent;
 
 import java.io.*;
 import java.net.Socket;
@@ -21,7 +27,7 @@ import java.util.Optional;
 import java.util.ResourceBundle;
 
 
-public class ClientController{
+public class ClientController {
     //Login Fenster
     @FXML
     private PasswordField password;
@@ -67,37 +73,38 @@ public class ClientController{
     public ClientController() {
     }
 
+
     @FXML
     private void initialize() throws IOException {
         System.out.println("### Initialize invoked");
-        if(!gameWindow) {
+        if (!gameWindow) {
             if (!initialized) {
                 initialized = true;
                 createSocket();
             } else {
-                if(!inviteWindow){
+                if (!inviteWindow) {
                     createMessageListener();
                     chatWindowController = this;
                     clients = new ArrayList<String>();
                 }
             }
-        }
-        else{
+        } else {
             choiceGames.setItems(FXCollections.observableArrayList("Chomp", "Vier Gewinnt"));
         }
     }
 
     @FXML
-    private void sendMessage() throws IOException{
-        if(server != null) {
+    private void sendMessage() throws IOException {
+        if (server != null) {
             send_server_message(inputField.getText(), "100");
         }
         inputField.clear();
     }
+
     @FXML
-    public void logout() throws IOException{
+    public void logout() throws IOException {
         Stage stage = (Stage) inputField.getScene().getWindow();
-        if(server!= null){
+        if (server != null) {
             send_server_message("101", "101");
             server.close();
         }
@@ -106,8 +113,8 @@ public class ClientController{
     }
 
     @FXML
-    private void login() throws  Exception{
-        //System.out.println("### Login invoked");
+    private void login() throws Exception {
+        System.out.println("### Login invoked");
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(server.getOutputStream()));
         out.write(username.getText());
         out.newLine();
@@ -125,23 +132,24 @@ public class ClientController{
         stage.show();
 
     }
-    private void createSocket(){
+
+    private void createSocket() {
         try {
             server = new Socket("localhost", 6666);
-        }catch(UnknownHostException e) {
+        } catch (UnknownHostException e) {
             System.out.println("Cannot find host.");
-        }catch (IOException e) {
+        } catch (IOException e) {
             System.out.println("Error connecting to host.");
         }
     }
 
-    private void createMessageListener() throws IOException{
+    private void createMessageListener() throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(server.getInputStream()));
         MessageListener messages = new MessageListener(in, this);
         messages.start();
     }
 
-    public void send_server_message(String message, String code)throws IOException{
+    public void send_server_message(String message, String code) throws IOException {
         BufferedWriter out = new BufferedWriter(new OutputStreamWriter(server.getOutputStream()));
         out.write(code);
         out.newLine();
@@ -150,33 +158,34 @@ public class ClientController{
         out.flush();
     }
 
-    public void updateTextArea(String message){
+    public void updateTextArea(String message) {
         outputField.appendText(message + "\n");
     }
 
-    public void updateClientList(){
+    public void updateClientList() {
+        System.out.println("### Clients Update invoked");
         activeClients.clear();
         for (String s : clients) {
             activeClients.appendText(s + "\n");
         }
     }
 
-    public void deleteClient(String newClient){
-        //System.out.println("### DeleteClient invoked");
+    public void deleteClient(String newClient) {
+        System.out.println("### DeleteClient invoked");
         int clients_size = clients.size();
-        for(int i = 0; i < clients_size; i++){
-            if(clients.get(i).equals(newClient)){
+        for (int i = 0; i < clients_size; i++) {
+            if (clients.get(i).equals(newClient)) {
                 clients.remove(i);
                 break;
             }
         }
-        //System.out.println("### DelteClient finished");
+        System.out.println("### DeleteClient finished");
     }
 
-    public void addClient(String newClient){
-        //System.out.println("### AddClient invoked");
-        clients.add(newClient);
-        //System.out.println("### AddClient finished");
+    public void addClient(String newClient) {
+        System.out.println("### AddClient invoked");
+        clients.add(newClient); //Programm bleibt stehen!
+        System.out.println("### AddClient finished");
     }
 
     //
@@ -207,6 +216,8 @@ public class ClientController{
 
     private static ChompController chompController;
 
+    private static VierGewinntController vierGewinntController;
+
     private static boolean inGame = false;
 
     private static String selectedGame;
@@ -214,7 +225,7 @@ public class ClientController{
     public static String cancelMessage = "----Der Gegner hat nicht geantwortet. Das Spiel wird nicht gestartet!----";
 
     @FXML
-    private void createNewGame(){
+    private void createNewGame() {
         gameWindow = true;
         try {
             if(!inGame) {
@@ -225,7 +236,8 @@ public class ClientController{
                 // Path to the FXML File
                 //String fxmlDocPathGame = "/home/sophie/Documents/Programmierpraktikum/serverclient/Game.fxml";
                 //String fxmlDocPathGame = "C:\\Users\\Sophie\\IdeaProjects\\Programmierpraktikum\\serverclient\\Game.fxml";
-                String fxmlDocPathGame = "/home/zo73qoh/IdeaProjects/Programmierpraktikum/serverclient/Game.fxml";
+                //String fxmlDocPathGame = "/home/zo73qoh/IdeaProjects/Programmierpraktikum/serverclient/Game.fxml";
+                String fxmlDocPathGame = "C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/serverclient/Game.fxml";
 
                 FileInputStream fxmlGameStream = new FileInputStream(fxmlDocPathGame);
 
@@ -292,7 +304,6 @@ public class ClientController{
                 }
             }
             else{
-                //TODO : nicht gestartetes Spiel bearbeiten --> Anfrage weitersenden
                 //Cancel Message wird je nach Ablehnungsart gesetzt
                 chatWindowController.updateTextArea(cancelMessage);
             }*/
@@ -326,7 +337,7 @@ public class ClientController{
     }
 
     @FXML
-    private void cancel(){
+    private void cancel() {
         Stage thisStage = (Stage) opponentField.getScene().getWindow();
         thisStage.close();
     }
@@ -367,7 +378,35 @@ public class ClientController{
         new Thread(chompTask).start();
     }
 
-    public void gotInvite(String opponent, String game, int horizontal, int vertical) throws IOException{
+    @FXML
+    private void startVierGewinnt() throws IOException {
+        Stage vierGewinntWindow = new Stage();
+
+        // Create the FXMLLoader
+        FXMLLoader vierGewinntLoader = new FXMLLoader();
+
+        // Path to the FXML File
+        String fxmlDocPathVierGewinnt = "/C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/viergewinnt/StartGameVierGewinnt.fxml";
+
+        FileInputStream fxmlVierGewinntStream = new FileInputStream(fxmlDocPathVierGewinnt);
+
+        AnchorPane rootVierGewinnt = (AnchorPane) vierGewinntLoader.load(fxmlVierGewinntStream);
+
+        VierGewinntController vierGewinntController = vierGewinntLoader.getController();
+        vierGewinntController.setParameters(this, verticalField, horizontalField, nutzername, gameOpponent, firstPlayer);
+
+        // Create the Scene
+        Scene vierGewinntScene = new Scene(rootVierGewinnt);
+        vierGewinntWindow.setScene(vierGewinntScene);
+
+        vierGewinntWindow.setTitle("Vier Gewinnt Game");
+
+        System.out.println("### Show Window");
+        vierGewinntWindow.show();
+    }
+
+
+    public void gotInvite (String opponent, String game,int horizontal, int vertical) throws IOException {
         inviteWindow = true;
         if(inGame == false) {
             gameOpponent = opponent;
@@ -430,13 +469,16 @@ public class ClientController{
 
     }
 
-    private void startVierGewinnt(){
+
+    public void setSpielzugChomp(int col, int row) {
+        System.out.println("### SetSpielzug Chomp invoked");
+        chompController.setSpielzug(col, row);
+
     }
 
-    public void setSpielzug(int col, int row){
-        //TODO: VierGewinnt Variante
-        System.out.println("### SetSpielzug invoked");
-        chompController.setSpielzug(col, row);
+    public void setSpielzugVierGewinnt(int col, int row) {
+        System.out.println("### SetSpielzug VierGewinnt invoked");
+        vierGewinntController.setSpielzug(col, row);
     }
 
     public void setChompController(ChompController newChompController){
@@ -459,4 +501,8 @@ public class ClientController{
     }
 
 
+    public void gameCancelVierGewinnt() {
+        vierGewinntController.gameGotCanceled();
+        //updateTextArea("Dein Spiel wurde abgebrochen!");
+    }
 }

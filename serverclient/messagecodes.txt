@@ -16,5 +16,6 @@
 560 = Spiel abgebrochen
 565 = ich habe Spiel verloren
 566 = Gegner hat Spiel verloren
-599 = Spiel gestartet, Liste aktualisieren
 600 = Spiel beendet, Status ändern
+567 = Spiel ging unentschieden aus
+599 = Spiel gestartet, Liste aktualisieren

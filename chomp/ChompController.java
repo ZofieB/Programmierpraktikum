@@ -150,6 +150,7 @@ public class ChompController {
 
     //Spielzug-Methode, die einen selbst gemachten Spielzug (durch klicken auf Viereck) auslöst
     public void spielzugAction(Rectangle clickedRec) throws IOException{
+        int game = 1;
         //Nur wenn das angeklickte Feld auch grau ist, wird die Spielmaschinerie in Bewegung gesetzt
         if(clickedRec.getFill() == LIGHTGREY) {
             ObservableList<Node> children = feld.getChildren();
@@ -175,7 +176,7 @@ public class ChompController {
                 }
             }
             //gemachten Spielzug an den Server schicken
-            clientController.send_server_message(recColumn + "-" + recRow, "555");
+            clientController.send_server_message(recColumn + "-" + recRow + "-" +  game, "555");
             //Spielzug im ChompSpiel im Hintergrund ausführen
             chomp.spielzug(spieler1, recColumn, recRow);
             //Zug an Gegner weitergeben
@@ -235,7 +236,7 @@ public class ChompController {
 
     @FXML
     private void cancelGame() throws IOException{
-        clientController.send_server_message("", "560");
+        clientController.send_server_message("Chomp", "560");
         Stage stage = (Stage) cancel.getScene().getWindow();
         stage.close();
     }

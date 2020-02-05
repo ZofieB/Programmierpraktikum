@@ -47,11 +47,12 @@ public class Chomp extends Spiel implements Protokollierbar{
             controller.setFeld(spielzug.getSpieler(), spielzug.getXkoordinate(), spielzug.getYkoordinate());
         } catch(IOException e){}*/
     }
-    @Override
+
     public void spielzug(Spieler spieler){
         //Methode mit falschen Eingabeparametern!
     }
 
+    @Override
     public void spielzug(Spieler spieler, int x, int y) {
         //System.out.println(spieler.getSpielername() + " ist dran!");
         if(spieler.getSpielerart() == 1){ //Ein richtiger Spieler spielt
