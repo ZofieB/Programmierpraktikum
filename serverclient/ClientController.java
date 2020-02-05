@@ -236,8 +236,8 @@ public class ClientController {
                 // Path to the FXML File
                 //String fxmlDocPathGame = "/home/sophie/Documents/Programmierpraktikum/serverclient/Game.fxml";
                 //String fxmlDocPathGame = "C:\\Users\\Sophie\\IdeaProjects\\Programmierpraktikum\\serverclient\\Game.fxml";
-                //String fxmlDocPathGame = "/home/zo73qoh/IdeaProjects/Programmierpraktikum/serverclient/Game.fxml";
-                String fxmlDocPathGame = "C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/serverclient/Game.fxml";
+                String fxmlDocPathGame = "/home/zo73qoh/IdeaProjects/Programmierpraktikum/serverclient/Game.fxml";
+                //String fxmlDocPathGame = "C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/serverclient/Game.fxml";
 
                 FileInputStream fxmlGameStream = new FileInputStream(fxmlDocPathGame);
 
@@ -293,20 +293,6 @@ public class ClientController {
                 }
             };
             wait.start();
-            /*if(isAccepted){
-                if(selectedGame.equals("Chomp")){
-                    inGame = true;
-                    startChomp();
-                }
-                else if(selectedGame.equals("Vier Gewinnt")){
-                    inGame = true;
-                    startVierGewinnt();
-                }
-            }
-            else{
-                //Cancel Message wird je nach Ablehnungsart gesetzt
-                chatWindowController.updateTextArea(cancelMessage);
-            }*/
 
         }
         else{
@@ -318,6 +304,7 @@ public class ClientController {
     }
 
     private void waitedForInvite() throws IOException{
+        //Aufgerufen von Nutzer, der die Einladung geschickt hat
         System.out.println("### waitedForInvite invoked");
         if(isAccepted){
             if(selectedGame.equals("Chomp")){
@@ -325,6 +312,7 @@ public class ClientController {
                 startChomp();
             }
             else if(selectedGame.equals("Vier Gewinnt")){
+                System.out.println("### VierGewinnt in waitedForInvite");
                 inGame = true;
                 startVierGewinnt();
             }
@@ -379,30 +367,47 @@ public class ClientController {
     }
 
     @FXML
-    private void startVierGewinnt() throws IOException {
-        Stage vierGewinntWindow = new Stage();
+    private void startVierGewinnt(){
+        System.out.println("###Aufruf start VierGewinnt");
+        ClientController thisClientController = this;
+        Task vierGewinntTask = new Task<Void>() {
+            @Override
+            public Void call(){
+                Platform.runLater(new Runnable(){
+                    @Override
+                    public void run(){
+                        try {
+                            Stage vierGewinntWindow = new Stage();
 
-        // Create the FXMLLoader
-        FXMLLoader vierGewinntLoader = new FXMLLoader();
+                            // Create the FXMLLoader
+                            FXMLLoader vierGewinntLoader = new FXMLLoader();
 
-        // Path to the FXML File
-        String fxmlDocPathVierGewinnt = "/C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/viergewinnt/StartGameVierGewinnt.fxml";
+                            // Path to the FXML File
+                            //String fxmlDocPathVierGewinnt = "/C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum/viergewinnt/StartGameVierGewinnt.fxml";
+                            String fxmlDocPathVierGewinnt = "/home/zo73qoh/IdeaProjects/Programmierpraktikum/viergewinnt/StartGameVierGewinnt.fxml";
 
-        FileInputStream fxmlVierGewinntStream = new FileInputStream(fxmlDocPathVierGewinnt);
+                            FileInputStream fxmlVierGewinntStream = new FileInputStream(fxmlDocPathVierGewinnt);
 
-        AnchorPane rootVierGewinnt = (AnchorPane) vierGewinntLoader.load(fxmlVierGewinntStream);
+                            AnchorPane rootVierGewinnt = (AnchorPane) vierGewinntLoader.load(fxmlVierGewinntStream);
 
-        VierGewinntController vierGewinntController = vierGewinntLoader.getController();
-        vierGewinntController.setParameters(this, verticalField, horizontalField, nutzername, gameOpponent, firstPlayer);
+                            VierGewinntController vierGewinntController = vierGewinntLoader.getController();
+                            vierGewinntController.setParameters(thisClientController, verticalField, horizontalField, nutzername, gameOpponent, firstPlayer);
 
-        // Create the Scene
-        Scene vierGewinntScene = new Scene(rootVierGewinnt);
-        vierGewinntWindow.setScene(vierGewinntScene);
+                            // Create the Scene
+                            Scene vierGewinntScene = new Scene(rootVierGewinnt);
+                            vierGewinntWindow.setScene(vierGewinntScene);
 
-        vierGewinntWindow.setTitle("Vier Gewinnt Game");
+                            vierGewinntWindow.setTitle("Vier Gewinnt Game");
 
-        System.out.println("### Show Window");
-        vierGewinntWindow.show();
+                            System.out.println("### Show Window");
+                            vierGewinntWindow.show();
+                        }catch(IOException e) {}
+                    }
+                });
+                return null;
+            }
+        };
+        new Thread(vierGewinntTask).start();
     }
 
 
@@ -462,6 +467,7 @@ public class ClientController {
             startChomp();
         }
         else if(game.equals("Vier Gewinnt")){
+            System.out.println("### VierGewinnt in acceptedInvite");
             send_server_message("Vier Gewinnt-" + nutzername + "-" + gameOpponent, "599");
             inGame = true;
             startVierGewinnt();
@@ -485,7 +491,11 @@ public class ClientController {
         chompController = newChompController;
     }
 
-    public void gameCancel(){
+    public void setVierGewinntController(VierGewinntController newVierGewinntController){
+        vierGewinntController = newVierGewinntController;
+    }
+
+    public void gameCancelChomp(){
         chompController.gameGotCanceled();
         updateTextArea("Dein Spiel wurde abgebrochen!");
         inGame = false;

@@ -1,5 +1,6 @@
 package serverclient;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
@@ -10,6 +11,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ServerController {
     @FXML
@@ -31,7 +33,9 @@ public class ServerController {
 
     private SocketListener socketlistener;
 
-    private ArrayList<String> matchesList = new ArrayList<>();
+    private CopyOnWriteArrayList<String> matchesList = new CopyOnWriteArrayList<>();
+
+
 
     @FXML
     private void initialize() throws IOException {

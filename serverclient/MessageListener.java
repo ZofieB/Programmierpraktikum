@@ -101,7 +101,9 @@ public class MessageListener extends Thread{
                 }
                 else if(input.equals("600")){
                     //Status am Ende des Spiels wieder ändern
+                    System.out.println("###Start finished Game");
                     controller.finishedGame();
+                    System.out.println("###Stop finished Game");
                 }
             }
         }catch(Exception E){}

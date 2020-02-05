@@ -113,8 +113,12 @@ public class ChompController {
             feld.setPrefHeight(sizeValues[1]);
             feld.setPrefWidth(sizeValues[2]);
 
-            anchor.setPrefHeight(sizeValues[1] + 50);
-            anchor.setPrefWidth(sizeValues[2] + 70);
+
+            anchor.setPrefHeight(sizeValues[1] + 10);
+            anchor.setPrefWidth(sizeValues[2] + 10);
+
+            cancel.setLayoutX(sizeValues[0] * feldhorizontal + 30.0);
+            cancel.setLayoutY(sizeValues[0] * feldvertical + 30.0);
 
             chomp = new Chomp(spielfeld, spielerarr, this);
             //Größe Rectangles Parametrisieren auf Eingabe!!
