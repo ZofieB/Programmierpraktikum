@@ -110,6 +110,8 @@ class ServerThread extends Thread{
                 else if (input[0].equals("567")){
                     //Das Spiel ging unentschieden aus
                     session.send_message("----Das Spiel ging unentschieden aus!----", "111", client);
+                    session.send_message("", "600", client);
+                    controller.deleteMatch(opponent);
                 }
                 else if (input[0].equals("599")) {
                     //Neues Spiel wurde begonnen

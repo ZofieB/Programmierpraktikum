@@ -17,7 +17,6 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.shape.Polygon;
-import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Circle;
 import javafx.stage.Stage;
 import serverclient.ClientController;
@@ -130,21 +129,6 @@ public class VierGewinntController {
             vierGewinnt = new VierGewinnt(spielfeld, spielerarr, this);
 
 
-
-
-            /*for (int i = 0; i < feldhorizontal; i++) {
-                for (int j = 1; j <= feldvertical; j++) {
-                    Rectangle rec = new Rectangle();
-                    rec.setX(0);
-                    rec.setY(0);
-                    rec.setWidth(paramGroesse);
-                    rec.setHeight(paramGroesse);
-                    rec.setArcWidth(5);
-                    rec.setArcHeight(5);
-                    rec.setFill(MINTCREAM);
-                    feld.add(rec, i, j);
-                }
-            }*/
             for (int i = 0; i < feldhorizontal; i++) {
                 for (int j = 1; j <= feldvertical; j++) {
                     Circle cir = new Circle();

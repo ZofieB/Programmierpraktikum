@@ -50,27 +50,47 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
 
     public void executeSpielzug(Spieler spieler, Spielzug spielzug) {
         int number;
-        if(spieler.getFarbe() == POWDERBLUE){
+        if (spieler.getFarbe() == POWDERBLUE) {
             number = 1;
-        }
-        else number = 2;
-        /*if (szstack.empty()) {
-            number = 1;
-        } else {
-            //Zug des letzten Spielers auslesen
-            Spielzug letzterZug = removeSpielzug();
-            //Zug wieder auf Stack bringen
-            addSpielzug(letzterZug);
-            System.out.println("letzter Zug Koordinaten x" + letzterZug.getXkoordinate() + "y" + letzterZug.getYkoordinate());
-            if (feld.checkNumber(letzterZug.getXkoordinate(), letzterZug.getYkoordinate())) {
-                number = 2;
-            } else number = 1;
-        }*/
+        } else number = 2;
         feld.changeCoordinates(spielzug.getXkoordinate(), spielzug.getYkoordinate(), number); //muss unbedingt schauen, wie ich das machen kann mit Spielernummer, vllt durch Anzahl der Spielzüge
     }
 
-    public void spielzug(Spieler spieler){
-    //falsche Eingabeparameter
+    public void spielzug(Spieler spieler) {
+        //falsche Eingabeparameter
+    }
+
+    public void spielzug(Spieler spieler, int x, int y) {
+
+        //Spielzug daraus erstellen
+        Spielzug spielzug = new Spielzug(x, y - 1, spieler);
+        //Spielzug ausführen
+        executeSpielzug(spieler, spielzug);
+        addSpielzug(spielzug);
+        feld.printSpielfeld();
+        //ein Spieler hat verloren
+        if (feld.checkGewonnen(x, y - 1)) {
+            setPlayerwin();
+            controller.playerWon(spieler);
+        } else if (feld.checkUnentschieden()) {
+            setPlayunentschieden();
+            controller.playDrawn();
+        }
+    }
+
+    @Override
+    public void durchgang() {
+        if (!playerwin && !playunentschieden) {
+            spielzug(spieler[0]);
+        }
+        if (!playerwin && !playunentschieden) {
+            spielzug(spieler[1]);
+        }
+    }
+
+
+    public Stack<Spielzug> getSzstack() {
+        return this.szstack;
     }
 
     /*public void spielzug(Spieler spieler, int x, int y) {
@@ -99,7 +119,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                 } else neuerZug = 0;
             } while (neuerZug == 1);
             //scan.close();*/
-            //Spielzug daraus erstellen
+    //Spielzug daraus erstellen
             /*Spielzug spielzug = new Spielzug(x, i, spieler);
             //Spielzug ausführen
             executeSpielzug(spieler, spielzug);
@@ -159,7 +179,7 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
                         }
                     }
                 }*/
-        //Checken ob Gegner in der Diagonale links unten bis rechts oben 4 Steine hinlegen kann
+    //Checken ob Gegner in der Diagonale links unten bis rechts oben 4 Steine hinlegen kann
                 /*if (feld.checkGefahrenLinksUntenRechtsOben(letzterZug.getXkoordinate(), letzterZug.getYkoordinate()) == true){
                     checker = feld.checkGegenzugGefahrLinksUnten(letzterZug.getXkoordinate(), letzterZug.getYkoordinate());
                     if (checker >= 0){
@@ -238,39 +258,8 @@ public class VierGewinnt extends Spiel implements Protokollierbar {
         feld.printSpielfeld();
         }
     }
+    }
 */
-   // }
-
-    public void spielzug(Spieler spieler, int x, int y) {
-
-        //Spielzug daraus erstellen
-        Spielzug spielzug = new Spielzug(x, y-1, spieler);
-        //Spielzug ausführen
-        executeSpielzug(spieler, spielzug);
-        addSpielzug(spielzug);
-        feld.printSpielfeld();
-        //ein Spieler hat verloren
-        if (feld.checkGewonnen(x, y-1)) {
-            setPlayerwin();
-            controller.playerWon(spieler);
-        } else if (feld.checkUnentschieden()) {
-            setPlayunentschieden();
-            controller.playDrawn();
-        }
-    }
-
-    @Override
-    public void durchgang(){
-        if(!playerwin && !playunentschieden) {
-            spielzug(spieler[0]);
-        }
-        if(!playerwin && !playunentschieden) {
-            spielzug(spieler[1]);
-        }
-    }
 
 
-    public Stack<Spielzug> getSzstack(){
-        return this.szstack;
-    }
 }
