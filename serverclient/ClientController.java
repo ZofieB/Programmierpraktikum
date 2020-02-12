@@ -258,6 +258,7 @@ public class ClientController {
             }
             else {
                 updateTextArea("----Du bist schon in einem Spiel! Versuche es später erneut!----");
+                gameWindow = false;
             }
         }
         catch (IOException e) {
@@ -299,6 +300,7 @@ public class ClientController {
             System.out.println("### Opponent not found");
             Stage thisStage = (Stage) opponentField.getScene().getWindow();
             thisStage.close();
+            gameWindow = false;
         }
 
     }
@@ -309,16 +311,17 @@ public class ClientController {
         if(isAccepted){
             if(selectedGame.equals("Chomp")){
                 inGame = true;
+                firstPlayer = true;
                 startChomp();
             }
             else if(selectedGame.equals("Vier Gewinnt")){
                 System.out.println("### VierGewinnt in waitedForInvite");
                 inGame = true;
+                firstPlayer = true;
                 startVierGewinnt();
             }
         }
         else{
-            //TODO : nicht gestartetes Spiel bearbeiten --> Anfrage weitersenden
             //Cancel Message wird je nach Ablehnungsart gesetzt
             chatWindowController.updateTextArea(cancelMessage);
         }
@@ -328,6 +331,7 @@ public class ClientController {
     private void cancel() {
         Stage thisStage = (Stage) opponentField.getScene().getWindow();
         thisStage.close();
+        gameWindow = false;
     }
 
     @FXML
@@ -434,8 +438,10 @@ public class ClientController {
                             dialog.setContentText("Einladung annehmen?");
 
                             Optional<String> result = dialog.showAndWait();
+
                             if (result.isPresent()) {
                                 String res = result.get();
+                                inviteWindow = false;
                                 try {
                                     if (res.equals("Annehmen")) {
                                         //Einladung wurde angenommen
@@ -444,6 +450,7 @@ public class ClientController {
                                     } else if (res.equals("Ablehnen")) {
                                         //Einladung wurde abgelehnt --> nichts tun
                                         send_server_message(opponent, "502");
+                                        inviteWindow = false;
                                     }
                                 } catch (IOException e) {
                                 }
@@ -457,6 +464,7 @@ public class ClientController {
         }
         else{
             send_server_message(opponent, "504");
+            inviteWindow = false;
         }
     }
     private void acceptedInvite(String game) throws IOException{
@@ -480,7 +488,6 @@ public class ClientController {
     public void setSpielzugChomp(int col, int row) {
         System.out.println("### SetSpielzug Chomp invoked");
         chompController.setSpielzug(col, row);
-
     }
 
     public void setSpielzugVierGewinnt(int col, int row) {
@@ -500,21 +507,33 @@ public class ClientController {
         chompController.gameGotCanceled();
         updateTextArea("Dein Spiel wurde abgebrochen!");
         inGame = false;
-        //TODO VierGewinnt Variante
+        inviteWindow = false;
+        firstPlayer = true;
+        gameWindow = false;
+        isAccepted = false;
     }
 
     public void finishedGame(){
+        //Flags zurücksetzen
+        System.out.println("Finished Game");
         inGame = false;
+        gameWindow = false;
+        inviteWindow = false;
+        firstPlayer = true;
+        isAccepted = false;
     }
-
-    public void changeCancelMessage(String message){
-        cancelMessage = message;
-    }
-
 
     public void gameCancelVierGewinnt() {
         vierGewinntController.gameGotCanceled();
         updateTextArea("Dein Spiel wurde abgebrochen!");
         inGame = false;
+        gameWindow = false;
+        inviteWindow = false;
+        firstPlayer = true;
+        isAccepted = false;
+    }
+
+    public void changeCancelMessage(String message){
+        cancelMessage = message;
     }
 }

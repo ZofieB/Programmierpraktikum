@@ -246,6 +246,7 @@ public class ChompController {
     }
 
     public void playerLost(Spieler spieler){
+        initialized = false;
         Task cancelGame = new Task<Void>(){
             @Override public Void call(){
                 Platform.runLater(new Runnable() {
@@ -273,6 +274,7 @@ public class ChompController {
     }
 
     public void gameGotCanceled(){
+        initialized = false;
         Task cancelGame = new Task<Void>(){
             @Override public Void call(){
                 Platform.runLater(new Runnable() {

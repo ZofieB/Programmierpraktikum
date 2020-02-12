@@ -96,6 +96,7 @@ public class VierGewinntController {
             initialized = true;
         } else {
             System.out.println("### second Initialize invoked");
+            System.out.println("FirstPlay? =" + firstPlayer);
             //Set the Reference for the new Controller in ClientController
             clientController.setVierGewinntController(this);
 
@@ -289,9 +290,11 @@ public class VierGewinntController {
         clientController.send_server_message("Vier Gewinnt", "560");
         Stage stage = (Stage) cancel.getScene().getWindow();
         stage.close();
+        firstPlayer = false;
     }
 
     public void playerWon(Spieler spieler){
+        initialized = false;
         Task cancelGame = new Task<Void>(){
             @Override public Void call(){
                 Platform.runLater(new Runnable() {
@@ -303,11 +306,13 @@ public class VierGewinntController {
                                 Stage stage = (Stage) cancel.getScene().getWindow();
                                 stage.close();
                                 clientController.send_server_message("", "566");
+                                firstPlayer = false;
                             } else {
                                 //Der Gegner hat gewonnen
                                 Stage stage = (Stage) cancel.getScene().getWindow();
                                 stage.close();
                                 clientController.send_server_message("", "565");
+                                firstPlayer = false;
                             }
                         }catch(Exception e){}
                     }
@@ -321,6 +326,7 @@ public class VierGewinntController {
 
 
     public void playDrawn(){
+        initialized = false;
         Task cancelGame = new Task<Void>(){
             @Override public Void call(){
                 Platform.runLater(new Runnable() {
@@ -330,6 +336,7 @@ public class VierGewinntController {
                                 Stage stage = (Stage) cancel.getScene().getWindow();
                                 stage.close();
                                 clientController.send_server_message("", "567");
+                                firstPlayer = false;
                         }catch(Exception e){}
                     }
                 });
@@ -342,6 +349,7 @@ public class VierGewinntController {
 
 
     public void gameGotCanceled(){
+        initialized = false;
         Task cancelGame = new Task<Void>(){
             @Override public Void call(){
                 Platform.runLater(new Runnable() {
