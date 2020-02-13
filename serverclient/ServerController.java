@@ -1,5 +1,6 @@
 package serverclient;
 
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
@@ -10,6 +11,7 @@ import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class ServerController {
     @FXML
@@ -17,6 +19,9 @@ public class ServerController {
 
     @FXML
     private TextArea activeClients;
+
+    @FXML
+    private TextArea matches;
 
     @FXML
     private URL location;
@@ -27,6 +32,10 @@ public class ServerController {
     private ServerSocket server;
 
     private SocketListener socketlistener;
+
+    private CopyOnWriteArrayList<String> matchesList = new CopyOnWriteArrayList<>();
+
+
 
     @FXML
     private void initialize() throws IOException {
@@ -62,6 +71,29 @@ public class ServerController {
             activeClients.appendText(s + "\n");
         }
         System.out.println("### Clients Update finished");
+    }
+    public void addNewMatch(String newMatch){
+        //String der Form spiel-nutzer-gegner kommt rein
+        matchesList.add(newMatch);
+        updateMatchList();
+    }
+    public void deleteMatch(String userInMatch){
+        System.out.println("###Delete Match started");
+        for(String s : matchesList) {
+            String[] splitted = s.split("-");
+            if(splitted[1].equals(userInMatch)  || splitted [2].equals(userInMatch)){
+                matchesList.remove(s);
+            }
+        }
+        updateMatchList();
+    }
+    public void updateMatchList(){
+        System.out.println("###updateMatchList started");
+        matches.clear();
+        for (String s : matchesList) {
+            String[] splittedString = s.split("-");
+            matches.appendText( splittedString[1] + " - " + splittedString[2] + " (" + splittedString[0] + ")" + "\n");
+        }
     }
 
  /*   public void deleteClient(String newClient){

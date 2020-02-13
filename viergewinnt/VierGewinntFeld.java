@@ -63,8 +63,8 @@ public class VierGewinntFeld extends Spielfeld {
     public boolean checkGewonnen(int x, int y){
         int counter = 0;
         //von unten testen
-        if (y >= 3){
-            for (int pruefunten =  y - 1; pruefunten >= y - 3 && feld[pruefunten][x] == feld[y][x]; pruefunten--){
+        if (y < this.vertical - 3){
+            for (int pruefunten =  y + 1; pruefunten <= y + 3 && feld[pruefunten][x] == feld[y][x]; pruefunten++){
                 if (feld[pruefunten][x] == feld[y][x]){
                     counter = counter + 1;
                 }
@@ -129,7 +129,7 @@ public class VierGewinntFeld extends Spielfeld {
     }
 
     // Methode für Computer um potentielle Gefahren zu erkennen und zu beseitigen
-    public boolean checkGefahrenOben(int x, int y){ 
+   /* public boolean checkGefahrenOben(int x, int y){
         int counter = 0;  //von unten testen ob schon 3 Steine vom Gegner übereinander liegen
         if (y >= 2){
             for (int pruefunten =  y - 1; pruefunten > y - 3 && feld[pruefunten][x] == feld[y][x]; pruefunten--){
@@ -208,7 +208,7 @@ public class VierGewinntFeld extends Spielfeld {
         }
         return nichtmöglich;
     }
-
+*/
     /*
     public boolean checkGefahrenLinksUntenRechtsOben(int x, int y){
         int counter = 0;

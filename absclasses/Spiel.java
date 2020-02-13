@@ -4,7 +4,7 @@ public abstract class Spiel {
     protected Spieler[] spieler;
     protected Spielfeld spielfeld;
 
-    abstract public void spielzug(Spieler spieler);
+    abstract public void spielzug(Spieler spieler, int x, int y);
     abstract public void durchgang();
     public Spieler[] getSpieler() {
         return this.spieler;

@@ -1,12 +1,13 @@
 package serverclient;
 
 import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.net.Socket;
+import java.util.ArrayList;
 
 class ServerThread extends Thread{
     Socket client;
     ServerController controller;
+    String opponent;
     ServerThread(Socket client, ServerController controller) {
         this.client = client;
         this.controller = controller;
@@ -60,6 +61,61 @@ class ServerThread extends Thread{
                 else if(input[0].equals("100")){
                     controller.printOutput("MESSAGE\t" + benutzername + ": " + input[1]);
                     session.message_all_clients(benutzername + ": " + input[1], "111");
+                }
+                else if(input[0].equals("500")){
+                    //Spieleanfrage weiterschicken an entsprechenden Gegner (input[1]) und Gegner in Variable speichern
+
+                    System.out.println("### Code 500 erhalten und bearbeitet");
+                    String[] splittedString = input[1].split("-");
+
+                    session.message_this_client(input[1], splittedString[0], "501");
+                    opponent = splittedString[0];
+                }
+                else if(input[0].equals("555")){
+                    //Client hat Spielzug gemacht, Spielzug wird weitergegeben
+                    session.message_this_client(input[1], opponent, "505");
+                }
+                else if(input[0].equals("502")){
+                    //Eine eingehende Einladung wurde abgelehnt
+                    session.message_this_client("", input[1], "502");
+                }
+                else if (input[0].equals("504")) {
+                    //Ich bin schon in einem spiel, benachrichtie einladenden Spieler darüber
+                    session.message_this_client("", input[1], "504");
+                }
+                else if (input[0].equals("503")) {
+                    //Eine eingehende Einladung wurde angenommen und Nachricht hat Form : spiel-gegner
+                    String[] splitted = input[1].split("-");
+                    opponent = splitted[1];
+                    session.message_this_client(splitted[0], opponent, "503");
+                }
+                else if (input[0].equals("560")) {
+                    //Spieler hat aktuelles Spiel abgebrochen
+                    session.message_this_client(input[1], opponent, "560");
+                    controller.deleteMatch(opponent);
+
+                }
+                else if (input[0].equals("565")) {
+                    //Ich habe das Spiel verloren
+                    session.send_message("----Du hast leider verloren!----", "111", client);
+                    session.send_message("", "600", client);
+                    controller.deleteMatch(opponent);
+                }
+                else if (input[0].equals("566")) {
+                    //Ich habe das Spiel gewonnen
+                    session.send_message("----Du hast das Spiel gegen " + opponent + " gewonnen!----", "111", client);
+                    session.send_message("", "600", client);
+                    controller.deleteMatch(opponent);
+                }
+                else if (input[0].equals("567")){
+                    //Das Spiel ging unentschieden aus
+                    session.send_message("----Das Spiel ging unentschieden aus!----", "111", client);
+                    session.send_message("", "600", client);
+                    controller.deleteMatch(opponent);
+                }
+                else if (input[0].equals("599")) {
+                    //Neues Spiel wurde begonnen
+                    controller.addNewMatch(input[1]);
                 }
             }
             client.close();

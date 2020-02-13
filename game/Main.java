@@ -1,11 +1,16 @@
 package game;
 
-import chomp.*;
-import absclasses.*;
-import java.util.*;
-import viergewinnt.*;
+import absclasses.Spieler;
+import absclasses.Spielzug;
+import chomp.Chomp;
+import chomp.ChompController;
+import chomp.ChompFeld;
+import viergewinnt.VierGewinnt;
+import viergewinnt.VierGewinntFeld;
 
-public class Main{
+import java.util.Scanner;
+
+/*public class Main{
     public static void main(String[] args){
         Scanner scan = new Scanner(System.in);
         //Auswahl der Spieler
@@ -72,7 +77,7 @@ public class Main{
             spielfeld.initializeSpielfeld();
             spielfeld.printSpielfeld();
 
-            Chomp chomp = new Chomp(spielfeld, spielerarr);
+            Chomp chomp = new Chomp(spielfeld, spielerarr, new ChompController());
             while(!chomp.getPlayerlost()) {
                 chomp.durchgang();
             }
@@ -113,7 +118,7 @@ public class Main{
             spielfeld.initializeSpielfeld();
             spielfeld.printSpielfeld();
 
-            VierGewinnt viergewinnt = new VierGewinnt(spielfeld, spielerarr);
+            VierGewinnt viergewinnt = new VierGewinnt(spielfeld, spielerarr, viergewinnt.VierGewinntController);
             while(!viergewinnt.getPlayerwin() && !viergewinnt.getPlayunentschieden()) {
                 viergewinnt.durchgang();
             }
@@ -133,4 +138,4 @@ public class Main{
         }
         scan.close();
     }
-}
+}*/

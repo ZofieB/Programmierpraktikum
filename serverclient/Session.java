@@ -39,12 +39,14 @@ public class Session{
                 //richtiges passwort aber nutzer war schon eingeloggt
                 else if(passwort.equals(current_client.getPassword()) && current_client.isLoggedin() == true){
                     controller.printOutput("VERBINDUNG\tAnmeldung fehlgeschlagen! Verbindung wird getrennt!");
+                    send_message("", "001", this.client);
                     client.close();
                     return false;
                 }
                 //falsches passwort
                 else{
                     controller.printOutput("VERBINDUNG\tAnmeldung fehlgeschlagen! Verbindung wird getrennt!");
+                    send_message("", "001", this.client);
                     client.close();
                     return false;
                 }
@@ -99,6 +101,18 @@ public class Session{
             ClientNode current_client = clients.get(i);
             if(current_client.getClient() != this.client && current_client.isLoggedin() == true){
                 send_message(message, "111", current_client.getClient());
+            }
+        }
+    }
+
+    public void message_this_client(String message, String messClient, String code) throws IOException{
+        System.out.println("### Message this Client invoked");
+        int listsize = clients.size();
+        for(int i = 0; i < listsize; i++) {
+            ClientNode current_client = clients.get(i);
+            if (current_client.getClient() != this.client && current_client.isLoggedin() == true && current_client.getName().equals(messClient)) {
+                System.out.println("### Message sent to " + current_client.getName());
+                send_message(message, code, current_client.getClient());
             }
         }
     }

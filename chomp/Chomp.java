@@ -1,16 +1,22 @@
 package chomp;
 
-import absclasses.*;
-import java.util.*;
+import absclasses.Protokollierbar;
+import absclasses.Spiel;
+import absclasses.Spieler;
+import absclasses.Spielzug;
+
+import java.util.Stack;
 
 public class Chomp extends Spiel implements Protokollierbar{
     protected ChompFeld feld = new ChompFeld();
     private boolean playerlost = false;
+    private ChompController controller;
     
 
-    public Chomp(ChompFeld feld, Spieler[] spieler) {
+    public Chomp(ChompFeld feld, Spieler[] spieler, ChompController controller) {
         this.feld = feld;
         this.spieler = spieler;
+        this.controller = controller;
     }
 
     public void setPlayerlost() {
@@ -37,24 +43,32 @@ public class Chomp extends Spiel implements Protokollierbar{
                 
             }
         }
+        /*try {
+            controller.setFeld(spielzug.getSpieler(), spielzug.getXkoordinate(), spielzug.getYkoordinate());
+        } catch(IOException e){}*/
     }
+
+    public void spielzug(Spieler spieler){
+        //Methode mit falschen Eingabeparametern!
+    }
+
     @Override
-    public void spielzug(Spieler spieler) {
-        System.out.println(spieler.getSpielername() + " ist dran!");
+    public void spielzug(Spieler spieler, int x, int y) {
+        //System.out.println(spieler.getSpielername() + " ist dran!");
         if(spieler.getSpielerart() == 1){ //Ein richtiger Spieler spielt
-            Scanner scan = new Scanner(System.in);
+            /*Scanner scan = new Scanner(System.in);
             // Koordinaten einlesen
             int x = feld.getHorizontal() - 1;
-            int y = feld.getVertical() -1 ;
-            System.out.println("Gib bitte nacheinander x und y Koordinate deines Zuges ein:");
+            int y = feld.getVertical() -1 ;*/
+            //System.out.println("Gib bitte nacheinander x und y Koordinate deines Zuges ein:");
             do{
-                System.out.println("Bitte die x-Koordinate eingeben:");
+/*                System.out.println("Bitte die x-Koordinate eingeben:");
                 x = scan.nextInt();
                 scan.nextLine();
                 System.out.println("Bitte die y-Koordinate eingeben:");
-                y = scan.nextInt();
+                y = scan.nextInt();*/
                 if(feld.isInRange(x, y) == false || feld.getValue(x, y) == 1) {
-                    System.out.println("Du musst ein korrektes Feld nehmen! Wiederhole die Eingabe:");
+                    //System.out.println("Du musst ein korrektes Feld nehmen! Wiederhole die Eingabe:");
                 }
             } while(feld.isInRange(x, y) == false || feld.getValue(x, y) != 0);
 
@@ -66,6 +80,7 @@ public class Chomp extends Spiel implements Protokollierbar{
             //Ein Spieler hat verloren ?
             if(feld.getValue(0, 0) == 1) {
                 setPlayerlost();
+                controller.playerLost(spieler);
             }
         }
         else{ //der Computer spielt

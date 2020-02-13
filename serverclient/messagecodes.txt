@@ -7,3 +7,15 @@
 098 = Client entfernen
 001 = fehlgeschlagener Login
 002 = erfolgreicher Login
+500 = Spieleanfrage ausgehend (vom Client aus gesehen)
+501 = Spieleanfrage eingehend (vom Client aus gesehen)
+502 = Spieleanfrage abgelehnt
+503 = Spieleanfrage angenommen
+505 = eingehender Spielzug
+555 = ausgehender Spielzug
+560 = Spiel abgebrochen
+565 = ich habe Spiel verloren
+566 = Gegner hat Spiel verloren
+600 = Spiel beendet, Status ändern
+567 = Spiel ging unentschieden aus
+599 = Spiel gestartet, Liste aktualisieren

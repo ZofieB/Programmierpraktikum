@@ -6,9 +6,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.stage.Stage;
 
-import java.io.*;
-import java.net.*;
-import java.util.*;
+import java.io.FileInputStream;
+import java.io.IOException;
 
 public class Server extends Application {
     public static void main(String[] args) throws IOException{
@@ -21,7 +20,10 @@ public class Server extends Application {
         FXMLLoader loader = new FXMLLoader();
 
         // Path to the FXML File
-        String fxmlDocPathLogin = "/home/sophie/Documents/Programmierpraktikum/serverclient/Server.fxml";
+        //String fxmlDocPathLogin = "/home/sophie/Documents/Programmierpraktikum/serverclient/Server.fxml";
+        String fxmlDocPathLogin = "C:/Users/erika/OneDrive/Dokumente/GitHub/Programmierpraktikum//serverclient/Server.fxml";
+        //String fxmlDocPathLogin = "C:\\Users\\Sophie\\IdeaProjects\\Programmierpraktikum\\serverclient\\Server.fxml";
+        //String fxmlDocPathLogin = "/home/zo73qoh/IdeaProjects/Programmierpraktikum/serverclient/Server.fxml";
 
         FileInputStream fxmlLoginStream = new FileInputStream(fxmlDocPathLogin);
 
